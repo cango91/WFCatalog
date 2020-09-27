@@ -9,6 +9,7 @@
     <Folder Include="Diagram\" />
     <Folder Include="UseCase\" />
     <Folder Include="Workflow\" />
+    <Folder Include="Setup\Commands\UpdateSetupDetails\" />
   </ItemGroup>
 
   <ItemGroup>
