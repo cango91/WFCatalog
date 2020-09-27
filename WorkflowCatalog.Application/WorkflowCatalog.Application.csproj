@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="Diagram\" />
     <Folder Include="UseCase\" />
     <Folder Include="Workflow\" />
