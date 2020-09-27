@@ -8,10 +8,20 @@ namespace WorkflowCatalog.Domain.Entities.SetupAggregate
 {
     public interface ISetupRepository : IRepository<Setup>
     {
-        Setup Add(Setup setup);
-        void Update(Setup setup);
-        Task<Setup> FindAsync(string abbreviation);
-        Task<Setup> FindAsyncByName(string name);
-        Task<Setup> FindAsyncById(int setupId);
+        Setup CreateSetup(Setup setup);
+        void UpdateSetup(int setupId, Setup setup);
+        void RemoveSetup(Setup setup);
+        Workflow AddWorkflow(int wfId, Workflow wf);
+        void UpdateWorkflow(int wfId, Workflow wf);
+        void RemoveWorkflow(int wfId);
+        UseCase AddUseCase(int wfId, UseCase useCase);
+        void UpdateUseCase(int useCaseId, UseCase useCase);
+        void RemoveUseCase(int useCaseId);
+
+
+
+        Task<Setup> FindSetupAsync(string abbreviation);
+        Task<Setup> FindSetupAsyncByName(string name);
+        Task<Setup> FindSetupAsyncById(int setupId);
     }
 }

@@ -12,7 +12,7 @@ namespace WorkflowCatalog.Domain.Entities.SetupAggregate
     {
         public string Name { get; private set; }
         public string ShortName { get; private set; }
-        private List<Workflow> _workflows;
+        private HashSet<Workflow> _workflows;
         public IReadOnlyCollection<Workflow> Workflows => _workflows;
 
         private SetupStatus _setupStatus;
@@ -21,10 +21,10 @@ namespace WorkflowCatalog.Domain.Entities.SetupAggregate
 
         protected Setup()
         {
-            _workflows = new List<Workflow>();
+            _workflows = new HashSet<Workflow>();
             _setupStatus = SetupStatus.Active;
         }
-        public Setup(string name, string abbreviation)
+        public Setup(string name, string abbreviation) : this()
         {
             Name = name;
             ShortName = abbreviation;
