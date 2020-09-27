@@ -5,7 +5,6 @@ namespace WorkflowCatalog.Domain.Common
     public abstract class Entity
     {
         int? _requestedHashCode;
-        int _Id;
         public virtual int Id { get; set; }
 
         public bool IsTransient()
