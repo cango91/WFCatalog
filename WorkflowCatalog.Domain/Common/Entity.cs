@@ -6,17 +6,7 @@ namespace WorkflowCatalog.Domain.Common
     {
         int? _requestedHashCode;
         int _Id;
-        public virtual int Id
-        {
-            get
-            {
-                return _Id;
-            }
-            protected set
-            {
-                _Id = value;
-            }
-        }
+        public virtual int Id { get; set; }
 
         public bool IsTransient()
         {
