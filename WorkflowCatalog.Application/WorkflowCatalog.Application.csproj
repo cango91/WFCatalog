@@ -10,6 +10,7 @@
     <Folder Include="UseCase\" />
     <Folder Include="Workflow\" />
     <Folder Include="Setup\Commands\UpdateSetupDetails\" />
+    <Folder Include="Setup\Commands\DeleteSetup\" />
   </ItemGroup>
 
   <ItemGroup>

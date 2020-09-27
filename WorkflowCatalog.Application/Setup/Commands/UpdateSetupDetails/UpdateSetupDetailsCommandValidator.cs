@@ -15,7 +15,10 @@ namespace WorkflowCatalog.Application.Setup.Commands.UpdateSetupDetails
         {
             _context = context;
 
-
+            RuleFor(x => x.ShortName)
+                .MaximumLength(6).WithMessage("Abbreviation can not exceed 6 characters.")
+                .NotEmpty().WithMessage("Abbreviation is required.")
+                .MustAsync(BeUniqueAbbreviation).WithMessage("Setup abbreviation must be unique.");
         }
 
         public async Task<bool> BeUniqueAbbreviation(UpdateSetupDetailsCommand model, string abb,CancellationToken cancellationToken)
