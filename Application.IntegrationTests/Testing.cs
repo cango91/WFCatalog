@@ -81,7 +81,7 @@ public class Testing
     }
     public static async Task<string> RunAsDefaultUserAsync()
     {
-        return await RunAsUserAsync("test@local", "Testing1234!");
+        return await RunAsUserAsync("catalogUser", "p@ss");
     }
 
     public static async Task<string> RunAsUserAsync(string userName, string password)
