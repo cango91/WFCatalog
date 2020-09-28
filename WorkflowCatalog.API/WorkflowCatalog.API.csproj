@@ -5,4 +5,12 @@
   </PropertyGroup>
 
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WorkflowCatalog.Application\WorkflowCatalog.Application.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

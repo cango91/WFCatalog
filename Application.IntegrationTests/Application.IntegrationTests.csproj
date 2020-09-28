@@ -19,6 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WorkflowCatalog.API\WorkflowCatalog.API.csproj" />
     <ProjectReference Include="..\WorkflowCatalog.Application\WorkflowCatalog.Application.csproj" />
+    <ProjectReference Include="..\WorkflowCatalog.Domain\WorkflowCatalog.Domain.csproj" />
   </ItemGroup>
 </Project>
