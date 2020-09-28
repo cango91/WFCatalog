@@ -12,6 +12,9 @@ using WorkflowCatalog.API;
 using System.Linq;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Infrastructure.Persistence;
+using System.Threading.Tasks;
+using WorkflowCatalog.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 
 [SetUpFixture]
 public class Testing
@@ -68,5 +71,71 @@ public class Testing
         context.Database.Migrate();
     }
 
-    
+    public static async Task<TResponse>  SendAsync<TResponse>(IRequest<TResponse> request)
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var mediator = scope.ServiceProvider.GetService<IMediator>();
+
+        return await mediator.Send(request);
+    }
+    public static async Task<string> RunAsDefaultUserAsync()
+    {
+        return await RunAsUserAsync("test@local", "Testing1234!");
+    }
+
+    public static async Task<string> RunAsUserAsync(string userName, string password)
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+
+        var user = new ApplicationUser { UserName = userName, Email = userName };
+
+        var result = await userManager.CreateAsync(user, password);
+
+        if (result.Succeeded)
+        {
+            _currentUserId = user.Id;
+
+            return _currentUserId;
+        }
+
+        var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
+
+        throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
+    }
+
+    public static async Task ResetState()
+    {
+        await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
+        _currentUserId = null;
+    }
+
+    public static async Task<TEntity> FindAsync<TEntity>(params object[] keyValues)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+        return await context.FindAsync<TEntity>(keyValues);
+    }
+
+    public static async Task AddAsync<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+        context.Add(entity);
+
+        await context.SaveChangesAsync();
+    }
+
+    [OneTimeTearDown]
+    public void RunAfterAnyTests()
+    {
+    }
 }
