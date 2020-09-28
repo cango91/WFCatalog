@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkflowCatalog.Domain", "W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCatalog.Application", "WorkflowCatalog.Application\WorkflowCatalog.Application.csproj", "{36B8022C-7A22-43B9-A62F-A85BEFABD84B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E6085B16-B37B-472F-AC75-DC3068B635E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.IntegrationTests", "Application.IntegrationTests\Application.IntegrationTests.csproj", "{35D17D85-53AE-4E5B-BB7F-3DB930182B0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCatalog.API", "WorkflowCatalog.API\WorkflowCatalog.API.csproj", "{D535A3E6-453B-4455-839F-920BF06C9B18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +27,22 @@ Global
 		{36B8022C-7A22-43B9-A62F-A85BEFABD84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36B8022C-7A22-43B9-A62F-A85BEFABD84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36B8022C-7A22-43B9-A62F-A85BEFABD84B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35D17D85-53AE-4E5B-BB7F-3DB930182B0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35D17D85-53AE-4E5B-BB7F-3DB930182B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35D17D85-53AE-4E5B-BB7F-3DB930182B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35D17D85-53AE-4E5B-BB7F-3DB930182B0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D535A3E6-453B-4455-839F-920BF06C9B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D535A3E6-453B-4455-839F-920BF06C9B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D535A3E6-453B-4455-839F-920BF06C9B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D535A3E6-453B-4455-839F-920BF06C9B18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AAC7667-DDDC-4B48-8CD7-91403AAE2261}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{35D17D85-53AE-4E5B-BB7F-3DB930182B0B} = {E6085B16-B37B-472F-AC75-DC3068B635E2}
 	EndGlobalSection
 EndGlobal

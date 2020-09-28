@@ -1,8 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using MediatR;
 using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace WorkflowCatalog.Application.Setups.Commands.DeleteSetup
 {
@@ -22,7 +24,10 @@ namespace WorkflowCatalog.Application.Setups.Commands.DeleteSetup
 
         public async Task<Unit> Handle (DeleteSetupCommand request,CancellationToken cancellationToken)
         {
-            var entity = await _context.Setups.FindAsync(request.Id);
+            var entity = await _context.Setups
+                .Where(x => x.Id == request.Id)
+                .SingleOrDefaultAsync(cancellationToken);
+
             if (entity==null)
             {
                 throw new NotFoundException(nameof(WorkflowCatalog.Domain.Entities.Setup), request.Id);
