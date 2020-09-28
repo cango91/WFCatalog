@@ -5,6 +5,7 @@ using MediatR;
 using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using WorkflowCatalog.Domain.Events.SetupEvents;
 
 namespace WorkflowCatalog.Application.Setups.Commands.DeleteSetup
 {
@@ -32,6 +33,7 @@ namespace WorkflowCatalog.Application.Setups.Commands.DeleteSetup
             {
                 throw new NotFoundException(nameof(WorkflowCatalog.Domain.Entities.Setup), request.Id);
             }
+            entity.DomainEvents.Add(new SetupRemovedEvent(entity));
 
             _context.Setups.Remove(entity);
 

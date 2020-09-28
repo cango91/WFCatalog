@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Domain.Entities;
 using WorkflowCatalog.Domain.Enums;
+using WorkflowCatalog.Domain.Events.SetupEvents;
 
 namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
 {
@@ -24,7 +25,7 @@ namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
         }
         public async Task<int> Handle(CreateSetupCommand request,CancellationToken cancellationToken)
         {
-            var entity = new WorkflowCatalog.Domain.Entities.Setup
+            var entity = new Setup
             {
                 Name = request.Name,
                 ShortName = request.ShortName,
@@ -32,6 +33,8 @@ namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
                 Workflows = new HashSet<Workflow>()
 
             };
+
+            entity.DomainEvents.Add(new SetupCreatedEvent(entity));
 
             _context.Setups.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
