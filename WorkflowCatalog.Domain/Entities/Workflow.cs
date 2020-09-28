@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using WorkflowCatalog.Domain.Common;
 using WorkflowCatalog.Domain.Enums;
-using WorkflowCatalog.Domain.Exceptions;
 
 namespace WorkflowCatalog.Domain.Entities
 {
@@ -18,8 +14,5 @@ namespace WorkflowCatalog.Domain.Entities
         public Setup Setup { get; set; }
 
         public WorkflowDiagram Primary {get; set;}
-
-
-        
     }
 }

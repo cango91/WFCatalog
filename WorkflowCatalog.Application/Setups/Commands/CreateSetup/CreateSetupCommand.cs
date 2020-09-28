@@ -6,7 +6,7 @@ using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Domain.Entities;
 using WorkflowCatalog.Domain.Enums;
 
-namespace WorkflowCatalog.Application.Setup.Commands.CreateSetup
+namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
 {
     public class CreateSetupCommand : IRequest<int>
     {

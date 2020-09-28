@@ -6,7 +6,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using WorkflowCatalog.Application.Common.Interfaces;
 
-namespace WorkflowCatalog.Application.Setup.Commands.UpdateSetupDetails
+namespace WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails
 {
     public class UpdateSetupDetailsCommandValidator : AbstractValidator<UpdateSetupDetailsCommand>
     {

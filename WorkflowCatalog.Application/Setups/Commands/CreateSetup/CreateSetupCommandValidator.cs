@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using WorkflowCatalog.Application.Common.Interfaces;
 using System;
 
-namespace WorkflowCatalog.Application.Setup.Commands.CreateSetup
+namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
 {
     public class CreateSetupCommandValidator : AbstractValidator<CreateSetupCommand>
     {

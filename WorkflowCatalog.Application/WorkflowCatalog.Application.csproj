@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -6,11 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Diagram\" />
-    <Folder Include="UseCase\" />
-    <Folder Include="Workflow\" />
-    <Folder Include="Setup\Commands\UpdateSetupDetails\" />
-    <Folder Include="Setup\Commands\DeleteSetup\" />
+    <Folder Include="Diagrams\Commands\CreateDiagram\" />
+    <Folder Include="Diagrams\Commands\DeleteDiagram\" />
+    <Folder Include="UseCases\Commands\DeleteUseCase\" />
+    <Folder Include="UseCases\Commands\UpdateUseCaseDetails\" />
+    <Folder Include="UseCases\Commands\CreateUseCase\" />
+    <Folder Include="Workflows\Commands\UpdateWorkflowDetails\" />
   </ItemGroup>
 
   <ItemGroup>

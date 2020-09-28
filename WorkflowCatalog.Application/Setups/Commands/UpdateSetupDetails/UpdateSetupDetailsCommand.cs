@@ -5,7 +5,7 @@ using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Domain.Enums;
 
-namespace WorkflowCatalog.Application.Setup.Commands.UpdateSetupDetails
+namespace WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails
 {
     public class UpdateSetupDetailsCommand : IRequest
     {

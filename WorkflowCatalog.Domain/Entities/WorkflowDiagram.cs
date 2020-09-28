@@ -12,6 +12,6 @@ namespace WorkflowCatalog.Domain.Entities
         public string Name { get;  set; }
         public string MimeType { get;  set; }
         public Workflow Workflow { get; set; }
-        public Byte File { get; set; }
+        public Byte[] File { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using MediatR;
 using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
 
-namespace WorkflowCatalog.Application.Setup.Commands.DeleteSetup
+namespace WorkflowCatalog.Application.Setups.Commands.DeleteSetup
 {
     public class DeleteSetupCommand : IRequest
     {
