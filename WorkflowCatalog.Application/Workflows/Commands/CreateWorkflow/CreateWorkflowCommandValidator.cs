@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 using WorkflowCatalog.Application.Common.Interfaces;
+using WorkflowCatalog.Domain.Enums;
 
 namespace WorkflowCatalog.Application.Workflows.Commands.CreateWorkflow
 {
@@ -16,8 +20,16 @@ namespace WorkflowCatalog.Application.Workflows.Commands.CreateWorkflow
                 .MaximumLength(200).WithMessage("Workflow name can cot exceed 200 characters.");
 
             RuleFor(x => x.SetupId)
-                .NotEmpty().WithMessage("SetupId can not be empty.");
+                .NotEmpty().WithMessage("SetupId can not be empty.")
+                .MustAsync(SetupIsActive).WithMessage("New Workflows can only be created for Setups with Active status.");
 
+
+        }
+
+        private async Task<bool> SetupIsActive(int id, CancellationToken cancellationToken)
+        {
+            var entity  = await _context.Setups.FindAsync(id);
+            return entity.Status == SetupStatus.Active;
         }
     }
 }

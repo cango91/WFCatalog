@@ -19,8 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WorkflowCatalog.API\WorkflowCatalog.API.csproj" />
+    <ProjectReference Include="..\WorkflowCatalog.API\WorkflowCatalog.API.csproj">
+      <ReferenceSourceTarget>ProjectReference</ReferenceSourceTarget>
+    </ProjectReference>
     <ProjectReference Include="..\WorkflowCatalog.Application\WorkflowCatalog.Application.csproj" />
     <ProjectReference Include="..\WorkflowCatalog.Domain\WorkflowCatalog.Domain.csproj" />
+    <ProjectReference Include="..\WorkflowCatalog.Infrastructure\WorkflowCatalog.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

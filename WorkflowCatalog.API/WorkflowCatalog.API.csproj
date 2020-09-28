@@ -12,5 +12,11 @@
     <ProjectReference Include="..\WorkflowCatalog.Application\WorkflowCatalog.Application.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\WorkflowCatalog.Infrastructure\WorkflowCatalog.Infrastructure.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkflowCatalog.Domain\WorkflowCatalog.Domain.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>

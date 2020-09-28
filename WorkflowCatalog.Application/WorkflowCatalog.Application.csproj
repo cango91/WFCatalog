@@ -12,6 +12,8 @@
     <Folder Include="UseCases\Commands\UpdateUseCaseDetails\" />
     <Folder Include="UseCases\Commands\CreateUseCase\" />
     <Folder Include="Workflows\Commands\UpdateWorkflowDetails\" />
+    <Folder Include="Setups\Queries\" />
+    <Folder Include="Setups\Queries\GetSetups\" />
   </ItemGroup>
 
   <ItemGroup>

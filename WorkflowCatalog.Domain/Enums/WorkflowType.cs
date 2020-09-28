@@ -16,6 +16,8 @@ namespace WorkflowCatalog.Domain.Enums
 
         public static IEnumerable<WorkflowType> List() =>
             new[] { MainFlow, SubFlow };
+
+
         public static WorkflowType FromName(string name)
         {
             var state = List()
@@ -35,6 +37,8 @@ namespace WorkflowCatalog.Domain.Enums
             }
             return state;
         }
+
+        public static implicit operator int(WorkflowType s) => s.Id;
 
 
     }

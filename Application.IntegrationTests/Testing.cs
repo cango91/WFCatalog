@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using WorkflowCatalog.API;
 using System.Linq;
 using WorkflowCatalog.Application.Common.Interfaces;
+using WorkflowCatalog.Infrastructure.Persistence;
 
 [SetUpFixture]
 public class Testing
