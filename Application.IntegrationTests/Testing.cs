@@ -1,6 +1,7 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Respawn;
 using Moq;
@@ -47,8 +48,23 @@ public class Testing
         services.Remove(currentUserServiceDescriptor);
 
         services.AddTransient(provider => Mock.Of<ICurrentUserService>(s => s.UserId == _currentUserId));
+        _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
+        _checkpoint = new Checkpoint
+        {
+            TablesToIgnore = new[] {"__EFMigrationsHistory"}
+        };
+        EnsureDatabase();
         
+    }
+
+    private static void EnsureDatabase()
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+        context.Database.Migrate();
     }
 
     

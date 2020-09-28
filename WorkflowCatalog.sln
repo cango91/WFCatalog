@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.IntegrationTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCatalog.API", "WorkflowCatalog.API\WorkflowCatalog.API.csproj", "{D535A3E6-453B-4455-839F-920BF06C9B18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCatalog.Infrastructure", "WorkflowCatalog.Infrastructure\WorkflowCatalog.Infrastructure.csproj", "{B3369303-3C14-46F0-AB74-54BB428D131B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{D535A3E6-453B-4455-839F-920BF06C9B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D535A3E6-453B-4455-839F-920BF06C9B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D535A3E6-453B-4455-839F-920BF06C9B18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3369303-3C14-46F0-AB74-54BB428D131B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3369303-3C14-46F0-AB74-54BB428D131B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3369303-3C14-46F0-AB74-54BB428D131B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3369303-3C14-46F0-AB74-54BB428D131B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
