@@ -9,8 +9,10 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Workflow> builder)
         {
-            builder.Property(e => e.Setup.Id)
-                .IsRequired();
+            builder.HasOne(x => x.Setup)
+                .WithOne().
+                IsRequired();
+                
             builder.Property(k => k.Name)
                 .IsRequired();
         }
