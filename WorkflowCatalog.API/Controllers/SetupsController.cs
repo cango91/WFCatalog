@@ -7,7 +7,7 @@ using WorkflowCatalog.Application.Setups.Queries.GetSetups;
 
 namespace WorkflowCatalog.API.Controllers
 {
-    
+   [Authorize] 
     public class SetupsController : ApiController
     {
         [HttpGet]
