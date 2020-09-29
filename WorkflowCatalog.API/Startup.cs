@@ -62,6 +62,8 @@ namespace WorkflowCatalog.API
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -69,6 +71,12 @@ namespace WorkflowCatalog.API
             app.UseIdentityServer();
 
             app.UseAuthorization();
+
+            app.UseSwaggerUi3(settings =>
+            {
+                settings.Path = "/api";
+                settings.DocumentPath = "/api/specification.json";
+            });
 
             app.UseEndpoints(endpoints =>
             {

@@ -3,7 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
+  
+     <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+    <Copy SourceFiles="@(Reference)" DestinationFolder="$(OutDir)References" />
+    <Exec Command="$(NSwagExe_Core31) run /variables:Configuration=$(Configuration)" />
+    <RemoveDir Directories="$(OutDir)References" />
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="8.1.0" />
@@ -19,12 +24,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.8" />
-    <PackageReference Include="IdentityServer4" Version="4.1.0" />
-    <PackageReference Include="IdentityServer4.Storage" Version="4.1.0" />
-    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.0" />
-    <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.0" />
-    <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.0" />
-    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
