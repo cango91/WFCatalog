@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkflowCatalog.Application.Setups.Commands.CreateSetup;
@@ -7,7 +8,7 @@ using WorkflowCatalog.Application.Setups.Queries.GetSetups;
 
 namespace WorkflowCatalog.API.Controllers
 {
-   [Authorize] 
+   [Authorize()] 
     public class SetupsController : ApiController
     {
         [HttpGet]

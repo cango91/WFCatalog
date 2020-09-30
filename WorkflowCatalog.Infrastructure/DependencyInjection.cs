@@ -7,6 +7,9 @@ using WorkflowCatalog.Infrastructure.Identity;
 using static WorkflowCatalog.Application.Common.Interfaces.IDateTimeService;
 using Microsoft.AspNetCore.Authentication;
 using WorkflowCatalog.Infrastructure.Services;
+using IdentityServer4.Models;
+using System.Collections.Generic;
+using IdentityServer4.Test;
 
 namespace WorkflowCatalog.Infrastructure
 {
@@ -23,13 +26,12 @@ namespace WorkflowCatalog.Infrastructure
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            
+                //AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            
             return services;
         }
     }

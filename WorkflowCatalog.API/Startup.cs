@@ -10,6 +10,8 @@ using WorkflowCatalog.Infrastructure;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using System.Linq;
+using WorkflowCatalog.API.Identity;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace WorkflowCatalog.API
 {
@@ -34,19 +36,9 @@ namespace WorkflowCatalog.API
 
             services.AddHttpContextAccessor();
 
-            services.AddOpenApiDocument(configure =>
-            {
-                configure.Title = "WorkflowCatalog API";
-                configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
-                {
-                    Type = OpenApiSecuritySchemeType.ApiKey,
-                    Name = "Authorization",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
-                });
+            services.AddAndConfigureIdentityServer();
 
-                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-            });
+            
 
 
 
@@ -66,9 +58,9 @@ namespace WorkflowCatalog.API
 
             app.UseRouting();
 
-            app.UseAuthentication();
-
             app.UseIdentityServer();
+
+            //app.UseOpenIdConnectAuthentication(a);
 
             app.UseAuthorization();
 
