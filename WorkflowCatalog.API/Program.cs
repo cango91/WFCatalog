@@ -40,6 +40,9 @@ namespace WorkflowCatalog.API
                         context.Database.Migrate();
                     }
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+
+
                     await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
                     await ApplicationDbContextSeed.SeedSampleDataAsync(context);
 

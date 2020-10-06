@@ -38,6 +38,8 @@ namespace WorkflowCatalog.API
 
             services.AddAndConfigureIdentityServer();
 
+            services.AddLogging();
+
             
 
 

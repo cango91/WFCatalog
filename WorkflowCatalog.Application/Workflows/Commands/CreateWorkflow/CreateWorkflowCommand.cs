@@ -6,6 +6,7 @@ using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Domain.Enums;
 using WorkflowCatalog.Domain.Entities;
 
+
 namespace WorkflowCatalog.Application.Workflows.Commands.CreateWorkflow
 {
     public class CreateWorkflowCommand : IRequest<int>
@@ -42,7 +43,6 @@ namespace WorkflowCatalog.Application.Workflows.Commands.CreateWorkflow
             };
 
             _context.Workflows.Add(wf);
-            //entity.Workflows.Add(wf);
 
             await _context.SaveChangesAsync(cancellationToken);
 

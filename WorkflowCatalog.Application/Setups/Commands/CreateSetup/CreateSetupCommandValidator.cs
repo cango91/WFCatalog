@@ -14,8 +14,8 @@ namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
         {
             _context = context;
             RuleFor(v => v.Name)
-                .MaximumLength(200).WithMessage("Name is required.")
-                .NotEmpty().WithMessage("Name must not exceed 200 characters.");
+                .MaximumLength(200).WithMessage("Name must not exceed 200 characters.")
+                .NotEmpty().WithMessage("Name is required.");
 
             RuleFor(x => x.ShortName)
                 .MaximumLength(6).WithMessage("Abbreviation can not exceed 6 characters.")
@@ -26,8 +26,9 @@ namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
         }
         public async Task<bool> BeUniqueAbbreviation(string abb, CancellationToken cancellationToken)
         {
+            
             return await _context.Setups
-                .AllAsync(a => !String.Equals(a.ShortName.ToLowerInvariant(), abb.ToLowerInvariant()));
+                .AllAsync(a => !String.Equals(a.ShortName.ToLower(), abb.ToLowerInvariant()));
         }
     }
 

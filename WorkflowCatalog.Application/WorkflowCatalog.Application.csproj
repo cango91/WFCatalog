@@ -14,6 +14,9 @@
     <Folder Include="Workflows\Commands\UpdateWorkflowDetails\" />
     <Folder Include="Setups\Queries\" />
     <Folder Include="Setups\Queries\GetSetups\" />
+    <Folder Include="Setups\Queries\GetSetupById\" />
+    <Folder Include="Workflows\Queries\" />
+    <Folder Include="Workflows\Queries\GetWorkflowById\" />
   </ItemGroup>
 
   <ItemGroup>

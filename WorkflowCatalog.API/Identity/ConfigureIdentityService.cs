@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IdentityServer4.Models;
-using IdentityServer4.Test;
-using Microsoft.AspNetCore.Authentication;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
-//using Microsoft.Extensions.
 
 namespace WorkflowCatalog.API.Identity
 {
@@ -45,22 +36,25 @@ namespace WorkflowCatalog.API.Identity
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    // base-address of your identityserver
+                    options.Authority = "https://localhost:62880";
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("asd")),
-                        ValidateIssuer = false
+                        ValidateIssuerSigningKey = false,
+                        //IssuerSigningKey = new SymmetricSecurityKey("as"),
+                        ValidateIssuer = false, ValidateAudience = false, RequireAudience = false,
+                       
                     };
                 })
+                
                 .AddOpenIdConnect(o =>
                 {
                     o.ClientId = "oauthApiClient";
                     o.ResponseType = "id_token token";
-                    o.Authority = "https://localhost:5001";
+                    o.Authority = "https://localhost:62880";
                     o.Scope.Add("api.read");
                     o.Scope.Add("api.write");
                     o.Scope.Add("api.admin");
+                
 
                 });
         }

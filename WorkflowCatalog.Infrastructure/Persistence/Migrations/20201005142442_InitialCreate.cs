@@ -210,7 +210,8 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                 name: "Workflows",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
@@ -218,24 +219,18 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Type = table.Column<int>(nullable: false),
-                    PrimaryId = table.Column<int>(nullable: true),
-                    SetupId = table.Column<int>(nullable: true)
+                    SetupId = table.Column<int>(nullable: false),
+                    PrimaryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Workflows", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Workflows_Setups_Id",
-                        column: x => x.Id,
-                        principalTable: "Setups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Workflows_Setups_SetupId",
                         column: x => x.SetupId,
                         principalTable: "Setups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -452,10 +447,10 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                 name: "Workflows");
 
             migrationBuilder.DropTable(
-                name: "Setups");
+                name: "Diagrams");
 
             migrationBuilder.DropTable(
-                name: "Diagrams");
+                name: "Setups");
         }
     }
 }

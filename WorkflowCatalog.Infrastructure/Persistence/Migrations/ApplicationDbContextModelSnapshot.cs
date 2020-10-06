@@ -354,7 +354,9 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.Workflow", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -378,7 +380,7 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                     b.Property<int?>("PrimaryId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SetupId")
+                    b.Property<int>("SetupId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Type")
@@ -562,19 +564,15 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.Workflow", b =>
                 {
-                    b.HasOne("WorkflowCatalog.Domain.Entities.Setup", "Setup")
-                        .WithOne()
-                        .HasForeignKey("WorkflowCatalog.Domain.Entities.Workflow", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("WorkflowCatalog.Domain.Entities.WorkflowDiagram", "Primary")
                         .WithMany()
                         .HasForeignKey("PrimaryId");
 
-                    b.HasOne("WorkflowCatalog.Domain.Entities.Setup", null)
+                    b.HasOne("WorkflowCatalog.Domain.Entities.Setup", "Setup")
                         .WithMany("Workflows")
-                        .HasForeignKey("SetupId");
+                        .HasForeignKey("SetupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.WorkflowDiagram", b =>

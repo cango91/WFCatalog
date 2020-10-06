@@ -25,9 +25,7 @@ namespace WorkflowCatalog.Infrastructure
             services.AddScoped<IDomainEventService, DomainEventService>();
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            
-                //AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            //.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();

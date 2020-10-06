@@ -15,5 +15,6 @@ namespace WorkflowCatalog.API.Services
         }
 
         public string UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        //public string UserId => "5BE86359-073C-434B-AD2D-A3932222DABE";
     }
 }
