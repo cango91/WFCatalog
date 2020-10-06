@@ -36,6 +36,8 @@ namespace WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails
             entity.ShortName = request.ShortName;
             entity.Status = request.Status;
 
+            await _context.SaveChangesAsync(cancellationToken);
+
             return Unit.Value;
 
         }

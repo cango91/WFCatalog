@@ -26,7 +26,7 @@ namespace WorkflowCatalog.Domain.Entities
                 _status = value;
             }
         }
-        //public SetupStatus ToggleStatus => Status = !Status;
+
         public HashSet<Workflow> Workflows { get; set; }
 
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();

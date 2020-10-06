@@ -1,34 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
 using WorkflowCatalog.Application.Common.Mappings;
 using WorkflowCatalog.Domain.Entities;
-using WorkflowCatalog.Domain.Enums;
 
 namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById
 {
-    public class SingleWorkflowDto : IMapFrom<Workflow>
+    public class UseCaseActorDto : IMapFrom<UseCaseActor>
     {
         public int Id { get; set; }
+        public int UseCaseId { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public int Type { get; set; }
-        public List<UseCasesDto> UseCases { get; set; }
-        public List<DiagramDto> Diagrams { get; set; }
-        public int SetupId { get; set; }
-
-        public int PrimaryDiagramId { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Workflow, SingleWorkflowDto>()
                 .ForMember(d => d.Type, opt => opt.MapFrom(s => (int)s.Type))
                 .ForMember(d => d.UseCases, opt => opt.MapFrom(x => x.UseCases.Select(y => y.Id).ToList()))
-                //.ForMember(d => d.Diagrams, opt => opt.MapFrom(x => x.Diagrams.Select(y => y.Id).ToList()))
+                .ForMember(d => d.Diagrams, opt => opt.MapFrom(x => x.Diagrams.Select(y => y.Id).ToList()))
                 .ForMember(d => d.PrimaryDiagramId, opt => opt.MapFrom(x => x.Primary.Id));
+
+
+            //.ForMember(d => d.Workflows, opt => opt.MapFrom(q=> q.Workflows.ToList()));
         }
     }
-
-
 }

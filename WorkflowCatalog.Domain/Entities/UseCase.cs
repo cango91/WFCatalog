@@ -16,8 +16,5 @@ namespace WorkflowCatalog.Domain.Entities
         public string NormalCourse { get;  set; }
         public string AltCourse { get;  set; }
         public Workflow Workflow { get; set; }
-
-      
-
     }
 }

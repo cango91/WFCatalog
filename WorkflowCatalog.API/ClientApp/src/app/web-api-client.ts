@@ -19,6 +19,7 @@ export interface ISetupsClient {
     create(command: CreateSetupCommand): Observable<number>;
     delete(command: DeleteSetupCommand): Observable<Unit>;
     getById(id: number): Observable<SetupVm>;
+    update(id: number, command: UpdateSetupDetailsCommand): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -236,6 +237,59 @@ export class SetupsClient implements ISetupsClient {
         }
         return _observableOf<SetupVm>(<any>null);
     }
+
+    update(id: number, command: UpdateSetupDetailsCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Setups/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
 }
 
 export interface IWeatherForecastClient {
@@ -310,6 +364,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 
 export interface IWorkflowsClient {
     create(command: CreateWorkflowCommand): Observable<number>;
+    smt(setupId: string): Observable<void>;
 }
 
 @Injectable({
@@ -375,6 +430,53 @@ export class WorkflowsClient implements IWorkflowsClient {
             }));
         }
         return _observableOf<number>(<any>null);
+    }
+
+    smt(setupId: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/Workflows/of/{setupId}";
+        if (setupId === undefined || setupId === null)
+            throw new Error("The parameter 'setupId' must be defined.");
+        url_ = url_.replace("{setupId}", encodeURIComponent("" + setupId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSmt(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSmt(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSmt(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
     }
 }
 
@@ -658,6 +760,59 @@ export interface ICreateSetupCommand {
     shortName?: string | undefined;
 }
 
+export class UpdateSetupDetailsCommand implements IUpdateSetupDetailsCommand {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    status?: SetupStatus;
+
+    constructor(data?: IUpdateSetupDetailsCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.shortName = _data["shortName"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): UpdateSetupDetailsCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateSetupDetailsCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["shortName"] = this.shortName;
+        data["status"] = this.status;
+        return data; 
+    }
+}
+
+export interface IUpdateSetupDetailsCommand {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    status?: SetupStatus;
+}
+
+export enum SetupStatus {
+    Passive = 0,
+    Active = 1,
+}
+
 export class Unit implements IUnit {
 
     constructor(data?: IUnit) {
@@ -823,6 +978,13 @@ export interface ICreateWorkflowCommand {
 export enum WorkflowType {
     MainFlow = 0,
     SubFlow = 1,
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class SwaggerException extends Error {

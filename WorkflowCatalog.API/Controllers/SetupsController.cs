@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkflowCatalog.Application.Setups.Commands.CreateSetup;
 using WorkflowCatalog.Application.Setups.Commands.DeleteSetup;
+using WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails;
 using WorkflowCatalog.Application.Setups.Queries.GetSetupById;
 using WorkflowCatalog.Application.Setups.Queries.GetSetups;
 
@@ -29,6 +30,16 @@ namespace WorkflowCatalog.API.Controllers
         public async Task<ActionResult<int>> Create(CreateSetupCommand command)
         {
             return await Mediator.Send(command);
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, UpdateSetupDetailsCommand command)
+        {
+            if(id!=command.Id)
+            {
+                return BadRequest();
+            }
+            await Mediator.Send(command);
+            return NoContent();
         }
         [HttpDelete]
         public async Task<ActionResult<Unit>> Delete(DeleteSetupCommand command)

@@ -17,6 +17,7 @@
     <Folder Include="Setups\Queries\GetSetupById\" />
     <Folder Include="Workflows\Queries\" />
     <Folder Include="Workflows\Queries\GetWorkflowById\" />
+    <Folder Include="Workflows\Queries\GetWorkflowsOfSetupWithPagination\" />
   </ItemGroup>
 
   <ItemGroup>

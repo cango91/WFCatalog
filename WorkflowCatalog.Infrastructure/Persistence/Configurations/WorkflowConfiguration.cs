@@ -15,8 +15,12 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Configurations
                 
             builder.Property(k => k.Name)
                 .IsRequired();
+
             builder.HasMany(s => s.Diagrams)
                 .WithOne(k => k.Workflow);
+
+            builder.HasMany(s => s.UseCases)
+                .WithOne(x => x.Workflow);
         }
     }
 }

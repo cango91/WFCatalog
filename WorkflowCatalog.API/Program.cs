@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using WorkflowCatalog.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using WorkflowCatalog.Infrastructure.Identity;
 

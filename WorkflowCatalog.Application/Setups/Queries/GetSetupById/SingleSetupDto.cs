@@ -21,8 +21,6 @@ namespace WorkflowCatalog.Application.Setups.Queries.GetSetupById
                 .ForMember(d => d.Status, opt => opt.MapFrom(s => (int)s.Status))
                 .ForMember(d => d.Workflows, opt => opt.MapFrom(x => x.Workflows.Select(y => y.Id).ToList()));
             
-      
-                //.ForMember(d => d.Workflows, opt => opt.MapFrom(q=> q.Workflows.ToList()));
         }
     }
 }
