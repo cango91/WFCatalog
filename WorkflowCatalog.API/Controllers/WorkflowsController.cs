@@ -21,11 +21,12 @@ namespace WorkflowCatalog.API.Controllers
         {
             return await Mediator.Send(new GetWorkflowByIdQuery { Id = id });
         }
-
-        [HttpGet("of/{setupId}")]
+        /*
+8        [HttpGet("of/{setupId}")]
         public async Task<ActionResult<PaginatedList>> smt()
         {
 
         }
+        */
     }
 }

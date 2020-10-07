@@ -10,8 +10,7 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<UseCaseActor> builder)
         {
             builder.HasMany(x => x.UseCases);
-            builder.Property(x => x.UseCases)
-                .IsRequired();
+           
                 
         }
     }

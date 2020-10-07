@@ -364,7 +364,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 
 export interface IWorkflowsClient {
     create(command: CreateWorkflowCommand): Observable<number>;
-    smt(setupId: string): Observable<void>;
+    getSingleWorkflow(id: number): Observable<SingleWorkflowDto>;
 }
 
 @Injectable({
@@ -432,35 +432,36 @@ export class WorkflowsClient implements IWorkflowsClient {
         return _observableOf<number>(<any>null);
     }
 
-    smt(setupId: string): Observable<void> {
-        let url_ = this.baseUrl + "/api/Workflows/of/{setupId}";
-        if (setupId === undefined || setupId === null)
-            throw new Error("The parameter 'setupId' must be defined.");
-        url_ = url_.replace("{setupId}", encodeURIComponent("" + setupId));
+    getSingleWorkflow(id: number): Observable<SingleWorkflowDto> {
+        let url_ = this.baseUrl + "/api/Workflows/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Accept": "application/json"
             })
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processSmt(response_);
+            return this.processGetSingleWorkflow(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processSmt(<any>response_);
+                    return this.processGetSingleWorkflow(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<SingleWorkflowDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<SingleWorkflowDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processSmt(response: HttpResponseBase): Observable<void> {
+    protected processGetSingleWorkflow(response: HttpResponseBase): Observable<SingleWorkflowDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -469,14 +470,17 @@ export class WorkflowsClient implements IWorkflowsClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SingleWorkflowDto.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<SingleWorkflowDto>(<any>null);
     }
 }
 
@@ -978,6 +982,230 @@ export interface ICreateWorkflowCommand {
 export enum WorkflowType {
     MainFlow = 0,
     SubFlow = 1,
+}
+
+export class SingleWorkflowDto implements ISingleWorkflowDto {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    type?: number;
+    useCases?: UseCasesDto[] | undefined;
+    diagrams?: DiagramDto[] | undefined;
+    setupId?: number;
+    primaryDiagramId?: number;
+
+    constructor(data?: ISingleWorkflowDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.type = _data["type"];
+            if (Array.isArray(_data["useCases"])) {
+                this.useCases = [] as any;
+                for (let item of _data["useCases"])
+                    this.useCases!.push(UseCasesDto.fromJS(item));
+            }
+            if (Array.isArray(_data["diagrams"])) {
+                this.diagrams = [] as any;
+                for (let item of _data["diagrams"])
+                    this.diagrams!.push(DiagramDto.fromJS(item));
+            }
+            this.setupId = _data["setupId"];
+            this.primaryDiagramId = _data["primaryDiagramId"];
+        }
+    }
+
+    static fromJS(data: any): SingleWorkflowDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SingleWorkflowDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["type"] = this.type;
+        if (Array.isArray(this.useCases)) {
+            data["useCases"] = [];
+            for (let item of this.useCases)
+                data["useCases"].push(item.toJSON());
+        }
+        if (Array.isArray(this.diagrams)) {
+            data["diagrams"] = [];
+            for (let item of this.diagrams)
+                data["diagrams"].push(item.toJSON());
+        }
+        data["setupId"] = this.setupId;
+        data["primaryDiagramId"] = this.primaryDiagramId;
+        return data; 
+    }
+}
+
+export interface ISingleWorkflowDto {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    type?: number;
+    useCases?: UseCasesDto[] | undefined;
+    diagrams?: DiagramDto[] | undefined;
+    setupId?: number;
+    primaryDiagramId?: number;
+}
+
+export class UseCasesDto implements IUseCasesDto {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    actors?: UCActorDto[] | undefined;
+
+    constructor(data?: IUseCasesDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["actors"])) {
+                this.actors = [] as any;
+                for (let item of _data["actors"])
+                    this.actors!.push(UCActorDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): UseCasesDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UseCasesDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        if (Array.isArray(this.actors)) {
+            data["actors"] = [];
+            for (let item of this.actors)
+                data["actors"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IUseCasesDto {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    actors?: UCActorDto[] | undefined;
+}
+
+export class UCActorDto implements IUCActorDto {
+    id?: number;
+    name?: string | undefined;
+
+    constructor(data?: IUCActorDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): UCActorDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UCActorDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IUCActorDto {
+    id?: number;
+    name?: string | undefined;
+}
+
+export class DiagramDto implements IDiagramDto {
+    id?: number;
+    fileName?: string | undefined;
+    mimeType?: string | undefined;
+    isPrimaryDiagram?: boolean;
+
+    constructor(data?: IDiagramDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fileName = _data["fileName"];
+            this.mimeType = _data["mimeType"];
+            this.isPrimaryDiagram = _data["isPrimaryDiagram"];
+        }
+    }
+
+    static fromJS(data: any): DiagramDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DiagramDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fileName"] = this.fileName;
+        data["mimeType"] = this.mimeType;
+        data["isPrimaryDiagram"] = this.isPrimaryDiagram;
+        return data; 
+    }
+}
+
+export interface IDiagramDto {
+    id?: number;
+    fileName?: string | undefined;
+    mimeType?: string | undefined;
+    isPrimaryDiagram?: boolean;
 }
 
 export interface FileResponse {

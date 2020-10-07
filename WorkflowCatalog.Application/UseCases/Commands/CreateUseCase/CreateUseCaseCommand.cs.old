@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using WorkflowCatalog.Application.Common.Exceptions;
+using WorkflowCatalog.Application.Common.Interfaces;
+using WorkflowCatalog.Domain.Entities;
+
+namespace WorkflowCatalog.Application.UseCases.Commands.CreateUseCase
+{
+    public class CreateUseCaseCommand : IRequest<int>
+    {
+        public int WorkflowId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public List<string> Actors { get; set; }
+        public string Preconditions { get; set; }
+        public string Postconditions { get; set; }
+        public string NormalCourse { get; set; }
+        public string AltCourse { get; set; }
+    }
+
+    public class CreateUseCaseCommandHandler : IRequestHandler<CreateUseCaseCommand,int>
+    {
+        private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public CreateUseCaseCommandHandler(IApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<int> Handle(CreateUseCaseCommand command, CancellationToken cancellationToken)
+        {
+            var entity = await _context.Workflows.FindAsync(command.WorkflowId);
+            if(entity==null)
+            {
+                throw new NotFoundException(nameof(Workflows), command.WorkflowId);
+            }
+
+            var uc = new UseCase
+            {
+                Name = command.Name,
+                Description = command.Description,
+                Preconditions = command.Preconditions,
+                Postconditions = command.Postconditions,
+                NormalCourse = command.NormalCourse,
+                AltCourse = command.AltCourse
+            };
+            uc.Actors = await ProcessIncomingActors(command.Actors, cancellationToken);
+            _context.UseCases.Add(uc);
+            await _context.SaveChangesAsync(cancellationToken);
+            return uc.Id;
+           
+        }
+
+        public async Task<List<UseCaseActor>> ProcessIncomingActors(List<string> actors, CancellationToken cancellationToken)
+        {
+            var output = new List<UseCaseActor>();
+           foreach(var actor in actors)
+            {
+                var entity = await _context.Actors.Where(x => x.Name.ToLower() == actor.ToLower()).FirstOrDefaultAsync(cancellationToken);
+                if(entity == null)
+                {
+                    entity = new UseCaseActor { Name = actor };
+                    //_context.Actors.Add(entity);
+                    output.Add(entity);
+                }
+                else
+                {
+                    output.Add(entity);
+                }                
+            }
+            return output;
+        }
+    }
+}

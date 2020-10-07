@@ -248,26 +248,34 @@
         ]
       }
     },
-    "/api/Workflows/of/{setupId}": {
+    "/api/Workflows/{id}": {
       "get": {
         "tags": [
           "Workflows"
         ],
-        "operationId": "Workflows_smt",
+        "operationId": "Workflows_GetSingleWorkflow",
         "parameters": [
           {
-            "name": "setupId",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             },
             "x-position": 1
           }
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SingleWorkflowDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -495,6 +503,110 @@
           0,
           1
         ]
+      },
+      "SingleWorkflowDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "useCases": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/UseCasesDto"
+            }
+          },
+          "diagrams": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/DiagramDto"
+            }
+          },
+          "setupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "primaryDiagramId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "UseCasesDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "actors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/UCActorDto"
+            }
+          }
+        }
+      },
+      "UCActorDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DiagramDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "isPrimaryDiagram": {
+            "type": "boolean"
+          }
+        }
       }
     },
     "securitySchemes": {

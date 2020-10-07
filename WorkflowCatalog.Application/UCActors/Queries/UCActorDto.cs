@@ -3,7 +3,7 @@ using AutoMapper;
 using WorkflowCatalog.Application.Common.Mappings;
 using WorkflowCatalog.Domain.Entities;
 
-namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById
+namespace WorkflowCatalog.Application.UCActors.Queries
 {
     public class UCActorDto : IMapFrom<UseCaseActor>
     {

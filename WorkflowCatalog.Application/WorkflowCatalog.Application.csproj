@@ -18,6 +18,11 @@
     <Folder Include="Workflows\Queries\" />
     <Folder Include="Workflows\Queries\GetWorkflowById\" />
     <Folder Include="Workflows\Queries\GetWorkflowsOfSetupWithPagination\" />
+    <Folder Include="UCActors\" />
+    <Folder Include="UCActors\Commands\" />
+    <Folder Include="UCActors\Queries\" />
+    <Folder Include="UCActors\Queries\GetActorsLike\" />
+    <Folder Include="UCActors\Commands\AddActor\" />
   </ItemGroup>
 
   <ItemGroup>
