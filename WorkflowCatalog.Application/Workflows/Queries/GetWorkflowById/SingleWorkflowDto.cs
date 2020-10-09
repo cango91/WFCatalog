@@ -24,8 +24,6 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById
         {
             profile.CreateMap<Workflow, SingleWorkflowDto>()
                 .ForMember(d => d.Type, opt => opt.MapFrom(s => (int)s.Type))
-                //.ForMember(d => d.UseCases, opt => opt.MapFrom(x => x.UseCases.Select(y => y.Id).ToList()))
-                //.ForMember(d => d.Diagrams, opt => opt.MapFrom(x => x.Diagrams.Select(y => y.Id).ToList()))
                 .ForMember(d => d.PrimaryDiagramId, opt => opt.MapFrom(x => x.Primary.Id));
         }
     }

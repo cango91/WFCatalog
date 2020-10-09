@@ -28,6 +28,7 @@
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Identity\" />
+    <Folder Include="Controllers\WorkFlow\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WorkflowCatalog.Application\WorkflowCatalog.Application.csproj">
