@@ -9,7 +9,7 @@ using WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById;
 using WorkflowCatalog.Application.Workflows.Queries.GetWorkflowsOfSetupWithPagination;
 using WorkflowCatalog.Domain.Enums;
 
-namespace WorkflowCatalog.API.Controllers.WorkFlow
+namespace WorkflowCatalog.API.Controllers
 {
     [Authorize]
     public class WorkflowsController : ApiController
@@ -27,8 +27,9 @@ namespace WorkflowCatalog.API.Controllers.WorkFlow
 
         [HttpGet("of/{setupId}")]
         public async Task<ActionResult<PaginatedList<SingleWorkflowDto>>> GetSetupsOf(int setupId,
-            [FromQuery] GetWorkflowsOfSetupRequest request)
+            [FromQuery] SieveRequest request)
         {
+            /*
             var filterTypes = request.filterTypes ?? new int[2] { (int) WorkflowType.MainFlow, (int) WorkflowType.SubFlow };
             return await Mediator.Send(new GetWorkflowsOfSetupWithPaginationQuery
             {
@@ -38,6 +39,15 @@ namespace WorkflowCatalog.API.Controllers.WorkFlow
                 FilterTypes = filterTypes.ToList(),
                 SortBy = request.sortBy,
                 SortOrder = request.order
+            });
+            */
+            return await Mediator.Send(new GetWorkflowsOfSetupWithPaginationQuery
+            {
+                SetupId = setupId,
+                Page = request.Page,
+                PageSize = request.PageSize,
+                Filters = request.Filters,
+                Sorts = request.Sorts
             });
 
         }

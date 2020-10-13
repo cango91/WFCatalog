@@ -2,6 +2,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Sieve.Services;
 using System.Reflection;
 using WorkflowCatalog.Application.Common.Behaviors;
 
@@ -17,6 +18,7 @@ namespace WorkflowCatalog.Application
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
+            services.AddScoped<SieveProcessor>();
 
             return services;
         }

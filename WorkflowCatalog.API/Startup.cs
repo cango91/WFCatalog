@@ -12,6 +12,7 @@ using NSwag.Generation.Processors.Security;
 using System.Linq;
 using WorkflowCatalog.API.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Sieve.Services;
 
 namespace WorkflowCatalog.API
 {
@@ -39,6 +40,8 @@ namespace WorkflowCatalog.API
             services.AddAndConfigureIdentityServer();
 
             services.AddLogging();
+
+            services.AddScoped<SieveProcessor>();
 
             
 

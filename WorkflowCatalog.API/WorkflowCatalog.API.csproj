@@ -24,11 +24,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.8" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Sieve" Version="2.3.3" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Identity\" />
-    <Folder Include="Controllers\WorkFlow\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WorkflowCatalog.Application\WorkflowCatalog.Application.csproj">

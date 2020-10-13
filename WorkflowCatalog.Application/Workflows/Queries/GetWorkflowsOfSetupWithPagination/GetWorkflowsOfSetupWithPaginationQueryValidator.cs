@@ -16,36 +16,14 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowsOfSetupWithP
             RuleFor(x => x.SetupId)
                 .NotNull()
                 .NotEmpty().WithMessage("SetupId is required.");
-            RuleFor(x => x.PageNumber)
+            RuleFor(x => x.Page)
                 .GreaterThanOrEqualTo(1).WithMessage("PageNumber must be at least 1");
             RuleFor(x => x.PageSize)
                 .GreaterThanOrEqualTo(1).WithMessage("PageSize must be at least 1");
 
-            RuleFor(x => x.SortBy)
-                .Must(BeValidSortBy);
-
-            RuleFor(x => x.FilterTypes)
-                .Must(BeValidFilterType);
-
             
   
         }
-        public bool BeValidSortBy(string sortBy)
-        {
-            var validSorts = new List<string> { "name", "description", "type","id" };
-            return validSorts.Exists(x => x == sortBy.ToLowerInvariant());
-        }
-
-        public bool BeValidSortOrder(string sortOrder)
-        {
-            var validSortOrders = new List<string> { "asc", "ascending", "desc", "descending" };
-            return validSortOrders.Exists(x => x == sortOrder.ToLowerInvariant());
-        }
-
-        public bool BeValidFilterType(List<int> filters)
-        {
-            var validFilters = new List<int> { (int) WorkflowType.MainFlow, (int) WorkflowType.SubFlow};
-            return filters.All(x => validFilters.Contains(x));
-        }
+        
     }
 }
