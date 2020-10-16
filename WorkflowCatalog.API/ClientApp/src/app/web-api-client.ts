@@ -14,6 +14,137 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IActorsClient {
+    getAll(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<UCActorDto[]>;
+    addActor(command: AddActorCommand): Observable<UCActorDto>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ActorsClient implements IActorsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getAll(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<UCActorDto[]> {
+        let url_ = this.baseUrl + "/api/Actors?";
+        if (filters !== undefined && filters !== null)
+            url_ += "Filters=" + encodeURIComponent("" + filters) + "&";
+        if (sorts !== undefined && sorts !== null)
+            url_ += "Sorts=" + encodeURIComponent("" + sorts) + "&";
+        if (page !== undefined && page !== null)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize !== undefined && pageSize !== null)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<UCActorDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UCActorDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<UCActorDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UCActorDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UCActorDto[]>(<any>null);
+    }
+
+    addActor(command: AddActorCommand): Observable<UCActorDto> {
+        let url_ = this.baseUrl + "/api/Actors";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAddActor(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAddActor(<any>response_);
+                } catch (e) {
+                    return <Observable<UCActorDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UCActorDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAddActor(response: HttpResponseBase): Observable<UCActorDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UCActorDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UCActorDto>(<any>null);
+    }
+}
+
 export interface ISetupsClient {
     get(): Observable<SetupsVm>;
     create(command: CreateSetupCommand): Observable<number>;
@@ -292,6 +423,76 @@ export class SetupsClient implements ISetupsClient {
     }
 }
 
+export interface IUseCasesClient {
+    create(command: CreateUseCaseCommand): Observable<number>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class UseCasesClient implements IUseCasesClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    create(command: CreateUseCaseCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/UseCases";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
+    }
+}
+
 export interface IWeatherForecastClient {
     get(): Observable<WeatherForecast[]>;
 }
@@ -365,6 +566,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 export interface IWorkflowsClient {
     create(command: CreateWorkflowCommand): Observable<number>;
     getSingleWorkflow(id: number): Observable<SingleWorkflowDto>;
+    getSetupsOf(setupId: number, filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<PaginatedListOfSingleWorkflowDto>;
 }
 
 @Injectable({
@@ -482,6 +684,141 @@ export class WorkflowsClient implements IWorkflowsClient {
         }
         return _observableOf<SingleWorkflowDto>(<any>null);
     }
+
+    getSetupsOf(setupId: number, filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<PaginatedListOfSingleWorkflowDto> {
+        let url_ = this.baseUrl + "/api/Workflows/of/{setupId}?";
+        if (setupId === undefined || setupId === null)
+            throw new Error("The parameter 'setupId' must be defined.");
+        url_ = url_.replace("{setupId}", encodeURIComponent("" + setupId));
+        if (filters !== undefined && filters !== null)
+            url_ += "Filters=" + encodeURIComponent("" + filters) + "&";
+        if (sorts !== undefined && sorts !== null)
+            url_ += "Sorts=" + encodeURIComponent("" + sorts) + "&";
+        if (page !== undefined && page !== null)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize !== undefined && pageSize !== null)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetSetupsOf(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetSetupsOf(<any>response_);
+                } catch (e) {
+                    return <Observable<PaginatedListOfSingleWorkflowDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PaginatedListOfSingleWorkflowDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetSetupsOf(response: HttpResponseBase): Observable<PaginatedListOfSingleWorkflowDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PaginatedListOfSingleWorkflowDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PaginatedListOfSingleWorkflowDto>(<any>null);
+    }
+}
+
+export class UCActorDto implements IUCActorDto {
+    id?: number;
+    name?: string | undefined;
+
+    constructor(data?: IUCActorDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): UCActorDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UCActorDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IUCActorDto {
+    id?: number;
+    name?: string | undefined;
+}
+
+export class AddActorCommand implements IAddActorCommand {
+    name?: string | undefined;
+
+    constructor(data?: IAddActorCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): AddActorCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddActorCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IAddActorCommand {
+    name?: string | undefined;
 }
 
 export class SetupsVm implements ISetupsVm {
@@ -883,6 +1220,78 @@ export interface IDeleteSetupCommand {
     id?: number;
 }
 
+export class CreateUseCaseCommand implements ICreateUseCaseCommand {
+    workflowId?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    actors?: number[] | undefined;
+    preconditions?: string | undefined;
+    postconditions?: string | undefined;
+    normalCourse?: string | undefined;
+    altCourse?: string | undefined;
+
+    constructor(data?: ICreateUseCaseCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.workflowId = _data["workflowId"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["actors"])) {
+                this.actors = [] as any;
+                for (let item of _data["actors"])
+                    this.actors!.push(item);
+            }
+            this.preconditions = _data["preconditions"];
+            this.postconditions = _data["postconditions"];
+            this.normalCourse = _data["normalCourse"];
+            this.altCourse = _data["altCourse"];
+        }
+    }
+
+    static fromJS(data: any): CreateUseCaseCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateUseCaseCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["workflowId"] = this.workflowId;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        if (Array.isArray(this.actors)) {
+            data["actors"] = [];
+            for (let item of this.actors)
+                data["actors"].push(item);
+        }
+        data["preconditions"] = this.preconditions;
+        data["postconditions"] = this.postconditions;
+        data["normalCourse"] = this.normalCourse;
+        data["altCourse"] = this.altCourse;
+        return data; 
+    }
+}
+
+export interface ICreateUseCaseCommand {
+    workflowId?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    actors?: number[] | undefined;
+    preconditions?: string | undefined;
+    postconditions?: string | undefined;
+    normalCourse?: string | undefined;
+    altCourse?: string | undefined;
+}
+
 export class WeatherForecast implements IWeatherForecast {
     date?: Date;
     temperatureC?: number;
@@ -1120,46 +1529,6 @@ export interface IUseCasesDto {
     actors?: UCActorDto[] | undefined;
 }
 
-export class UCActorDto implements IUCActorDto {
-    id?: number;
-    name?: string | undefined;
-
-    constructor(data?: IUCActorDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): UCActorDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UCActorDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data; 
-    }
-}
-
-export interface IUCActorDto {
-    id?: number;
-    name?: string | undefined;
-}
-
 export class DiagramDto implements IDiagramDto {
     id?: number;
     fileName?: string | undefined;
@@ -1206,6 +1575,70 @@ export interface IDiagramDto {
     fileName?: string | undefined;
     mimeType?: string | undefined;
     isPrimaryDiagram?: boolean;
+}
+
+export class PaginatedListOfSingleWorkflowDto implements IPaginatedListOfSingleWorkflowDto {
+    items?: SingleWorkflowDto[] | undefined;
+    pageIndex?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+
+    constructor(data?: IPaginatedListOfSingleWorkflowDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(SingleWorkflowDto.fromJS(item));
+            }
+            this.pageIndex = _data["pageIndex"];
+            this.totalPages = _data["totalPages"];
+            this.totalCount = _data["totalCount"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedListOfSingleWorkflowDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedListOfSingleWorkflowDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["pageIndex"] = this.pageIndex;
+        data["totalPages"] = this.totalPages;
+        data["totalCount"] = this.totalCount;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        return data; 
+    }
+}
+
+export interface IPaginatedListOfSingleWorkflowDto {
+    items?: SingleWorkflowDto[] | undefined;
+    pageIndex?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
 }
 
 export interface FileResponse {

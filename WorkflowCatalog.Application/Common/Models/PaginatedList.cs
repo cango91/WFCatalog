@@ -10,9 +10,9 @@ namespace WorkflowCatalog.Application.Common.Models
     {
         public List<T> Items { get; }
         public int PageIndex { get; }
-        public int TotalPages { get; }
-        public int TotalCount { get; }
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+        public long TotalPages { get; }
+        public long TotalCount { get; }
+        public PaginatedList(List<T> items, long count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);

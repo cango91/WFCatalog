@@ -23,6 +23,8 @@
     <Folder Include="UCActors\Queries\" />
     <Folder Include="UCActors\Queries\GetActorsLike\" />
     <Folder Include="UCActors\Commands\AddActor\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="UCActors\Queries\GetActors\" />
   </ItemGroup>
 
   <ItemGroup>

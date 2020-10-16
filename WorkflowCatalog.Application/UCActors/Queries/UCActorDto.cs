@@ -12,7 +12,7 @@ namespace WorkflowCatalog.Application.UCActors.Queries
         [Sieve(CanFilter = true, CanSort = false)]
         public int Id { get; set; }
 
-
+        [Sieve(CanFilter = true, CanSort = true)]
         public string Name { get; set; }
 
         public void Mapping(Profile profile)

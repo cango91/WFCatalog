@@ -25,6 +25,8 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById
 
         public List<UseCasesDto> UseCases { get; set; }
         public List<DiagramDto> Diagrams { get; set; }
+
+
         public int SetupId { get; set; }
 
         public int PrimaryDiagramId { get; set; }

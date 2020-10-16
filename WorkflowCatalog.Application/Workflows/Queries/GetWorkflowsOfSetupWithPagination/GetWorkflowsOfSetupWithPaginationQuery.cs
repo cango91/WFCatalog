@@ -10,11 +10,12 @@ using Sieve.Models;
 using Sieve.Services;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Application.Common.Models;
+using WorkflowCatalog.Application.Extensions;
 using WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById;
 
 namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowsOfSetupWithPagination
 {
-    public class GetWorkflowsOfSetupWithPaginationQuery : SieveModel, IRequest<IList<SingleWorkflowDto>>
+    public class GetWorkflowsOfSetupWithPaginationQuery : SieveModel, IRequest<PaginatedList<SingleWorkflowDto>>
     {
         public int SetupId { get; set; }
         //public int PageNumber { get; set; }
@@ -24,34 +25,26 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowsOfSetupWithP
         //public List<int> FilterTypes { get; set; }
     }
 
-    public class GetWorkflowsOfSetupWithPaginationQueryHandler : IRequestHandler<GetWorkflowsOfSetupWithPaginationQuery,IList<SingleWorkflowDto>>
+    public class GetWorkflowsOfSetupWithPaginationQueryHandler : IRequestHandler<GetWorkflowsOfSetupWithPaginationQuery, PaginatedList<SingleWorkflowDto>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly ISieveProcessor _sieve;
+        private readonly SieveProcessor _sieve;
 
-        public GetWorkflowsOfSetupWithPaginationQueryHandler(IApplicationDbContext context, IMapper mapper, ISieveProcessor sieveProcessor)
+        public GetWorkflowsOfSetupWithPaginationQueryHandler(IApplicationDbContext context, IMapper mapper, SieveProcessor sieveProcessor)
         {
             _mapper = mapper;
             _context = context;
             _sieve = sieveProcessor;
         }
 
-        public async Task<IList<SingleWorkflowDto>> Handle(GetWorkflowsOfSetupWithPaginationQuery request,CancellationToken cancellationToken)
+        public async Task<PaginatedList<SingleWorkflowDto>> Handle(GetWorkflowsOfSetupWithPaginationQuery request,CancellationToken cancellationToken)
         {
             var results = _context.Workflows
-                .Where(x => x.Setup.Id == request.SetupId);
-            var sieveModel = new SieveModel
-            {
-                Page = request.Page,
-                PageSize = request.Page,
-                Sorts = request.Sorts,
-                Filters = request.Filters
-            };
-            results = _sieve.Apply(sieveModel, results);
-            return results.ProjectTo<SingleWorkflowDto>(_mapper.ConfigurationProvider).ToList();
-            
+                .Where(x => x.Setup.Id == request.SetupId)
+                .ProjectTo<SingleWorkflowDto>(_mapper.ConfigurationProvider);
 
+            return await results.Paginate(_sieve, request);
         }
     }
 }
