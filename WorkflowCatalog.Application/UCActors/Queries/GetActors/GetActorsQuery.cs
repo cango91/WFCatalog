@@ -12,8 +12,10 @@ using WorkflowCatalog.Application.Extensions;
 
 namespace WorkflowCatalog.Application.UCActors.Queries.GetActors
 {
-    public class GetActorsQuery : SieveModel, IRequest<IList<UCActorDto>>
+    public class GetActorsQuery : IRequest<IList<UCActorDto>>
     {
+        public string Filters { get; set; }
+        public string Sorts { get; set; }
     }
     
     public class GetActorsQueryHandler : IRequestHandler<GetActorsQuery,IList<UCActorDto>>
@@ -32,7 +34,11 @@ namespace WorkflowCatalog.Application.UCActors.Queries.GetActors
         public async Task<IList<UCActorDto>> Handle (GetActorsQuery query, CancellationToken cancellationToken)
         {
             var actors = _context.Actors.ProjectTo<UCActorDto>(_mapper.ConfigurationProvider);
-            return await actors.FilterAndSort(_processor,query);
+            return await actors.FilterAndSort(_processor,new SieveModel
+            {
+                Filters = query.Filters,
+                Sorts = query.Sorts
+            });
 
         }
     }
