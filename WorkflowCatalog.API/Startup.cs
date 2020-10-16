@@ -13,6 +13,7 @@ using System.Linq;
 using WorkflowCatalog.API.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Sieve.Services;
+using Sieve.Models;
 
 namespace WorkflowCatalog.API
 {
@@ -42,6 +43,8 @@ namespace WorkflowCatalog.API
             services.AddLogging();
 
             services.AddScoped<SieveProcessor>();
+
+            services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
 
             
 

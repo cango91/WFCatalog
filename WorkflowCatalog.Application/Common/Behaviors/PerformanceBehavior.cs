@@ -47,7 +47,7 @@ namespace WorkflowCatalog.Application.Common.Behaviors
                     userName = await _identityService.GetUserNameAsync(userId);
                 }
 
-                _logger.LogWarning("ca_ref Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
+                _logger.LogWarning("WFCatalog Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
                     requestName, elapsedMilliseconds, userId, userName, request);
             }
 

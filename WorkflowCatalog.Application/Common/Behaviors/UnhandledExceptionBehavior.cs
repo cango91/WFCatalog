@@ -25,7 +25,7 @@ namespace WorkflowCatalog.Application.Common.Behaviors
             {
                 var requestName = typeof(TRequest).Name;
 
-                _logger.LogError(ex, "ca_ref Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
+                _logger.LogError(ex, "WFCatalog Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
 
                 throw;
             }

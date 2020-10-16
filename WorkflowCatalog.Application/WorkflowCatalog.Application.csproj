@@ -14,10 +14,7 @@
     <Folder Include="Workflows\Commands\UpdateWorkflowDetails\" />
     <Folder Include="Setups\Queries\" />
     <Folder Include="Setups\Queries\GetSetups\" />
-    <Folder Include="Setups\Queries\GetSetupById\" />
     <Folder Include="Workflows\Queries\" />
-    <Folder Include="Workflows\Queries\GetWorkflowById\" />
-    <Folder Include="Workflows\Queries\GetWorkflowsOfSetupWithPagination\" />
     <Folder Include="UCActors\" />
     <Folder Include="UCActors\Commands\" />
     <Folder Include="UCActors\Queries\" />
@@ -25,6 +22,10 @@
     <Folder Include="UCActors\Commands\AddActor\" />
     <Folder Include="Extensions\" />
     <Folder Include="UCActors\Queries\GetActors\" />
+    <Folder Include="UseCases\Queries\" />
+    <Folder Include="UseCases\Queries\GetUseCaseById\" />
+    <Folder Include="UseCases\Queries\GetUseCasesOfWorkflowWithPagination\" />
+    <Folder Include="Workflows\Queries\GetWorkflows\" />
   </ItemGroup>
 
   <ItemGroup>

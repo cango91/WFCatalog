@@ -146,10 +146,10 @@ export class ActorsClient implements IActorsClient {
 }
 
 export interface ISetupsClient {
-    get(): Observable<SetupsVm>;
+    get(filters: string | null | undefined, sorts: string | null | undefined): Observable<SetupsVm>;
     create(command: CreateSetupCommand): Observable<number>;
     delete(command: DeleteSetupCommand): Observable<Unit>;
-    getById(id: number): Observable<SetupVm>;
+    getById(id: number): Observable<SetupsVm>;
     update(id: number, command: UpdateSetupDetailsCommand): Observable<FileResponse>;
 }
 
@@ -166,8 +166,12 @@ export class SetupsClient implements ISetupsClient {
         this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    get(): Observable<SetupsVm> {
-        let url_ = this.baseUrl + "/api/Setups";
+    get(filters: string | null | undefined, sorts: string | null | undefined): Observable<SetupsVm> {
+        let url_ = this.baseUrl + "/api/Setups?";
+        if (filters !== undefined && filters !== null)
+            url_ += "Filters=" + encodeURIComponent("" + filters) + "&";
+        if (sorts !== undefined && sorts !== null)
+            url_ += "Sorts=" + encodeURIComponent("" + sorts) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -318,7 +322,7 @@ export class SetupsClient implements ISetupsClient {
         return _observableOf<Unit>(<any>null);
     }
 
-    getById(id: number): Observable<SetupVm> {
+    getById(id: number): Observable<SetupsVm> {
         let url_ = this.baseUrl + "/api/Setups/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -340,14 +344,14 @@ export class SetupsClient implements ISetupsClient {
                 try {
                     return this.processGetById(<any>response_);
                 } catch (e) {
-                    return <Observable<SetupVm>><any>_observableThrow(e);
+                    return <Observable<SetupsVm>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<SetupVm>><any>_observableThrow(response_);
+                return <Observable<SetupsVm>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetById(response: HttpResponseBase): Observable<SetupVm> {
+    protected processGetById(response: HttpResponseBase): Observable<SetupsVm> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -358,7 +362,7 @@ export class SetupsClient implements ISetupsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = SetupVm.fromJS(resultData200);
+            result200 = SetupsVm.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -366,7 +370,7 @@ export class SetupsClient implements ISetupsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<SetupVm>(<any>null);
+        return _observableOf<SetupsVm>(<any>null);
     }
 
     update(id: number, command: UpdateSetupDetailsCommand): Observable<FileResponse> {
@@ -565,8 +569,8 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 
 export interface IWorkflowsClient {
     create(command: CreateWorkflowCommand): Observable<number>;
-    getSingleWorkflow(id: number): Observable<SingleWorkflowDto>;
-    getSetupsOf(setupId: number, filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<PaginatedListOfSingleWorkflowDto>;
+    getWorkflows(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<WorkflowsVm>;
+    getSingleWorkflow(id: number): Observable<WorkflowsVm>;
 }
 
 @Injectable({
@@ -634,7 +638,63 @@ export class WorkflowsClient implements IWorkflowsClient {
         return _observableOf<number>(<any>null);
     }
 
-    getSingleWorkflow(id: number): Observable<SingleWorkflowDto> {
+    getWorkflows(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<WorkflowsVm> {
+        let url_ = this.baseUrl + "/api/Workflows?";
+        if (filters !== undefined && filters !== null)
+            url_ += "Filters=" + encodeURIComponent("" + filters) + "&";
+        if (sorts !== undefined && sorts !== null)
+            url_ += "Sorts=" + encodeURIComponent("" + sorts) + "&";
+        if (page !== undefined && page !== null)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize !== undefined && pageSize !== null)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetWorkflows(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetWorkflows(<any>response_);
+                } catch (e) {
+                    return <Observable<WorkflowsVm>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<WorkflowsVm>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetWorkflows(response: HttpResponseBase): Observable<WorkflowsVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = WorkflowsVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<WorkflowsVm>(<any>null);
+    }
+
+    getSingleWorkflow(id: number): Observable<WorkflowsVm> {
         let url_ = this.baseUrl + "/api/Workflows/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -656,14 +716,14 @@ export class WorkflowsClient implements IWorkflowsClient {
                 try {
                     return this.processGetSingleWorkflow(<any>response_);
                 } catch (e) {
-                    return <Observable<SingleWorkflowDto>><any>_observableThrow(e);
+                    return <Observable<WorkflowsVm>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<SingleWorkflowDto>><any>_observableThrow(response_);
+                return <Observable<WorkflowsVm>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetSingleWorkflow(response: HttpResponseBase): Observable<SingleWorkflowDto> {
+    protected processGetSingleWorkflow(response: HttpResponseBase): Observable<WorkflowsVm> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -674,7 +734,7 @@ export class WorkflowsClient implements IWorkflowsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = SingleWorkflowDto.fromJS(resultData200);
+            result200 = WorkflowsVm.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -682,66 +742,7 @@ export class WorkflowsClient implements IWorkflowsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<SingleWorkflowDto>(<any>null);
-    }
-
-    getSetupsOf(setupId: number, filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<PaginatedListOfSingleWorkflowDto> {
-        let url_ = this.baseUrl + "/api/Workflows/of/{setupId}?";
-        if (setupId === undefined || setupId === null)
-            throw new Error("The parameter 'setupId' must be defined.");
-        url_ = url_.replace("{setupId}", encodeURIComponent("" + setupId));
-        if (filters !== undefined && filters !== null)
-            url_ += "Filters=" + encodeURIComponent("" + filters) + "&";
-        if (sorts !== undefined && sorts !== null)
-            url_ += "Sorts=" + encodeURIComponent("" + sorts) + "&";
-        if (page !== undefined && page !== null)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize !== undefined && pageSize !== null)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetSetupsOf(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetSetupsOf(<any>response_);
-                } catch (e) {
-                    return <Observable<PaginatedListOfSingleWorkflowDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<PaginatedListOfSingleWorkflowDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetSetupsOf(response: HttpResponseBase): Observable<PaginatedListOfSingleWorkflowDto> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PaginatedListOfSingleWorkflowDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<PaginatedListOfSingleWorkflowDto>(<any>null);
+        return _observableOf<WorkflowsVm>(<any>null);
     }
 }
 
@@ -917,13 +918,13 @@ export interface ISetupStatusDto {
     name?: string | undefined;
 }
 
-export class SetupsDto implements ISetupsDto {
-    id?: number;
-    name?: string | undefined;
-    shortName?: string | undefined;
-    status?: number;
+export abstract class Auditable implements IAuditable {
+    createdBy?: string | undefined;
+    created?: Date;
+    lastModifiedBy?: string | undefined;
+    lastModified?: Date;
 
-    constructor(data?: ISetupsDto) {
+    constructor(data?: IAuditable) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -934,10 +935,54 @@ export class SetupsDto implements ISetupsDto {
 
     init(_data?: any) {
         if (_data) {
+            this.createdBy = _data["createdBy"];
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.lastModifiedBy = _data["lastModifiedBy"];
+            this.lastModified = _data["lastModified"] ? new Date(_data["lastModified"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): Auditable {
+        data = typeof data === 'object' ? data : {};
+        throw new Error("The abstract class 'Auditable' cannot be instantiated.");
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["createdBy"] = this.createdBy;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["lastModifiedBy"] = this.lastModifiedBy;
+        data["lastModified"] = this.lastModified ? this.lastModified.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IAuditable {
+    createdBy?: string | undefined;
+    created?: Date;
+    lastModifiedBy?: string | undefined;
+    lastModified?: Date;
+}
+
+export class SetupsDto extends Auditable implements ISetupsDto {
+    id?: number;
+    name?: string | undefined;
+    shortName?: string | undefined;
+    status?: number;
+    workflowCount?: number;
+
+    constructor(data?: ISetupsDto) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
             this.shortName = _data["shortName"];
             this.status = _data["status"];
+            this.workflowCount = _data["workflowCount"];
         }
     }
 
@@ -954,111 +999,18 @@ export class SetupsDto implements ISetupsDto {
         data["name"] = this.name;
         data["shortName"] = this.shortName;
         data["status"] = this.status;
+        data["workflowCount"] = this.workflowCount;
+        super.toJSON(data);
         return data; 
     }
 }
 
-export interface ISetupsDto {
+export interface ISetupsDto extends IAuditable {
     id?: number;
     name?: string | undefined;
     shortName?: string | undefined;
     status?: number;
-}
-
-export class SetupVm implements ISetupVm {
-    setup?: SingleSetupDto | undefined;
-
-    constructor(data?: ISetupVm) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.setup = _data["setup"] ? SingleSetupDto.fromJS(_data["setup"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): SetupVm {
-        data = typeof data === 'object' ? data : {};
-        let result = new SetupVm();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["setup"] = this.setup ? this.setup.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface ISetupVm {
-    setup?: SingleSetupDto | undefined;
-}
-
-export class SingleSetupDto implements ISingleSetupDto {
-    id?: number;
-    name?: string | undefined;
-    shortName?: string | undefined;
-    status?: number;
-    workflows?: number[] | undefined;
-
-    constructor(data?: ISingleSetupDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.shortName = _data["shortName"];
-            this.status = _data["status"];
-            if (Array.isArray(_data["workflows"])) {
-                this.workflows = [] as any;
-                for (let item of _data["workflows"])
-                    this.workflows!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): SingleSetupDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new SingleSetupDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["shortName"] = this.shortName;
-        data["status"] = this.status;
-        if (Array.isArray(this.workflows)) {
-            data["workflows"] = [];
-            for (let item of this.workflows)
-                data["workflows"].push(item);
-        }
-        return data; 
-    }
-}
-
-export interface ISingleSetupDto {
-    id?: number;
-    name?: string | undefined;
-    shortName?: string | undefined;
-    status?: number;
-    workflows?: number[] | undefined;
+    workflowCount?: number;
 }
 
 export class CreateSetupCommand implements ICreateSetupCommand {
@@ -1393,17 +1345,11 @@ export enum WorkflowType {
     SubFlow = 1,
 }
 
-export class SingleWorkflowDto implements ISingleWorkflowDto {
-    id?: number;
-    name?: string | undefined;
-    description?: string | undefined;
-    type?: number;
-    useCases?: UseCasesDto[] | undefined;
-    diagrams?: DiagramDto[] | undefined;
-    setupId?: number;
-    primaryDiagramId?: number;
+export class WorkflowsVm implements IWorkflowsVm {
+    workflowTypes?: WorkflowTypeDto[] | undefined;
+    workflows?: PaginatedListOfWorkflowsDto | undefined;
 
-    constructor(data?: ISingleWorkflowDto) {
+    constructor(data?: IWorkflowsVm) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1414,178 +1360,88 @@ export class SingleWorkflowDto implements ISingleWorkflowDto {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            if (Array.isArray(_data["workflowTypes"])) {
+                this.workflowTypes = [] as any;
+                for (let item of _data["workflowTypes"])
+                    this.workflowTypes!.push(WorkflowTypeDto.fromJS(item));
+            }
+            this.workflows = _data["workflows"] ? PaginatedListOfWorkflowsDto.fromJS(_data["workflows"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): WorkflowsVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new WorkflowsVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.workflowTypes)) {
+            data["workflowTypes"] = [];
+            for (let item of this.workflowTypes)
+                data["workflowTypes"].push(item.toJSON());
+        }
+        data["workflows"] = this.workflows ? this.workflows.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IWorkflowsVm {
+    workflowTypes?: WorkflowTypeDto[] | undefined;
+    workflows?: PaginatedListOfWorkflowsDto | undefined;
+}
+
+export class WorkflowTypeDto implements IWorkflowTypeDto {
+    value?: number;
+    name?: string | undefined;
+
+    constructor(data?: IWorkflowTypeDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
             this.name = _data["name"];
-            this.description = _data["description"];
-            this.type = _data["type"];
-            if (Array.isArray(_data["useCases"])) {
-                this.useCases = [] as any;
-                for (let item of _data["useCases"])
-                    this.useCases!.push(UseCasesDto.fromJS(item));
-            }
-            if (Array.isArray(_data["diagrams"])) {
-                this.diagrams = [] as any;
-                for (let item of _data["diagrams"])
-                    this.diagrams!.push(DiagramDto.fromJS(item));
-            }
-            this.setupId = _data["setupId"];
-            this.primaryDiagramId = _data["primaryDiagramId"];
         }
     }
 
-    static fromJS(data: any): SingleWorkflowDto {
+    static fromJS(data: any): WorkflowTypeDto {
         data = typeof data === 'object' ? data : {};
-        let result = new SingleWorkflowDto();
+        let result = new WorkflowTypeDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["value"] = this.value;
         data["name"] = this.name;
-        data["description"] = this.description;
-        data["type"] = this.type;
-        if (Array.isArray(this.useCases)) {
-            data["useCases"] = [];
-            for (let item of this.useCases)
-                data["useCases"].push(item.toJSON());
-        }
-        if (Array.isArray(this.diagrams)) {
-            data["diagrams"] = [];
-            for (let item of this.diagrams)
-                data["diagrams"].push(item.toJSON());
-        }
-        data["setupId"] = this.setupId;
-        data["primaryDiagramId"] = this.primaryDiagramId;
         return data; 
     }
 }
 
-export interface ISingleWorkflowDto {
-    id?: number;
+export interface IWorkflowTypeDto {
+    value?: number;
     name?: string | undefined;
-    description?: string | undefined;
-    type?: number;
-    useCases?: UseCasesDto[] | undefined;
-    diagrams?: DiagramDto[] | undefined;
-    setupId?: number;
-    primaryDiagramId?: number;
 }
 
-export class UseCasesDto implements IUseCasesDto {
-    id?: number;
-    name?: string | undefined;
-    description?: string | undefined;
-    actors?: UCActorDto[] | undefined;
-
-    constructor(data?: IUseCasesDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.description = _data["description"];
-            if (Array.isArray(_data["actors"])) {
-                this.actors = [] as any;
-                for (let item of _data["actors"])
-                    this.actors!.push(UCActorDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): UseCasesDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UseCasesDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        if (Array.isArray(this.actors)) {
-            data["actors"] = [];
-            for (let item of this.actors)
-                data["actors"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IUseCasesDto {
-    id?: number;
-    name?: string | undefined;
-    description?: string | undefined;
-    actors?: UCActorDto[] | undefined;
-}
-
-export class DiagramDto implements IDiagramDto {
-    id?: number;
-    fileName?: string | undefined;
-    mimeType?: string | undefined;
-    isPrimaryDiagram?: boolean;
-
-    constructor(data?: IDiagramDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.fileName = _data["fileName"];
-            this.mimeType = _data["mimeType"];
-            this.isPrimaryDiagram = _data["isPrimaryDiagram"];
-        }
-    }
-
-    static fromJS(data: any): DiagramDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new DiagramDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["fileName"] = this.fileName;
-        data["mimeType"] = this.mimeType;
-        data["isPrimaryDiagram"] = this.isPrimaryDiagram;
-        return data; 
-    }
-}
-
-export interface IDiagramDto {
-    id?: number;
-    fileName?: string | undefined;
-    mimeType?: string | undefined;
-    isPrimaryDiagram?: boolean;
-}
-
-export class PaginatedListOfSingleWorkflowDto implements IPaginatedListOfSingleWorkflowDto {
-    items?: SingleWorkflowDto[] | undefined;
+export class PaginatedListOfWorkflowsDto implements IPaginatedListOfWorkflowsDto {
+    items?: WorkflowsDto[] | undefined;
     pageIndex?: number;
     totalPages?: number;
     totalCount?: number;
     hasPreviousPage?: boolean;
     hasNextPage?: boolean;
 
-    constructor(data?: IPaginatedListOfSingleWorkflowDto) {
+    constructor(data?: IPaginatedListOfWorkflowsDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1599,7 +1455,7 @@ export class PaginatedListOfSingleWorkflowDto implements IPaginatedListOfSingleW
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
-                    this.items!.push(SingleWorkflowDto.fromJS(item));
+                    this.items!.push(WorkflowsDto.fromJS(item));
             }
             this.pageIndex = _data["pageIndex"];
             this.totalPages = _data["totalPages"];
@@ -1609,9 +1465,9 @@ export class PaginatedListOfSingleWorkflowDto implements IPaginatedListOfSingleW
         }
     }
 
-    static fromJS(data: any): PaginatedListOfSingleWorkflowDto {
+    static fromJS(data: any): PaginatedListOfWorkflowsDto {
         data = typeof data === 'object' ? data : {};
-        let result = new PaginatedListOfSingleWorkflowDto();
+        let result = new PaginatedListOfWorkflowsDto();
         result.init(data);
         return result;
     }
@@ -1632,13 +1488,74 @@ export class PaginatedListOfSingleWorkflowDto implements IPaginatedListOfSingleW
     }
 }
 
-export interface IPaginatedListOfSingleWorkflowDto {
-    items?: SingleWorkflowDto[] | undefined;
+export interface IPaginatedListOfWorkflowsDto {
+    items?: WorkflowsDto[] | undefined;
     pageIndex?: number;
     totalPages?: number;
     totalCount?: number;
     hasPreviousPage?: boolean;
     hasNextPage?: boolean;
+}
+
+export class WorkflowsDto extends Auditable implements IWorkflowsDto {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    type?: number;
+    setupId?: number;
+    primaryDiagramId?: number;
+    diagramCount?: number;
+    useCaseCount?: number;
+
+    constructor(data?: IWorkflowsDto) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.type = _data["type"];
+            this.setupId = _data["setupId"];
+            this.primaryDiagramId = _data["primaryDiagramId"];
+            this.diagramCount = _data["diagramCount"];
+            this.useCaseCount = _data["useCaseCount"];
+        }
+    }
+
+    static fromJS(data: any): WorkflowsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new WorkflowsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["type"] = this.type;
+        data["setupId"] = this.setupId;
+        data["primaryDiagramId"] = this.primaryDiagramId;
+        data["diagramCount"] = this.diagramCount;
+        data["useCaseCount"] = this.useCaseCount;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IWorkflowsDto extends IAuditable {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    type?: number;
+    setupId?: number;
+    primaryDiagramId?: number;
+    diagramCount?: number;
+    useCaseCount?: number;
 }
 
 export interface FileResponse {
