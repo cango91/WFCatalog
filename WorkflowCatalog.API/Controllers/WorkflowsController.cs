@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -26,21 +27,9 @@ namespace WorkflowCatalog.API.Controllers
         }
 
         [HttpGet("of/{setupId}")]
-        public async Task<ActionResult<PaginatedList<SingleWorkflowDto>>> GetSetupsOf(int setupId,
+        public async Task<PaginatedList<SingleWorkflowDto>> GetSetupsOf(int setupId,
             [FromQuery] SieveRequest request)
         {
-            /*
-            var filterTypes = request.filterTypes ?? new int[2] { (int) WorkflowType.MainFlow, (int) WorkflowType.SubFlow };
-            return await Mediator.Send(new GetWorkflowsOfSetupWithPaginationQuery
-            {
-                SetupId = setupId,
-                PageNumber = request.page,
-                PageSize = request.pageSize,
-                FilterTypes = filterTypes.ToList(),
-                SortBy = request.sortBy,
-                SortOrder = request.order
-            });
-            */
             return await Mediator.Send(new GetWorkflowsOfSetupWithPaginationQuery
             {
                 SetupId = setupId,
