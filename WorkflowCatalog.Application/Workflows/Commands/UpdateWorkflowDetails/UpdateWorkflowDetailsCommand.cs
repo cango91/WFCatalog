@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Domain.Entities;
 using WorkflowCatalog.Domain.Enums;
@@ -27,6 +28,18 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
 
         public async Task<Unit> Handle(UpdateWorkflowDetailsCommand command,CancellationToken cancellationToken)
         {
+            var entity = await _context.Workflows.FindAsync(command.Id);
+            if(entity == null)
+            {
+                throw new NotFoundException(nameof(Workflow),command.Id);
+            }
+
+            entity.Name = command.Name;
+            entity.Description = command.Description;
+            entity.Type = command.Type;
+            entity.Primary = await _context.Diagrams.FindAsync(command.PrimaryDiagramId);
+
+            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }
