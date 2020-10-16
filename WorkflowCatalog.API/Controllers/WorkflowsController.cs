@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkflowCatalog.Application.Common.Models;
 using WorkflowCatalog.Application.Workflows.Commands.CreateWorkflow;
-using WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById;
-using WorkflowCatalog.Application.Workflows.Queries.GetWorkflowsOfSetupWithPagination;
+using WorkflowCatalog.Application.Workflows.Queries.GetWorkflows;
 using WorkflowCatalog.Domain.Enums;
 
 namespace WorkflowCatalog.API.Controllers
@@ -20,25 +19,23 @@ namespace WorkflowCatalog.API.Controllers
         {
             return await Mediator.Send(command);
         }
+
+
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<SingleWorkflowDto>> GetSingleWorkflowAsync(int id)
+        public async Task<ActionResult<WorkflowsVm>> GetSingleWorkflowAsync(int id)
         {
-            return await Mediator.Send(new GetWorkflowByIdQuery { Id = id });
+            //return await Mediator.Send(new GetWorkflowByIdQuery { Id = id });
+            return await Mediator.Send(new GetWorkflowsQuery
+            {
+                Filters = $"id=={id}"
+            });
         }
 
-        [HttpGet("of/{setupId}")]
-        public async Task<PaginatedList<SingleWorkflowDto>> GetSetupsOf(int setupId,
-            [FromQuery] SieveRequest request)
+        [HttpGet]
+        public async Task<ActionResult<WorkflowsVm>> GetWorkflows ([FromQuery] GetWorkflowsQuery query)
         {
-            return await Mediator.Send(new GetWorkflowsOfSetupWithPaginationQuery
-            {
-                SetupId = setupId,
-                Page = request.Page,
-                PageSize = request.PageSize,
-                Filters = request.Filters,
-                Sorts = request.Sorts
-            });
-
+            return await Mediator.Send(query);
         }
 
         
