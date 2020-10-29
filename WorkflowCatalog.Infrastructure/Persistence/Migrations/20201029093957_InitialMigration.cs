@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -207,6 +207,54 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UseCases",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    Created = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModified = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Preconditions = table.Column<string>(nullable: true),
+                    Postconditions = table.Column<string>(nullable: true),
+                    NormalCourse = table.Column<string>(nullable: true),
+                    AltCourse = table.Column<string>(nullable: true),
+                    WorkflowId = table.Column<int>(nullable: false),
+                    UseCaseActorId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UseCases", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Actors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    Created = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModified = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    UseCaseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Actors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Actors_UseCases_UseCaseId",
+                        column: x => x.UseCaseId,
+                        principalTable: "UseCases",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Workflows",
                 columns: table => new
                 {
@@ -255,59 +303,6 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                         name: "FK_Diagrams_Workflows_WorkflowId",
                         column: x => x.WorkflowId,
                         principalTable: "Workflows",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UseCases",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    Created = table.Column<DateTime>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModified = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Preconditions = table.Column<string>(nullable: true),
-                    Postconditions = table.Column<string>(nullable: true),
-                    NormalCourse = table.Column<string>(nullable: true),
-                    AltCourse = table.Column<string>(nullable: true),
-                    WorkflowId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UseCases", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UseCases_Workflows_WorkflowId",
-                        column: x => x.WorkflowId,
-                        principalTable: "Workflows",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Actors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    Created = table.Column<DateTime>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModified = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    UseCaseId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Actors", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Actors_UseCases_UseCaseId",
-                        column: x => x.UseCaseId,
-                        principalTable: "UseCases",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -381,6 +376,11 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                 columns: new[] { "SubjectId", "ClientId", "Type" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_UseCases_UseCaseActorId",
+                table: "UseCases",
+                column: "UseCaseActorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UseCases_WorkflowId",
                 table: "UseCases",
                 column: "WorkflowId");
@@ -396,6 +396,22 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                 column: "SetupId");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_UseCases_Workflows_WorkflowId",
+                table: "UseCases",
+                column: "WorkflowId",
+                principalTable: "Workflows",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_UseCases_Actors_UseCaseActorId",
+                table: "UseCases",
+                column: "UseCaseActorId",
+                principalTable: "Actors",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Workflows_Diagrams_PrimaryId",
                 table: "Workflows",
                 column: "PrimaryId",
@@ -407,11 +423,12 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                name: "FK_Actors_UseCases_UseCaseId",
+                table: "Actors");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Diagrams_Workflows_WorkflowId",
                 table: "Diagrams");
-
-            migrationBuilder.DropTable(
-                name: "Actors");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -435,13 +452,16 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
-                name: "UseCases");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "UseCases");
+
+            migrationBuilder.DropTable(
+                name: "Actors");
 
             migrationBuilder.DropTable(
                 name: "Workflows");

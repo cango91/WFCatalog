@@ -15,7 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IActorsClient {
-    getAll(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<UCActorDto[]>;
+    getAll(filters: string | null | undefined, sorts: string | null | undefined): Observable<UCActorDto[]>;
     addActor(command: AddActorCommand): Observable<UCActorDto>;
 }
 
@@ -32,16 +32,12 @@ export class ActorsClient implements IActorsClient {
         this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getAll(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<UCActorDto[]> {
+    getAll(filters: string | null | undefined, sorts: string | null | undefined): Observable<UCActorDto[]> {
         let url_ = this.baseUrl + "/api/Actors?";
         if (filters !== undefined && filters !== null)
             url_ += "Filters=" + encodeURIComponent("" + filters) + "&";
         if (sorts !== undefined && sorts !== null)
             url_ += "Sorts=" + encodeURIComponent("" + sorts) + "&";
-        if (page !== undefined && page !== null)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize !== undefined && pageSize !== null)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {

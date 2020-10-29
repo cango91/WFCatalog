@@ -10,8 +10,8 @@ using WorkflowCatalog.Infrastructure.Persistence;
 namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201005142442_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201029093957_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -300,7 +300,9 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("character varying(200)")
+                        .HasMaxLength(200);
 
                     b.Property<string>("NormalCourse")
                         .HasColumnType("text");
@@ -311,10 +313,15 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                     b.Property<string>("Preconditions")
                         .HasColumnType("text");
 
-                    b.Property<int?>("WorkflowId")
+                    b.Property<int?>("UseCaseActorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WorkflowId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UseCaseActorId");
 
                     b.HasIndex("WorkflowId");
 
@@ -552,9 +559,15 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.UseCase", b =>
                 {
+                    b.HasOne("WorkflowCatalog.Domain.Entities.UseCaseActor", null)
+                        .WithMany("UseCases")
+                        .HasForeignKey("UseCaseActorId");
+
                     b.HasOne("WorkflowCatalog.Domain.Entities.Workflow", "Workflow")
                         .WithMany("UseCases")
-                        .HasForeignKey("WorkflowId");
+                        .HasForeignKey("WorkflowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.UseCaseActor", b =>

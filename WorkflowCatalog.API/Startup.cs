@@ -10,8 +10,6 @@ using WorkflowCatalog.Infrastructure;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using System.Linq;
-using WorkflowCatalog.API.Identity;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Sieve.Services;
 using Sieve.Models;
 
@@ -32,13 +30,10 @@ namespace WorkflowCatalog.API
             services.AddApplication();
             services.AddInfrastructure(Configuration);
             //services.AddControllers();
-            
-            
+            services.AddMvc();
             services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
             services.AddHttpContextAccessor();
-
-            services.AddAndConfigureIdentityServer();
 
             services.AddLogging();
 
@@ -46,8 +41,20 @@ namespace WorkflowCatalog.API
 
             services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
 
-            
 
+            services.AddOpenApiDocument(configure =>
+            {
+                configure.Title = "SadaPayBackend API";
+                configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
+                });
+
+                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            });
 
 
         }
@@ -66,9 +73,9 @@ namespace WorkflowCatalog.API
 
             app.UseRouting();
 
-            app.UseIdentityServer();
-
             //app.UseOpenIdConnectAuthentication(a);
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
