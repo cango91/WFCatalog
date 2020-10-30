@@ -24,6 +24,14 @@
     <Folder Include="UCActors\Queries\GetActors\" />
     <Folder Include="UseCases\Queries\" />
     <Folder Include="Workflows\Queries\GetWorkflows\" />
+    <Folder Include="UseCases\Queries\GetUseCases\" />
+    <Folder Include="Diagrams\Queries\" />
+    <Folder Include="Diagrams\Queries\GetDiagram\" />
+    <Folder Include="Workflows\Queries\DumpWorkflows\" />
+    <Folder Include="Setups\Queries\DumpSetups\" />
+    <Folder Include="UseCases\Queries\DumpUseCases\" />
+    <Folder Include="UCActors\Queries\DumpActors\" />
+    <Folder Include="Diagrams\Queries\DumpDiagramsInfo\" />
   </ItemGroup>
 
   <ItemGroup>

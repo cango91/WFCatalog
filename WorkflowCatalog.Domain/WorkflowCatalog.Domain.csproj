@@ -7,5 +7,7 @@
   <ItemGroup>
     <Folder Include="Events\" />
     <Folder Include="Events\SetupEvents\" />
+    <Folder Include="Events\UseCaseEvents\" />
+    <Folder Include="Events\WorkflowDiagramEvents\" />
   </ItemGroup>
 </Project>

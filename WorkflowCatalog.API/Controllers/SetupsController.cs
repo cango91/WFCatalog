@@ -50,9 +50,13 @@ namespace WorkflowCatalog.API.Controllers
             await Mediator.Send(command);
             return NoContent();
         }
-        [HttpDelete]
-        public async Task<ActionResult<Unit>> Delete(DeleteSetupCommand command)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Unit>> Delete(int id, DeleteSetupCommand command)
         {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
             return await Mediator.Send(command);
         }
     }

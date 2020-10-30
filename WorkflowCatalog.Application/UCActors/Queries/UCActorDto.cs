@@ -9,7 +9,7 @@ namespace WorkflowCatalog.Application.UCActors.Queries
     public class UCActorDto : IMapFrom<UseCaseActor>
     {
 
-        [Sieve(CanFilter = true, CanSort = false)]
+        [Sieve(CanFilter = true, CanSort = true)]
         public int Id { get; set; }
 
         [Sieve(CanFilter = true, CanSort = true)]

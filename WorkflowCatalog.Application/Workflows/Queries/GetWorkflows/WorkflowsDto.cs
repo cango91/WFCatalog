@@ -26,7 +26,7 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflows
         public int SetupId { get; set; }
 
         [Sieve(CanFilter = false, CanSort = false)]
-        public int PrimaryDiagramId { get; set; }
+        public int? PrimaryDiagramId { get; set; }
 
         [Sieve(CanSort = true, CanFilter = false)]
         public int DiagramCount { get; set; }

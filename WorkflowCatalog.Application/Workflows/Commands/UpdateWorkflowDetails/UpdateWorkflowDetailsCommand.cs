@@ -15,7 +15,7 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
         public string Name { get; set; }
         public string Description { get; set; }
         public WorkflowType Type { get; set; }
-        public int PrimaryDiagramId { get; set; }
+        public int? PrimaryDiagramId { get; set; }
     }
 
     public class UpdateWorkflowDetailsCommandHandler : IRequestHandler<UpdateWorkflowDetailsCommand>

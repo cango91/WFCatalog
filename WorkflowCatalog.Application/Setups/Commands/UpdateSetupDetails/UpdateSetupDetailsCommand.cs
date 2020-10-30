@@ -4,6 +4,7 @@ using MediatR;
 using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Domain.Enums;
+using WorkflowCatalog.Domain.Events.SetupEvents;
 
 namespace WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails
 {
@@ -32,9 +33,17 @@ namespace WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails
                 throw new NotFoundException(nameof(WorkflowCatalog.Domain.Entities.Setup),request.Id);
             }
 
+
             entity.Name = request.Name;
             entity.ShortName = request.ShortName;
+
+            if(entity.Status != request.Status)
+            {
+                entity.DomainEvents.Add(new SetupStatusChangedEvent(entity));
+            }
+
             entity.Status = request.Status;
+
 
             await _context.SaveChangesAsync(cancellationToken);
 
