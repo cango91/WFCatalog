@@ -13,8 +13,6 @@ using System.Linq;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Infrastructure.Persistence;
 using System.Threading.Tasks;
-using WorkflowCatalog.Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
 
 [SetUpFixture]
 public class Testing
@@ -86,11 +84,11 @@ public class Testing
 
     public static async Task<string> RunAsUserAsync(string userName, string password)
     {
-        using var scope = _scopeFactory.CreateScope();
+       /* using var scope = _scopeFactory.CreateScope();
 
-        var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+        //var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
-        var user = new ApplicationUser { UserName = userName, Email = userName };
+        //var user = new ApplicationUser { UserName = userName, Email = userName };
 
         var result = await userManager.CreateAsync(user, password);
 
@@ -103,7 +101,7 @@ public class Testing
 
         var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
 
-        throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
+        throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");*/
     }
 
     public static async Task ResetState()
