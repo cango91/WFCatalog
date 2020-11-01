@@ -29,7 +29,7 @@ export class ActorsClient implements IActorsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     getAll(filters: string | null | undefined, sorts: string | null | undefined): Observable<UCActorDto[]> {
@@ -156,7 +156,7 @@ export class DiagramsClient implements IDiagramsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     addDiagram(workFlowId: number, file: FileParameter | null | undefined): Observable<number> {
@@ -283,7 +283,7 @@ export class DumpClient implements IDumpClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     dumpSetups(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<SetupsDumpVm> {
@@ -585,7 +585,7 @@ export class SetupsClient implements ISetupsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     get(filters: string | null | undefined, sorts: string | null | undefined): Observable<SetupsVm> {
@@ -870,7 +870,7 @@ export class UseCasesClient implements IUseCasesClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     create(command: CreateUseCaseCommand): Observable<number> {
@@ -1155,7 +1155,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     get(): Observable<WeatherForecast[]> {
@@ -1229,7 +1229,7 @@ export class WorkflowsClient implements IWorkflowsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     create(command: CreateWorkflowCommand): Observable<number> {
