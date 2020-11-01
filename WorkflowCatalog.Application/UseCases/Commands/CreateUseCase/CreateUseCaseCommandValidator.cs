@@ -39,7 +39,7 @@ namespace WorkflowCatalog.Application.UseCases.Commands.CreateUseCase
 
         public async Task<bool> MustBeValidWorkflowId(int id, CancellationToken cancellationToken)
         {
-            var entity = await _context.Workflows.FindAsync(id, cancellationToken);
+            var entity = await _context.Workflows.FindAsync(id);
             return entity != null;
         }
     }

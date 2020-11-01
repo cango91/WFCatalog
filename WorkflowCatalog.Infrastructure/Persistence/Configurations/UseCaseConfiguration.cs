@@ -9,6 +9,7 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<UseCase> builder)
         {
+            builder.Ignore(e => e.DomainEvents);
             builder.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(200);

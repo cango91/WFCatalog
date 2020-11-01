@@ -11,7 +11,6 @@ using WorkflowCatalog.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.AspNetCore.Identity;
-using WorkflowCatalog.Infrastructure.Identity;
 
 namespace WorkflowCatalog.API
 {
@@ -38,12 +37,13 @@ namespace WorkflowCatalog.API
                     {
                         context.Database.Migrate();
                     }
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+                    // var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
 
 
-                    await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
-                    await ApplicationDbContextSeed.SeedSampleDataAsync(context);
+                    // await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
+                    // await ApplicationDbContextSeed.SeedSampleDataAsync(context);
 
                 }
                 catch (Exception ex)

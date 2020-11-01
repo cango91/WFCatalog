@@ -6,7 +6,7 @@ using WorkflowCatalog.Domain.Common;
 
 namespace WorkflowCatalog.Domain.Entities
 {
-    public class UseCase : AuditableEntity
+    public class UseCase : AuditableEntity, IHasDomainEvent
     {
         public string Name { get;  set; }
         public string Description { get;  set; }
@@ -16,5 +16,7 @@ namespace WorkflowCatalog.Domain.Entities
         public string NormalCourse { get;  set; }
         public string AltCourse { get;  set; }
         public Workflow Workflow { get; set; }
+
+        public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
     }
 }

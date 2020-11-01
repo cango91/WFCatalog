@@ -39,7 +39,7 @@ namespace WorkflowCatalog.Application.UseCases.Commands.CreateUseCase
             var actors = await _context.Actors
                 .Where(x => command.Actors.Contains(x.Id))
                 .ToListAsync(cancellationToken);
-            var wf = await _context.Workflows.FindAsync(command.WorkflowId,cancellationToken);
+            var wf = await _context.Workflows.FindAsync(command.WorkflowId);
             var entity = new UseCase
             {
                 Name = command.Name,

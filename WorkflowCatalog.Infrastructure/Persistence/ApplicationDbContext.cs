@@ -1,11 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using WorkflowCatalog.Infrastructure.Identity;
 using WorkflowCatalog.Application.Common.Interfaces;
 using static WorkflowCatalog.Application.Common.Interfaces.IDateTimeService;
 using Microsoft.Extensions.Options;
-using IdentityServer4.EntityFramework.Options;
 using WorkflowCatalog.Domain.Entities;
 using System.Threading.Tasks;
 using System.Threading;
@@ -15,7 +12,7 @@ using System.Reflection;
 
 namespace WorkflowCatalog.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
@@ -23,10 +20,9 @@ namespace WorkflowCatalog.Infrastructure.Persistence
 
         public ApplicationDbContext(
             DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions,
             ICurrentUserService currentUserService,
             IDomainEventService domainEventService,
-            IDateTime dateTime) : base(options,operationalStoreOptions)
+            IDateTime dateTime) : base(options)
         {
             _currentUserService = currentUserService;
             _dateTime = dateTime;

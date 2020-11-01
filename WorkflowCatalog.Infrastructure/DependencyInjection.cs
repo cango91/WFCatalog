@@ -3,13 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using WorkflowCatalog.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using WorkflowCatalog.Application.Common.Interfaces;
-using WorkflowCatalog.Infrastructure.Identity;
 using static WorkflowCatalog.Application.Common.Interfaces.IDateTimeService;
-using Microsoft.AspNetCore.Authentication;
 using WorkflowCatalog.Infrastructure.Services;
-using IdentityServer4.Models;
-using System.Collections.Generic;
-using IdentityServer4.Test;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace WorkflowCatalog.Infrastructure
 {
@@ -19,17 +17,32 @@ namespace WorkflowCatalog.Infrastructure
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection")?? "Server=127.0.0.1;Port=5432;Database=WFCatalogDb;User Id=catalogUser;Password=p@ss;",
+                configuration.GetConnectionString("DefaultConnection")?? "Server=10.5.0.110;Port=5432;Database=workflow;User Id=WORKFLOW;Password=001992;",
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             services.AddScoped<IDomainEventService, DomainEventService>();
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            //.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            
+
+
+            services
+               .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.RequireHttpsMetadata = false;
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateIssuer = false,
+                       ValidateAudience = false,
+                       ValidateLifetime = false,
+                       ValidateIssuerSigningKey = false,
+                       ValidIssuer = configuration["Token:Issuer"],
+                       ValidAudience = configuration["Token:Audience"],
+                       IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(configuration["Token:Secret"]))
+                   };
+               });
+
             return services;
         }
     }

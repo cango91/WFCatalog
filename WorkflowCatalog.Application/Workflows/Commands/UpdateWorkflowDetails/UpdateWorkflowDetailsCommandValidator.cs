@@ -18,15 +18,19 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
                 .NotEmpty().WithMessage("WorkflowId can not be empty")
                 .NotNull().WithMessage("WorkflowId is required");
 
-            RuleFor(x => x.PrimaryDiagramId)
-                .MustAsync(BeValidDiagramId);
+            RuleFor(x => x.PrimaryDiagramId)   
+                .MustAsync(BeValidDiagramIdOrNull);
         }
 
-        public async Task<bool>  BeValidDiagramId(UpdateWorkflowDetailsCommand model,int id, CancellationToken cancellationToken)
+        public async Task<bool>  BeValidDiagramIdOrNull(UpdateWorkflowDetailsCommand model,int? id, CancellationToken cancellationToken)
         {
+            if (!id.HasValue)
+            {
+                return true;
+            }
             return await _context.Diagrams.
                 Where(x => x.Workflow.Id == model.Id)
-                .AnyAsync(x => x.Id == id);
+                .AnyAsync(x => x.Id == id.Value);
         }
     }
 }
