@@ -21,10 +21,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",
+      "applicationUrl": "http://localhost:34260",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:62880;http://localhost:34260"
+      }
     }
   }
 }

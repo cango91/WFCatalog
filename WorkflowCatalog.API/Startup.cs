@@ -50,7 +50,7 @@ namespace WorkflowCatalog.API
 
             services.AddOpenApiDocument(configure =>
             {
-                configure.Title = "SadaPayBackend API";
+                configure.Title = "Workflow Catalog API";
                 configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
                 {
                     Type = OpenApiSecuritySchemeType.ApiKey,

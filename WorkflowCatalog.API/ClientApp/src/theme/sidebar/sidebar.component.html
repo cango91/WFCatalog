@@ -46,12 +46,16 @@
             </a>
 
             <ul class="sub-menu navbar-collapse collapse" [ngbCollapse]="activeMenu !== 1">
-                <li *ngFor="let setup of setups">
-                    <a href="#">
+                <li *ngFor="let setup of setups" [ngClass]="{'active':activeSetup === setup.id}">
+                    <a href="pages/workflows/{{setup.id}}">
                         <i class="fa fa-angle-right"></i>
                         <span class="title">{{setup.name}}</span>
                     </a>
                 </li>
+                <hr>
+                <div *ngIf="editAuthority">
+                    <a href="#"><i class="fa fa-shield"></i><span class="title">Edit Setups</span></a>
+                </div>
             </ul>
         </li>
     </ul>

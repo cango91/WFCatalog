@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkflowCatalog.Application.Common.Models;
+using WorkflowCatalog.Application.Workflows.Commands.CopyWorkflow;
 using WorkflowCatalog.Application.Workflows.Commands.CreateWorkflow;
 using WorkflowCatalog.Application.Workflows.Commands.DeleteWorkflow;
 using WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails;
@@ -55,6 +56,16 @@ namespace WorkflowCatalog.API.Controllers
         public async Task<ActionResult<Unit>> DeleteWorkflow(int id,DeleteWorkflowCommand command)
         {
             if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return await Mediator.Send(command);
+        }
+
+        [HttpPost("{id}/copy")]
+        public async Task<ActionResult<int>> CopyWorkflow(int id,CopyWorkflowCommand command)
+        {
+            if(id!=command.WorkflowId)
             {
                 return BadRequest();
             }

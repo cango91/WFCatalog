@@ -32,6 +32,7 @@
     <Folder Include="UseCases\Queries\DumpUseCases\" />
     <Folder Include="UCActors\Queries\DumpActors\" />
     <Folder Include="Diagrams\Queries\DumpDiagramsInfo\" />
+    <Folder Include="Workflows\Commands\CopyWorkflow\" />
   </ItemGroup>
 
   <ItemGroup>

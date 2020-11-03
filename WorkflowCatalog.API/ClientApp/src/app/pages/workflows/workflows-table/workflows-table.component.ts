@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { SetupsClient, SetupsDto, WorkflowsClient, WorkflowsDto } from 'src/app/web-api-client';
 import { WorkflowItemMenuComponent } from '../workflow-item-menu/workflow-item-menu.component';
 import { WorkflowsDatasource } from './workflows.datasource';
+import { isNullOrUndefined } from 'util';
+import { $ } from 'protractor';
 
 @Component({
   selector: 'app-workflows-table',
@@ -13,6 +15,8 @@ export class WorkflowsTableComponent implements OnInit, OnChanges {
   @Input() setupId: number;
 
   @Output() onWorkflowSelect: EventEmitter<WorkflowsDto> = new EventEmitter();
+
+  @ViewChild('grdTags') grdTags;
 
   setup: SetupsDto;
 
@@ -35,7 +39,7 @@ export class WorkflowsTableComponent implements OnInit, OnChanges {
         filter: {
           type: 'list',
           config: {
-            selectText: 'Select...',
+            selectText: 'All',
             list: [
               { value: 0, title: 'MainFlow' },
               { value: 1, title: 'SubFlow' },
@@ -47,8 +51,10 @@ export class WorkflowsTableComponent implements OnInit, OnChanges {
         title: '',
         type: 'custom',
         filter: false,
-        renderComponent: WorkflowItemMenuComponent
-
+        renderComponent: WorkflowItemMenuComponent,
+        onComponentInitFunction: (instance) => {
+          instance.setEditAuthority(true);
+        }
       },
     },
     attr: {
@@ -72,7 +78,6 @@ export class WorkflowsTableComponent implements OnInit, OnChanges {
     this.setupsClient.getById(this.setupId).subscribe(res => {
       this.setup = res.setups.length > 0 ? res.setups[0] : null;
     })
-
     this.source.updateSetup(this.setupId);
   }
 

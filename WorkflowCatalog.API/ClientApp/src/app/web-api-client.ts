@@ -29,7 +29,7 @@ export class ActorsClient implements IActorsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     getAll(filters: string | null | undefined, sorts: string | null | undefined): Observable<UCActorDto[]> {
@@ -156,7 +156,7 @@ export class DiagramsClient implements IDiagramsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     addDiagram(workFlowId: number, file: FileParameter | null | undefined): Observable<number> {
@@ -283,7 +283,7 @@ export class DumpClient implements IDumpClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     dumpSetups(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<SetupsDumpVm> {
@@ -585,7 +585,7 @@ export class SetupsClient implements ISetupsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     get(filters: string | null | undefined, sorts: string | null | undefined): Observable<SetupsVm> {
@@ -870,7 +870,7 @@ export class UseCasesClient implements IUseCasesClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     create(command: CreateUseCaseCommand): Observable<number> {
@@ -1155,7 +1155,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     get(): Observable<WeatherForecast[]> {
@@ -1217,6 +1217,7 @@ export interface IWorkflowsClient {
     update(id: number, command: UpdateWorkflowDetailsCommand): Observable<FileResponse>;
     getSingleWorkflow(id: number): Observable<WorkflowsVm>;
     deleteWorkflow(id: number, command: DeleteWorkflowCommand): Observable<Unit>;
+    copyWorkflow(id: number, command: CopyWorkflowCommand): Observable<number>;
 }
 
 @Injectable({
@@ -1229,7 +1230,7 @@ export class WorkflowsClient implements IWorkflowsClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-       this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        this.baseUrl = this.baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     create(command: CreateWorkflowCommand): Observable<number> {
@@ -1497,6 +1498,61 @@ export class WorkflowsClient implements IWorkflowsClient {
             }));
         }
         return _observableOf<Unit>(<any>null);
+    }
+
+    copyWorkflow(id: number, command: CopyWorkflowCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/Workflows/{id}/copy";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCopyWorkflow(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCopyWorkflow(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<number>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCopyWorkflow(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(<any>null);
     }
 }
 
@@ -3323,6 +3379,46 @@ export class DeleteWorkflowCommand implements IDeleteWorkflowCommand {
 
 export interface IDeleteWorkflowCommand {
     id?: number;
+}
+
+export class CopyWorkflowCommand implements ICopyWorkflowCommand {
+    workflowId?: number;
+    setupId?: number;
+
+    constructor(data?: ICopyWorkflowCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.workflowId = _data["workflowId"];
+            this.setupId = _data["setupId"];
+        }
+    }
+
+    static fromJS(data: any): CopyWorkflowCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CopyWorkflowCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["workflowId"] = this.workflowId;
+        data["setupId"] = this.setupId;
+        return data; 
+    }
+}
+
+export interface ICopyWorkflowCommand {
+    workflowId?: number;
+    setupId?: number;
 }
 
 export interface FileParameter {
