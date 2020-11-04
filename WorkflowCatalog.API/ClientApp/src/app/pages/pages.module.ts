@@ -1,29 +1,45 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { WorkflowsComponent } from './workflows/workflows.component';
-import { ThemeModule } from 'src/theme/theme.module';
+import { NbButtonModule, NbCardModule, NbContextMenuModule, NbDialogModule, NbInputModule, NbMenuModule, NbSelectModule } from '@nebular/theme';
+
+import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
+import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
+import { SetupComponent } from './setup/setup.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { WorkflowItemMenuComponent } from './workflows/workflow-item-menu/workflow-item-menu.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { WorkflowsTableComponent } from './workflows/workflows-table/workflows-table.component';
-import { UsecasesTableComponent } from './workflows/usecases-table/usecases-table.component';
-import { EditUseCaseComponent } from './edits/usecase/edit-use-case/edit-use-case.component';
-import { EditWorkflowComponent } from './edits/workflow/edit-workflow/edit-workflow.component';
-import { EditSetupComponent } from './edits/setup/edit-setup/edit-setup.component';
-import { DeleteSetupComponent } from './edits/setup/delete-setup/delete-setup.component';
-
-
+import { UseCasesComponent } from './setup/use-cases/use-cases.component';
+import { UseCaseMenuitemComponent } from './setup/use-cases/use-case-menuitem/use-case-menuitem.component';
+import { EditUseCaseComponent } from './setup/use-cases/edit-use-case/edit-use-case.component';
+import { FormsModule } from '@angular/forms';
+import { EditWorkflowComponent } from './setup/edit-workflow/edit-workflow.component';
+import { WorkflowMenuitemComponent } from './setup/workflow-menuitem/workflow-menuitem.component';
+import { ConfirmDialogComponent } from './setup/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
-  declarations: [WorkflowsComponent, PagesComponent, WorkflowItemMenuComponent, WorkflowsTableComponent, UsecasesTableComponent, EditUseCaseComponent, EditWorkflowComponent, EditSetupComponent, DeleteSetupComponent],
   imports: [
-    CommonModule,
-    ThemeModule,
     PagesRoutingModule,
+    ThemeModule,
+    NbMenuModule,
+    NbCardModule,
     Ng2SmartTableModule,
-    NgbModule
+    DashboardModule,
+    NbContextMenuModule,
+    NbButtonModule,
+    NbInputModule,
+    NbSelectModule,
+    FormsModule,
+    NbDialogModule.forRoot()
+  ],
+  declarations: [
+    PagesComponent,
+    SetupComponent,
+    UseCasesComponent,
+    UseCaseMenuitemComponent,
+    EditUseCaseComponent,
+    EditWorkflowComponent,
+    WorkflowMenuitemComponent,
+    ConfirmDialogComponent,
   ],
 })
-export class PagesModule { }
+export class PagesModule {
+}

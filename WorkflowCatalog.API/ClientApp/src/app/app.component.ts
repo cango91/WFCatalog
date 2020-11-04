@@ -1,30 +1,27 @@
-import { Component } from '@angular/core';
-import { UserService } from './authentication/user.service';
-import { SetupsClient, SetupsDto } from './web-api-client';
+/**
+ * @license
+ * Copyright Akveo. All Rights Reserved.
+ * Licensed under the MIT License. See License.txt in the project root for license information.
+ */
+import { Component, OnInit } from '@angular/core';
+import { UserService } from '../authentication/user.service';
+import { AnalyticsService } from './@core/utils/analytics.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'ngx-app',
+  template: '<router-outlet></router-outlet>',
 })
-export class AppComponent {
-  title = 'Catelog';
+export class AppComponent implements OnInit {
 
   username = '';
-  setups: Array<SetupsDto> = [];
-
-  /**
-   *
-   */
-  constructor(protected userService: UserService, protected setupsClient: SetupsClient) {
+  constructor(private analytics: AnalyticsService, protected userService: UserService) {
     this.userService.loadUser();
     this.userService.user.subscribe(res => {
       this.username = res.UserDetail.FULL_NAME;
-
-      this.setupsClient.get(null, null).subscribe(data => {
-        this.setups = data.setups;
-      })
-
     })
+  }
+
+  ngOnInit() {
+    this.analytics.trackPageViews();
   }
 }

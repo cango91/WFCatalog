@@ -1,0 +1,29 @@
+<nb-card>
+    <nb-card-header>
+        {{(useCaseId ? (editAuthority ? 'Edit' : 'View') : 'New')}} {{useCaseId ? useCase?.name : 'Use Case'}}
+    </nb-card-header>
+
+    <nb-card-body>
+        <input type="text" class="mb-2" [(ngModel)]="editableObject.name" nbInput fullWidth status="basic"
+            placeholder="Name">
+        <textarea nbInput class="mb-2" [(ngModel)]="editableObject.description" fullWidth status="basic"
+            placeholder="Description"></textarea>
+        <nb-select fullWidth class="mb-2" [(ngModel)]="editableObject.actors" placeholder="Select actor">
+            <nb-option *ngFor="let actor of actors">{{actor.name}}</nb-option>
+        </nb-select>
+        <textarea nbInput class="mb-2" [(ngModel)]="editableObject.preconditions" fullWidth status="basic"
+            placeholder="Pre-conditions"></textarea>
+        <textarea nbInput class="mb-2" [(ngModel)]="editableObject.postconditions" fullWidth status="basic"
+            placeholder="Post-conditions"></textarea>
+        <textarea nbInput class="mb-2" [(ngModel)]="editableObject.normalcourse" fullWidth status="basic"
+            placeholder="Normal course"></textarea>
+        <textarea nbInput class="mb-2" [(ngModel)]="editableObject.altcourse" fullWidth status="basic"
+            placeholder="Alternative course"></textarea>
+
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="pull-right">
+            <button nbButton (click)="save()">Save</button>
+        </div>
+    </nb-card-footer>
+</nb-card>>

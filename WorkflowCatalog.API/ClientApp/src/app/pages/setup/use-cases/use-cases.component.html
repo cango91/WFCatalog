@@ -1,0 +1,9 @@
+<nb-card>
+    <nb-card-header>
+        <strong>{{workflow?.name}}</strong> Use Cases
+        <button nbButton (click)="openNew()" hero status="info" class="pull-right">+</button>
+    </nb-card-header>
+    <nb-card-body>
+        <ng2-smart-table [source]="source" [settings]="settings"></ng2-smart-table>
+    </nb-card-body>
+</nb-card>
