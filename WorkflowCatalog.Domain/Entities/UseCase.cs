@@ -10,7 +10,7 @@ namespace WorkflowCatalog.Domain.Entities
     {
         public string Name { get;  set; }
         public string Description { get;  set; }
-        public List<UseCaseActor> Actors { get; set; }
+        public List<UseCaseActor> Actors { get; set; } = new List<UseCaseActor>();
         public string Preconditions { get;  set; }
         public string Postconditions { get;  set; }
         public string NormalCourse { get;  set; }

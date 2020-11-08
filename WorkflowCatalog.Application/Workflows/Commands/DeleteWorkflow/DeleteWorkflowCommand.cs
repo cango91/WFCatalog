@@ -1,9 +1,9 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Domain.Entities;
@@ -12,7 +12,7 @@ namespace WorkflowCatalog.Application.Workflows.Commands.DeleteWorkflow
 {
     public class DeleteWorkflowCommand : IRequest
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
     public class DeleteWorkflowCommandHandler : IRequestHandler<DeleteWorkflowCommand>
     {
@@ -21,21 +21,17 @@ namespace WorkflowCatalog.Application.Workflows.Commands.DeleteWorkflow
         {
             _context = context;
         }
-        public async Task<Unit> Handle(DeleteWorkflowCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle (DeleteWorkflowCommand command, CancellationToken cancellationToken)
         {
-            var entity = await _context.Workflows.FindAsync(request.Id);
-            
-
-            if(entity==null)
+            var entity = await _context.Workflows.FindAsync(command.Id);
+            if(entity == null)
             {
-                throw new NotFoundException(nameof(Workflow),request.Id);
+                throw new NotFoundException(nameof(Workflow), command.Id);
             }
 
             _context.Workflows.Remove(entity);
-
-
+            await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }
-
 }

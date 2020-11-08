@@ -6,12 +6,13 @@ using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using WorkflowCatalog.Domain.Events.SetupEvents;
+using System;
 
 namespace WorkflowCatalog.Application.Setups.Commands.DeleteSetup
 {
     public class DeleteSetupCommand : IRequest
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class DeleteSetupCommandHandler : IRequestHandler<DeleteSetupCommand>

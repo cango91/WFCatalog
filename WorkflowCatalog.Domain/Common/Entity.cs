@@ -5,11 +5,11 @@ namespace WorkflowCatalog.Domain.Common
     public abstract class Entity
     {
         int? _requestedHashCode;
-        public virtual int Id { get; set; }
+        public virtual Guid Id { get; set; }
 
         public bool IsTransient()
         {
-            return this.Id == default(Int32);
+            return this.Id == default;
         }
 
         public override bool Equals(object obj)

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using WorkflowCatalog.Application.Common.Interfaces;
 
 namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
@@ -15,22 +17,20 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
         {
             _context = context;
             RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("WorkflowId can not be empty")
-                .NotNull().WithMessage("WorkflowId is required");
+                .NotEmpty().WithMessage("Id can not be blank");
 
-            RuleFor(x => x.PrimaryDiagramId)   
-                .MustAsync(BeValidDiagramIdOrNull);
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Name can not be blank")
+                .MustAsync(BeUniqueNameForSetup);
         }
 
-        public async Task<bool>  BeValidDiagramIdOrNull(UpdateWorkflowDetailsCommand model,int? id, CancellationToken cancellationToken)
+        public async Task<bool> BeUniqueNameForSetup(UpdateWorkflowDetailsCommand command, string name, CancellationToken cancellationToken)
         {
-            if (!id.HasValue)
-            {
-                return true;
-            }
-            return await _context.Diagrams.
-                Where(x => x.Workflow.Id == model.Id)
-                .AnyAsync(x => x.Id == id.Value);
+            var wf = await _context.Workflows.FindAsync(command.Id);
+            return !await _context.Workflows
+                .Where(x => (x.Setup.Id == wf.Setup.Id) && x.Id != command.Id)
+                .AnyAsync(a => a.Name.ToLower() == command.Name.ToLower(), cancellationToken);
         }
+
     }
 }

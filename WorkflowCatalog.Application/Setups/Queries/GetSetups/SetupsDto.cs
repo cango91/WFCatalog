@@ -11,19 +11,21 @@ namespace WorkflowCatalog.Application.Setups.Queries.GetSetups
     public class SetupsDto : Auditable, IMapFrom<Setup>
     {
 
-        [Sieve(CanFilter = true, CanSort = true)]
-        public int Id { get; set; }
+        [Sieve(CanFilter = true, CanSort = false)]
+        public Guid Id { get; set; }
 
         [Sieve(CanFilter = true, CanSort = true)]
         public string Name { get; set; }
 
         [Sieve(CanFilter = true, CanSort = true)]
         public string ShortName { get; set; }
+        [Sieve(CanFilter = true, CanSort = true)]
+        public string Description { get; set; }
 
         [Sieve(CanFilter = true, CanSort = false)]
         public int Status { get; set; }
 
-        [Sieve(CanFilter = false, CanSort = true)]
+        [Sieve(CanFilter = true, CanSort = true)]
         public int WorkflowCount { get; set; }
 
         public void Mapping(Profile profile)

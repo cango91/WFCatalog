@@ -9,18 +9,17 @@ using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
 using WorkflowCatalog.Application.Common.Interfaces;
+using WorkflowCatalog.Application.Common.Models;
 using WorkflowCatalog.Application.Extensions;
 using WorkflowCatalog.Domain.Enums;
 
 namespace WorkflowCatalog.Application.Setups.Queries.GetSetups
 {
 
-    public class GetSetupsQuery : IRequest<SetupsVm>
+    public class GetSetupsQuery : SieveModel, IRequest<PaginatedList<SetupsDto>>
     {
-        public string Filters { get; set; }
-        public string Sorts { get; set; }
     }
-    public class GetSetupsQueryHandler : IRequestHandler<GetSetupsQuery,SetupsVm>
+    public class GetSetupsQueryHandler : IRequestHandler<GetSetupsQuery,PaginatedList<SetupsDto>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -33,12 +32,15 @@ namespace WorkflowCatalog.Application.Setups.Queries.GetSetups
             _processor = processor;
         }
 
-        public async Task<SetupsVm> Handle(GetSetupsQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedList<SetupsDto>> Handle(GetSetupsQuery request, CancellationToken cancellationToken)
         {
             var setups =  _context.Setups
+                .AsNoTracking()
                 .ProjectTo<SetupsDto>(_mapper.ConfigurationProvider);
-            
-            return new SetupsVm
+
+            return await setups.Paginate(_processor, request);
+
+            /*return new SetupsVm
             {
                 SetupStatus = Enum.GetValues(typeof(SetupStatus))
                 .Cast<SetupStatus>()
@@ -51,7 +53,7 @@ namespace WorkflowCatalog.Application.Setups.Queries.GetSetups
                     Sorts = request.Sorts,
                 })
 
-        };
+        };*/
         }
 
     }

@@ -1,23 +1,25 @@
 ﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
-using WorkflowCatalog.Domain.Enums;
 using WorkflowCatalog.Domain.Entities;
-
+using WorkflowCatalog.Domain.Enums;
 
 namespace WorkflowCatalog.Application.Workflows.Commands.CreateWorkflow
 {
-    public class CreateWorkflowCommand : IRequest<int>
+    public class CreateWorkflowCommand : IRequest<Guid>
     {
-        public int SetupId { get; set; }
+        public Guid SetupId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public WorkflowType Type { get; set; }
+        public int WorkflowType { get; set; }
     }
 
-    public class CreateWorkflowCommandHandler : IRequestHandler<CreateWorkflowCommand, int>
+    public class CreateWorkflowCommandHandler : IRequestHandler<CreateWorkflowCommand,Guid>
     {
         private readonly IApplicationDbContext _context;
 
@@ -26,28 +28,24 @@ namespace WorkflowCatalog.Application.Workflows.Commands.CreateWorkflow
             _context = context;
         }
 
-        public async Task<int> Handle(CreateWorkflowCommand request,CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateWorkflowCommand command, CancellationToken cancellationToken)
         {
-            var entity = await _context.Setups.FindAsync(request.SetupId);
-            if(entity == null)
+            var setup = await _context.Setups.FindAsync(command.SetupId);
+            if(setup == null)
             {
-                throw new NotFoundException(nameof(Setup),request.SetupId);
+                throw new NotFoundException(nameof(Setup), command.SetupId);
             }
-
-            var wf = new Workflow
+            var entity = new Workflow
             {
-                Name = request.Name,
-                Description = request.Description,
-                Type = request.Type,
-                Setup = entity
+                Name = command.Name,
+                Description = command.Description,
+                Type = (WorkflowType)command.WorkflowType,
+                Setup = setup
             };
-
-            _context.Workflows.Add(wf);
-
+            _context.Workflows.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
-
-            return wf.Id;
-
+            return entity.Id;
         }
+
     }
 }

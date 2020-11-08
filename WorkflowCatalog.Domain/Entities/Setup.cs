@@ -9,10 +9,12 @@ using WorkflowCatalog.Domain.Exceptions;
 
 namespace WorkflowCatalog.Domain.Entities
 {
-    public class Setup : AuditableEntity, IHasDomainEvent
+    public class Setup : AuditableEntity, IHasDomainEvent, IAggregateRoot
     {
-        public string Name { get; set; }
-        public string ShortName { get; set; }
+        public string Name { get;  set; }
+        public string ShortName { get;  set; }
+        public string Description { get;  set; }
+
         private SetupStatus _status;
         public SetupStatus Status
         {
@@ -27,8 +29,11 @@ namespace WorkflowCatalog.Domain.Entities
             }
         }
 
-        public HashSet<Workflow> Workflows { get; set; }
+        public HashSet<Workflow> Workflows { get; set; } = new HashSet<Workflow>();
+        public HashSet<UseCaseActor> Actors { get; set; } = new HashSet<UseCaseActor>();
 
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+
+
     }
 }

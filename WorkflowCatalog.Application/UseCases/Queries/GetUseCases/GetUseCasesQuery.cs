@@ -1,42 +1,38 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
+using System.Threading;
+using System.Threading.Tasks;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Application.Common.Models;
 using WorkflowCatalog.Application.Extensions;
 
 namespace WorkflowCatalog.Application.UseCases.Queries.GetUseCases
 {
-    public class GetUseCasesQuery : SieveModel, IRequest<PaginatedList<UseCasesDto>>
+    public class GetUseCasesQuery : SieveModel, IRequest<PaginatedList<UseCaseDto>>
     {
-        public GetUseCasesQuery()
-        {
-        }
     }
 
-    public class GetUseCasesQueryHandler : IRequestHandler<GetUseCasesQuery,PaginatedList<UseCasesDto>>
+    public class GetUseCasesQueryHandler : IRequestHandler<GetUseCasesQuery,PaginatedList<UseCaseDto>>
     {
         private readonly IApplicationDbContext _context;
-        private readonly SieveProcessor _sieveProcessor;
         private readonly IMapper _mapper;
-        public GetUseCasesQueryHandler(IApplicationDbContext context, SieveProcessor processor, IMapper mapper)
+        private readonly SieveProcessor _processor;
+        public GetUseCasesQueryHandler(IMapper mapper, IApplicationDbContext context, SieveProcessor processor)
         {
-            _mapper = mapper;
             _context = context;
-            _sieveProcessor = processor;
+            _mapper = mapper;
+            _processor = processor;
         }
-
-        public async Task<PaginatedList<UseCasesDto>> Handle (GetUseCasesQuery query,CancellationToken cancellationToken)
+        public async Task<PaginatedList<UseCaseDto>> Handle (GetUseCasesQuery query, CancellationToken cancellationToken)
         {
-            var results = _context.UseCases
-                .ProjectTo<UseCasesDto>(_mapper.ConfigurationProvider);
-
-            return await results.Paginate(_sieveProcessor, query);
+            var entity = _context.UseCases
+                .AsNoTracking()
+                .ProjectTo<UseCaseDto>(_mapper.ConfigurationProvider);
+            return await entity.Paginate(_processor, query);
         }
     }
 }

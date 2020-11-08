@@ -1,46 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using WorkflowCatalog.Application.Common.Interfaces;
+using WorkflowCatalog.Application.Common.Models;
 using WorkflowCatalog.Application.Extensions;
 
 namespace WorkflowCatalog.Application.UCActors.Queries.GetActors
 {
-    public class GetActorsQuery : IRequest<IList<UCActorDto>>
+    public class GetActorsQuery : SieveModel, IRequest<PaginatedList<UCActorDto>>
     {
-        public string Filters { get; set; }
-        public string Sorts { get; set; }
     }
-    
-    public class GetActorsQueryHandler : IRequestHandler<GetActorsQuery,IList<UCActorDto>>
+
+    public class GetActorsQueryHandler : IRequestHandler<GetActorsQuery,PaginatedList<UCActorDto>>
     {
         private readonly IApplicationDbContext _context;
-        private readonly SieveProcessor _processor;
         private readonly IMapper _mapper;
+        private readonly SieveProcessor _processor;
 
-        public GetActorsQueryHandler(IApplicationDbContext context,SieveProcessor processor, IMapper mapper)
+        public GetActorsQueryHandler(IApplicationDbContext context, IMapper mapper, SieveProcessor processor)
         {
             _context = context;
-            _processor = processor;
             _mapper = mapper;
+            _processor = processor;
         }
 
-        public async Task<IList<UCActorDto>> Handle (GetActorsQuery query, CancellationToken cancellationToken)
+        public async Task<PaginatedList<UCActorDto>> Handle(GetActorsQuery query, CancellationToken cancellationToken)
         {
-            var actors = _context.Actors.ProjectTo<UCActorDto>(_mapper.ConfigurationProvider);
-            return await actors.FilterAndSort(_processor,new SieveModel
-            {
-                Filters = query.Filters,
-                Sorts = query.Sorts
-            });
+            var entity = _context.Actors
+                .AsNoTracking()
+                .ProjectTo<UCActorDto>(_mapper.ConfigurationProvider);
+            return await entity.Paginate(_processor, query);
 
         }
     }
-    
 }

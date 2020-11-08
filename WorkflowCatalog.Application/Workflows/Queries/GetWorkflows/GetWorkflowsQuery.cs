@@ -1,25 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
+using System.Threading;
+using System.Threading.Tasks;
 using WorkflowCatalog.Application.Common.Interfaces;
+using WorkflowCatalog.Application.Common.Models;
 using WorkflowCatalog.Application.Extensions;
-using WorkflowCatalog.Domain.Enums;
 
 namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflows
 {
-    public class GetWorkflowsQuery : SieveModel, IRequest<WorkflowsVm>
+    public class GetWorkflowsQuery : SieveModel, IRequest<PaginatedList<WorkflowsDto>>
     {
-        public GetWorkflowsQuery()
-        {
-        }
     }
-    public class GetWorkflowsQueryHandler : IRequestHandler<GetWorkflowsQuery,WorkflowsVm>
+
+    public class GetWorkflowsQueryHandler : IRequestHandler<GetWorkflowsQuery, PaginatedList<WorkflowsDto>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -27,25 +24,17 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflows
 
         public GetWorkflowsQueryHandler(IApplicationDbContext context, IMapper mapper, SieveProcessor processor)
         {
-            _processor = processor;
-            _mapper = mapper;
             _context = context;
+            _mapper = mapper;
+            _processor = processor;
         }
 
-        public async Task<WorkflowsVm> Handle(GetWorkflowsQuery query, CancellationToken cancellationToken)
+        public async Task<PaginatedList<WorkflowsDto>> Handle (GetWorkflowsQuery query, CancellationToken cancellationToken)
         {
-            var results = _context.Workflows
+            var result = _context.Workflows
+                .AsNoTracking()
                 .ProjectTo<WorkflowsDto>(_mapper.ConfigurationProvider);
-
-            return new WorkflowsVm
-            {
-                WorkflowTypes = Enum.GetValues(typeof(WorkflowType))
-                .Cast<WorkflowType>()
-                .Select(p => new WorkflowTypeDto { Value = (int)p, Name = p.ToString() })
-                .ToList(),
-
-                Workflows = await results.Paginate(_processor, query)
-            };
+            return await result.Paginate(_processor, query);
         }
     }
 }

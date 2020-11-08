@@ -4,10 +4,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WorkflowCatalog.Application.Common.Models;
 using WorkflowCatalog.Application.Setups.Commands.CreateSetup;
 using WorkflowCatalog.Application.Setups.Commands.DeleteSetup;
+
 using WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails;
-//using WorkflowCatalog.Application.Setups.Queries.GetSetupById;
+using WorkflowCatalog.Application.Setups.Queries.GetSetupById;
 using WorkflowCatalog.Application.Setups.Queries.GetSetups;
 
 namespace WorkflowCatalog.API.Controllers
@@ -16,32 +18,27 @@ namespace WorkflowCatalog.API.Controllers
     public class SetupsController : ApiController
     {
         [HttpGet]
-        public async Task<ActionResult<SetupsVm>> Get([FromQuery] GetSetupsQuery query)
+        public async Task<ActionResult<PaginatedList<SetupsDto>>> GetSetups([FromQuery] GetSetupsQuery query)
         {
             return await Mediator.Send(query);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<SetupsVm>> GetById(int id)
+        public async Task<ActionResult<SingleSetupDto>> GetSetupById(Guid id)
         {
-            //return await Mediator.Send(new GetSetupByIdQuery { Id = id});
-
-            return await Mediator.Send(new GetSetupsQuery
-            {
-                Filters = $"id=={id}"
-            });
+            return await Mediator.Send(new GetSetupByIdQuery { Id = id });
         }
 
 
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create(CreateSetupCommand command)
+        public async Task<ActionResult<Guid>> CreateSetup(CreateSetupCommand command)
         {
             return await Mediator.Send(command);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, UpdateSetupDetailsCommand command)
+        public async Task<ActionResult> UpdateSetup(Guid id, UpdateSetupDetailsCommand command)
         {
             if(id!=command.Id)
             {
@@ -51,7 +48,7 @@ namespace WorkflowCatalog.API.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unit>> Delete(int id, DeleteSetupCommand command)
+        public async Task<ActionResult<Unit>> DeleteSetup(Guid id, DeleteSetupCommand command)
         {
             if (id != command.Id)
             {

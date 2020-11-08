@@ -1,22 +1,24 @@
-﻿using System;
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using WorkflowCatalog.Application.Common.Exceptions;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Domain.Entities;
-using WorkflowCatalog.Domain.Events.WorkflowDiagramEvents;
+using WorkflowCatalog.Domain.ValueObjects;
 
 namespace WorkflowCatalog.Application.Diagrams.Commands.CreateDiagram
 {
-    public class CreateDiagramCommand  : IRequest<int>
+    public class CreateDiagramCommand : IRequest<Guid>
     {
-        public int WorkflowId { get; set; }
+        public Guid WorkflowId { get; set; }
         public string Name { get; set; }
-        public string MimeType { get; set; }
+        public string ContentType { get; set; }
         public byte[] File { get; set; }
     }
-
-    public class CreateDiagramCommandHandler : IRequestHandler<CreateDiagramCommand,int>
+    public class CreateDiagramCommandHandler : IRequestHandler<CreateDiagramCommand,Guid>
     {
         private readonly IApplicationDbContext _context;
         public CreateDiagramCommandHandler(IApplicationDbContext context)
@@ -24,20 +26,22 @@ namespace WorkflowCatalog.Application.Diagrams.Commands.CreateDiagram
             _context = context;
         }
 
-        public async Task<int> Handle (CreateDiagramCommand command, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateDiagramCommand command, CancellationToken cancellationToken)
         {
             var wf = await _context.Workflows.FindAsync(command.WorkflowId);
+            if(wf==null)
+            {
+                throw new NotFoundException(nameof(Workflow), command.WorkflowId);
+            }
             var entity = new WorkflowDiagram
             {
-                Name = command.Name,
-                MimeType = command.MimeType,
-                File = command.File
+                Name = (Filename) command.Name,
+                ContentType = command.ContentType,
+                File = command.File,
+                Workflow = wf
             };
             wf.Diagrams.Add(entity);
-            entity.DomainEvents.Add(new DiagramCreatedEvent(entity));
-
             await _context.SaveChangesAsync(cancellationToken);
-
             return entity.Id;
         }
     }

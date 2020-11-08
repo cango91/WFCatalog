@@ -21,15 +21,17 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.Setup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
@@ -58,10 +60,9 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.UseCase", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<string>("AltCourse")
                         .HasColumnType("text");
@@ -95,11 +96,11 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                     b.Property<string>("Preconditions")
                         .HasColumnType("text");
 
-                    b.Property<int?>("UseCaseActorId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("UseCaseActorId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("WorkflowId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("WorkflowId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -112,15 +113,17 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.UseCaseActor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModified")
@@ -132,10 +135,15 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("UseCaseId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("SetupId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("UseCaseId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SetupId");
 
                     b.HasIndex("UseCaseId");
 
@@ -144,10 +152,9 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.Workflow", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -168,11 +175,11 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PrimaryId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("PrimaryId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("SetupId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("SetupId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -188,10 +195,13 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.WorkflowDiagram", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -208,16 +218,8 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<string>("MimeType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("WorkflowId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("WorkflowId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -241,6 +243,12 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WorkflowCatalog.Domain.Entities.UseCaseActor", b =>
                 {
+                    b.HasOne("WorkflowCatalog.Domain.Entities.Setup", "Setup")
+                        .WithMany("Actors")
+                        .HasForeignKey("SetupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("WorkflowCatalog.Domain.Entities.UseCase", null)
                         .WithMany("Actors")
                         .HasForeignKey("UseCaseId");
@@ -266,6 +274,25 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Migrations
                         .HasForeignKey("WorkflowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsOne("WorkflowCatalog.Domain.ValueObjects.Filename", "Name", b1 =>
+                        {
+                            b1.Property<Guid>("WorkflowDiagramId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Extension")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Name")
+                                .HasColumnType("text");
+
+                            b1.HasKey("WorkflowDiagramId");
+
+                            b1.ToTable("Diagrams");
+
+                            b1.WithOwner()
+                                .HasForeignKey("WorkflowDiagramId");
+                        });
                 });
 #pragma warning restore 612, 618
         }

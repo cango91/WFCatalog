@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WorkflowCatalog.Domain.Entities;
@@ -19,6 +20,8 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Configurations
             builder.Property(x => x.Status).IsRequired();
             builder.HasMany(x => x.Workflows)
                 .WithOne(k=>k.Setup);
+            builder.HasMany(x => x.Actors)
+                .WithOne(x => x.Setup);
         }
     }
 }

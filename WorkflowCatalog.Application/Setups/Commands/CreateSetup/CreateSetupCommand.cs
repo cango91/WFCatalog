@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,13 +10,14 @@ using WorkflowCatalog.Domain.Events.SetupEvents;
 
 namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
 {
-    public class CreateSetupCommand : IRequest<int>
+    public class CreateSetupCommand : IRequest<Guid>
     {
         public string Name { get; set; }
         public string ShortName { get; set; }
+        public string Description { get; set; }
     }
 
-    public class CreateSetupCommandHandler : IRequestHandler<CreateSetupCommand,int>
+    public class CreateSetupCommandHandler : IRequestHandler<CreateSetupCommand,Guid>
     {
         private readonly IApplicationDbContext _context;
 
@@ -23,7 +25,7 @@ namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
         {
             _context = context;
         }
-        public async Task<int> Handle(CreateSetupCommand request,CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateSetupCommand request,CancellationToken cancellationToken)
         {
             var entity = new Setup
             {

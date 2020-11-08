@@ -1,27 +1,10 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../authentication/user.service';
-import { AnalyticsService } from './@core/utils/analytics.service';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-app',
-  template: '<router-outlet></router-outlet>',
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-
-  username = '';
-  constructor(private analytics: AnalyticsService, protected userService: UserService) {
-    this.userService.loadUser();
-    this.userService.user.subscribe(res => {
-      this.username = res.UserDetail.FULL_NAME;
-    })
-  }
-
-  ngOnInit() {
-    this.analytics.trackPageViews();
-  }
+export class AppComponent {
+  title = 'client-app';
 }

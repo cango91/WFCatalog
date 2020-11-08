@@ -1,44 +1,53 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FileSignatures;
+using FileSignatures.Formats;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using WorkflowCatalog.Application.Common.Interfaces;
+using WorkflowCatalog.Application.Diagrams.Queries.GetDiagramById;
+using WorkflowCatalog.Domain.ValueObjects;
 
 namespace WorkflowCatalog.Application.Diagrams.Commands.CreateDiagram
 {
-    public class CreateDiagramCommandValidator : AbstractValidator<CreateDiagramCommand>
+    class CreateDiagramCommandValidator : AbstractValidator<CreateDiagramCommand>
     {
         private readonly IApplicationDbContext _context;
-        public CreateDiagramCommandValidator(IApplicationDbContext context)
+        private readonly IFileFormatInspector _inspector;
+        private readonly IMapper _mapper;
+        public CreateDiagramCommandValidator(IApplicationDbContext context, IFileFormatInspector inspector, IMapper mapper)
         {
             _context = context;
+            _inspector = inspector;
+            _mapper = mapper;
+
             RuleFor(x => x.File)
-                .NotEmpty().WithMessage("A file must be provided for workflow diagram.");
-            RuleFor(x => x.WorkflowId)
-                .NotEmpty().WithMessage("A diagram must belong to an existing workflow.")
-                .MustAsync(HaveValidWorkflow);
+                .Must(BeAcceptableFileType).WithMessage("Only image, pdf and Microsoft Visio filetypes are accepted.");
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("A name for the diagram must be provided.")
-                .MustAsync(HaveUniqueNameForWorkflowOrDifferentMimeType).WithMessage(
-                "Name for the diagram must be unique for the workflow (or have a different filetype than the existing name)");
-            RuleFor(x => x.MimeType)
-                .NotEmpty().WithMessage("Mime Type must be specified.");
-               
+                .NotEmpty().WithMessage("Diagram name can not be blank")
+                .MustAsync(BeUniqueFilename).WithMessage("A file with the same name already exists for the workflow");
         }
 
-        public async Task<bool> HaveUniqueNameForWorkflowOrDifferentMimeType(CreateDiagramCommand model, string name, CancellationToken cancellationToken)
+        public bool BeAcceptableFileType(byte[] byteArray)
         {
-            var entity = await _context.Workflows.Include(s => s.Diagrams).FirstOrDefaultAsync(s => s.Id == model.WorkflowId);
-            var diags = entity.Diagrams.Where(x => x.Name.ToLower() == name.ToLower());
-            return diags.Count() == 0 ? true : !diags.Any(x => x.MimeType == model.MimeType);
+            Stream stream = new MemoryStream(byteArray);
+            var format = _inspector.DetermineFileFormat(stream);
+            return (format is Pdf) || (format is Image) || (format is Visio) || (format is VisioLegacy);
         }
 
-        public async Task<bool> HaveValidWorkflow(int id, CancellationToken cancellationToken)
+        public async Task<bool> BeUniqueFilename(CreateDiagramCommand command, string name, CancellationToken cancellationToken)
         {
-            var entity = await _context.Workflows.FindAsync(id);
-            return entity != null;
+            var diags = await _context.Diagrams
+                .Where(x => x.Workflow.Id == command.WorkflowId)
+                .ToListAsync(cancellationToken);
+                return !diags.Any(x => x.Name.ToString().ToLower() == name.ToLower());
         }
     }
 }

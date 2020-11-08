@@ -3,17 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCatalog.Domain", "WorkflowCatalog.Domain\WorkflowCatalog.Domain.csproj", "{F23DC2BB-711F-4DD0-B33B-7363B6A7E6C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkflowCatalog.Domain", "WorkflowCatalog.Domain\WorkflowCatalog.Domain.csproj", "{F23DC2BB-711F-4DD0-B33B-7363B6A7E6C6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E6085B16-B37B-472F-AC75-DC3068B635E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkflowCatalog.Application", "WorkflowCatalog.Application\WorkflowCatalog.Application.csproj", "{388127DB-799C-423D-86CB-B1072681ABAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.IntegrationTests", "Application.IntegrationTests\Application.IntegrationTests.csproj", "{2142F61F-A989-4EB5-96CF-66E2A0A7192C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkflowCatalog.API", "WorkflowCatalog.API\WorkflowCatalog.API.csproj", "{8861BA11-5A20-4FAD-A5C6-ADECC3E37278}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCatalog.Application", "WorkflowCatalog.Application\WorkflowCatalog.Application.csproj", "{388127DB-799C-423D-86CB-B1072681ABAB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCatalog.API", "WorkflowCatalog.API\WorkflowCatalog.API.csproj", "{8861BA11-5A20-4FAD-A5C6-ADECC3E37278}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowCatalog.Infrastructure", "WorkflowCatalog.Infrastructure\WorkflowCatalog.Infrastructure.csproj", "{9E062CF0-A7B8-49E2-B56C-6A204FBD3282}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkflowCatalog.Infrastructure", "WorkflowCatalog.Infrastructure\WorkflowCatalog.Infrastructure.csproj", "{9E062CF0-A7B8-49E2-B56C-6A204FBD3282}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +21,6 @@ Global
 		{F23DC2BB-711F-4DD0-B33B-7363B6A7E6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F23DC2BB-711F-4DD0-B33B-7363B6A7E6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F23DC2BB-711F-4DD0-B33B-7363B6A7E6C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2142F61F-A989-4EB5-96CF-66E2A0A7192C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2142F61F-A989-4EB5-96CF-66E2A0A7192C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2142F61F-A989-4EB5-96CF-66E2A0A7192C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2142F61F-A989-4EB5-96CF-66E2A0A7192C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{388127DB-799C-423D-86CB-B1072681ABAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{388127DB-799C-423D-86CB-B1072681ABAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{388127DB-799C-423D-86CB-B1072681ABAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,8 +39,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AAC7667-DDDC-4B48-8CD7-91403AAE2261}
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{2142F61F-A989-4EB5-96CF-66E2A0A7192C} = {E6085B16-B37B-472F-AC75-DC3068B635E2}
 	EndGlobalSection
 EndGlobal

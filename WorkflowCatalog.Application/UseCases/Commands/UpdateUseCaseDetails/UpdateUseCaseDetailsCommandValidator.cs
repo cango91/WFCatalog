@@ -1,36 +1,32 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using WorkflowCatalog.Application.Common.Interfaces;
 
 namespace WorkflowCatalog.Application.UseCases.Commands.UpdateUseCaseDetails
 {
-    public class UpdateUseCaseDetailsCommandValidator : AbstractValidator<UpdateUseCaseDetailsCommand>
+    class UpdateUseCaseDetailsCommandValidator : AbstractValidator<UpdateUseCaseDetailsCommand>
     {
         private readonly IApplicationDbContext _context;
         public UpdateUseCaseDetailsCommandValidator(IApplicationDbContext context)
         {
             _context = context;
-            _context = context;
-            RuleFor(v => v.Name)
-                .MaximumLength(200).WithMessage("Name must not exceed 200 characters.")
-                .NotEmpty().WithMessage("Name is required.");
-            RuleFor(v => v.Description)
-                .NotEmpty().WithMessage("Description must not be empty.");
-            RuleFor(v => v.NormalCourse)
-                .NotEmpty().WithMessage("Normal course of use case can not be empty.");
-            RuleFor(v => v.Actors)
-                .MustAsync(MustExistAllActors);
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Name can not be blank.");
+            RuleFor(x => x.Actors)
+                .MustAsync(BeValidActorIds).WithMessage("All actor Ids must be valid");
+            RuleFor(x => x.NormalCourse)
+                .NotEmpty().WithMessage("Normal course can not be empty");
         }
 
-        public async Task<bool> MustExistAllActors(IEnumerable<int> actors, CancellationToken cancellationToken)
+        public async Task<bool> BeValidActorIds(UpdateUseCaseDetailsCommand command, List<Guid> actors, CancellationToken cancellationToken)
         {
-            var validIds = await _context.Actors.Select(x => x.Id).ToListAsync();
-            return actors.All(x => validIds.Contains(x));
+            var uc = await _context.UseCases.FindAsync(command.Id);
+            return actors.All(x => uc.Workflow.Setup.Actors.Select(a => a.Id).Contains(x));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using WorkflowCatalog.Application.Common.Exceptions;
@@ -10,9 +11,10 @@ namespace WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails
 {
     public class UpdateSetupDetailsCommand : IRequest
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
+        public string Description { get; set; }
         public SetupStatus Status { get; set; }
     }
 
@@ -36,6 +38,7 @@ namespace WorkflowCatalog.Application.Setups.Commands.UpdateSetupDetails
 
             entity.Name = request.Name;
             entity.ShortName = request.ShortName;
+            entity.Description = request.Description;
 
             if(entity.Status != request.Status)
             {

@@ -11,387 +11,7 @@
         "tags": [
           "Actors"
         ],
-        "operationId": "Actors_GetAll",
-        "parameters": [
-          {
-            "name": "Filters",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          },
-          {
-            "name": "Sorts",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UCActorDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Actors"
-        ],
-        "operationId": "Actors_AddActor",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddActorCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UCActorDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Diagrams/{workFlowId}": {
-      "post": {
-        "tags": [
-          "Diagrams"
-        ],
-        "operationId": "Diagrams_AddDiagram",
-        "parameters": [
-          {
-            "name": "workFlowId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary",
-                    "nullable": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "get": {
-        "tags": [
-          "Diagrams"
-        ],
-        "operationId": "Diagrams_Get",
-        "parameters": [
-          {
-            "name": "workFlowId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Dump/Setups": {
-      "get": {
-        "tags": [
-          "Dump"
-        ],
-        "operationId": "Dump_DumpSetups",
-        "parameters": [
-          {
-            "name": "Filters",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          },
-          {
-            "name": "Sorts",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          },
-          {
-            "name": "Page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "maximum": 2147483647.0,
-              "minimum": 1.0,
-              "nullable": true
-            },
-            "x-position": 3
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "maximum": 2147483647.0,
-              "minimum": 1.0,
-              "nullable": true
-            },
-            "x-position": 4
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SetupsDumpVm"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Dump/Workflows": {
-      "get": {
-        "tags": [
-          "Dump"
-        ],
-        "operationId": "Dump_DumpWorkflows",
-        "parameters": [
-          {
-            "name": "Filters",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          },
-          {
-            "name": "Sorts",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          },
-          {
-            "name": "Page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "maximum": 2147483647.0,
-              "minimum": 1.0,
-              "nullable": true
-            },
-            "x-position": 3
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "maximum": 2147483647.0,
-              "minimum": 1.0,
-              "nullable": true
-            },
-            "x-position": 4
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowsDumpVm"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Dump/UseCases": {
-      "get": {
-        "tags": [
-          "Dump"
-        ],
-        "operationId": "Dump_DumpUseCases",
-        "parameters": [
-          {
-            "name": "Filters",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 1
-          },
-          {
-            "name": "Sorts",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          },
-          {
-            "name": "Page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "maximum": 2147483647.0,
-              "minimum": 1.0,
-              "nullable": true
-            },
-            "x-position": 3
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "maximum": 2147483647.0,
-              "minimum": 1.0,
-              "nullable": true
-            },
-            "x-position": 4
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfUseCasesDumpDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Dump/Actors": {
-      "get": {
-        "tags": [
-          "Dump"
-        ],
-        "operationId": "Dump_DumpActors",
+        "operationId": "Actors_GetActors",
         "parameters": [
           {
             "name": "Filters",
@@ -455,12 +75,248 @@
         ]
       }
     },
-    "/api/Dump/Diagrams": {
+    "/api/Actors/{actorId}": {
       "get": {
         "tags": [
-          "Dump"
+          "Actors"
         ],
-        "operationId": "Dump_DumpDiagramsInfo",
+        "operationId": "Actors_GeActortById",
+        "parameters": [
+          {
+            "name": "actorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UCActorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Actors"
+        ],
+        "operationId": "Actors_UpdateActor",
+        "parameters": [
+          {
+            "name": "actorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateActorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Actors"
+        ],
+        "operationId": "Actors_DeleteActor",
+        "parameters": [
+          {
+            "name": "actorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteActorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Actors/forSetup/{setupId}": {
+      "post": {
+        "tags": [
+          "Actors"
+        ],
+        "operationId": "Actors_CreateActor",
+        "parameters": [
+          {
+            "name": "setupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateActorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Diagrams/forWorkflow/{workflowId}": {
+      "post": {
+        "tags": [
+          "Diagrams"
+        ],
+        "operationId": "Diagrams_CreateDiagram",
+        "parameters": [
+          {
+            "name": "workflowId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Diagrams": {
+      "get": {
+        "tags": [
+          "Diagrams"
+        ],
+        "operationId": "Diagrams_GetDiagramsMetaData",
         "parameters": [
           {
             "name": "Filters",
@@ -511,7 +367,117 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfDiagramsInfoDto"
+                  "$ref": "#/components/schemas/PaginatedListOfDiagramsMetaDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Diagrams/{diagramId}": {
+      "get": {
+        "tags": [
+          "Diagrams"
+        ],
+        "operationId": "Diagrams_GetDiagramById",
+        "parameters": [
+          {
+            "name": "diagramId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Diagrams"
+        ],
+        "operationId": "Diagrams_DeleteDiagram",
+        "parameters": [
+          {
+            "name": "diagramId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteDiagramCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Enums": {
+      "get": {
+        "tags": [
+          "Enums"
+        ],
+        "operationId": "Enums_GetEnumsInfo",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnumInfoVm"
                 }
               }
             }
@@ -529,7 +495,7 @@
         "tags": [
           "Setups"
         ],
-        "operationId": "Setups_Get",
+        "operationId": "Setups_GetSetups",
         "parameters": [
           {
             "name": "Filters",
@@ -548,6 +514,30 @@
               "nullable": true
             },
             "x-position": 2
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 2147483647.0,
+              "minimum": 1.0,
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 2147483647.0,
+              "minimum": 1.0,
+              "nullable": true
+            },
+            "x-position": 4
           }
         ],
         "responses": {
@@ -556,7 +546,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SetupsVm"
+                  "$ref": "#/components/schemas/PaginatedListOfSetupsDto"
                 }
               }
             }
@@ -572,7 +562,7 @@
         "tags": [
           "Setups"
         ],
-        "operationId": "Setups_Create",
+        "operationId": "Setups_CreateSetup",
         "requestBody": {
           "x-name": "command",
           "content": {
@@ -591,8 +581,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "type": "string",
+                  "format": "guid"
                 }
               }
             }
@@ -610,15 +600,15 @@
         "tags": [
           "Setups"
         ],
-        "operationId": "Setups_GetById",
+        "operationId": "Setups_GetSetupById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "guid"
             },
             "x-position": 1
           }
@@ -629,7 +619,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SetupsVm"
+                  "$ref": "#/components/schemas/SingleSetupDto"
                 }
               }
             }
@@ -645,15 +635,15 @@
         "tags": [
           "Setups"
         ],
-        "operationId": "Setups_Update",
+        "operationId": "Setups_UpdateSetup",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "guid"
             },
             "x-position": 1
           }
@@ -693,15 +683,15 @@
         "tags": [
           "Setups"
         ],
-        "operationId": "Setups_Delete",
+        "operationId": "Setups_DeleteSetup",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "guid"
             },
             "x-position": 1
           }
@@ -738,47 +728,11 @@
       }
     },
     "/api/UseCases": {
-      "post": {
-        "tags": [
-          "UseCases"
-        ],
-        "operationId": "UseCases_Create",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUseCaseCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
       "get": {
         "tags": [
           "UseCases"
         ],
-        "operationId": "UseCases_Get",
+        "operationId": "UseCases_GetUseCases",
         "parameters": [
           {
             "name": "Filters",
@@ -829,7 +783,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfUseCasesDto"
+                  "$ref": "#/components/schemas/PaginatedListOfUseCaseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "UseCases"
+        ],
+        "operationId": "UseCases_CreateUseCase",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUseCaseCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
                 }
               }
             }
@@ -843,19 +833,54 @@
       }
     },
     "/api/UseCases/{id}": {
-      "put": {
+      "get": {
         "tags": [
           "UseCases"
         ],
-        "operationId": "UseCases_Update",
+        "operationId": "UseCases_GetUseCaseById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UseCaseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "UseCases"
+        ],
+        "operationId": "UseCases_UpdateUseCaseDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
             },
             "x-position": 1
           }
@@ -895,15 +920,15 @@
         "tags": [
           "UseCases"
         ],
-        "operationId": "UseCases_Delete",
+        "operationId": "UseCases_DeleteUseCase",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "guid"
             },
             "x-position": 1
           }
@@ -927,41 +952,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Unit"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "get": {
-        "tags": [
-          "UseCases"
-        ],
-        "operationId": "UseCases_GetSingle",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfUseCasesDto"
                 }
               }
             }
@@ -997,32 +987,31 @@
         }
       }
     },
-    "/api/Workflows": {
-      "post": {
+    "/api/Workflows/{id}": {
+      "get": {
         "tags": [
           "Workflows"
         ],
-        "operationId": "Workflows_Create",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateWorkflowCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
+        "operationId": "Workflows_GetWorkflowById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "$ref": "#/components/schemas/SingleWorkflowDto"
                 }
               }
             }
@@ -1034,6 +1023,103 @@
           }
         ]
       },
+      "put": {
+        "tags": [
+          "Workflows"
+        ],
+        "operationId": "Workflows_UpdateWorkflow",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWorkflowDetailsCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Workflows"
+        ],
+        "operationId": "Workflows_DeleteWorkflow",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteWorkflowCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Workflows": {
       "get": {
         "tags": [
           "Workflows"
@@ -1089,57 +1175,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WorkflowsVm"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Workflows/{id}": {
-      "put": {
-        "tags": [
-          "Workflows"
-        ],
-        "operationId": "Workflows_Update",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateWorkflowDetailsCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "$ref": "#/components/schemas/PaginatedListOfWorkflowsDto"
                 }
               }
             }
@@ -1151,118 +1187,22 @@
           }
         ]
       },
-      "get": {
-        "tags": [
-          "Workflows"
-        ],
-        "operationId": "Workflows_GetSingleWorkflow",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowsVm"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Workflows"
-        ],
-        "operationId": "Workflows_DeleteWorkflow",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeleteWorkflowCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Unit"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/Workflows/{id}/copy": {
       "post": {
         "tags": [
           "Workflows"
         ],
-        "operationId": "Workflows_CopyWorkflow",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
+        "operationId": "Workflows_CreateWorkflow",
         "requestBody": {
           "x-name": "command",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CopyWorkflowCommand"
+                "$ref": "#/components/schemas/CreateWorkflowCommand"
               }
             }
           },
           "required": true,
-          "x-position": 2
+          "x-position": 1
         },
         "responses": {
           "200": {
@@ -1270,8 +1210,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer",
-                  "format": "int32"
+                  "type": "string",
+                  "format": "guid"
                 }
               }
             }
@@ -1287,360 +1227,6 @@
   },
   "components": {
     "schemas": {
-      "UCActorDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "AddActorCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "SetupsDumpVm": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "setupStatuses": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/SetupStatusDto"
-            }
-          },
-          "setups": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PaginatedListOfSetupsDumpDto"
-              }
-            ]
-          }
-        }
-      },
-      "SetupStatusDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "value": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "PaginatedListOfSetupsDumpDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/SetupsDumpDto"
-            }
-          },
-          "pageIndex": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "hasPreviousPage": {
-            "type": "boolean"
-          },
-          "hasNextPage": {
-            "type": "boolean"
-          }
-        }
-      },
-      "SetupsDumpDto": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Auditable"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "name": {
-                "type": "string",
-                "nullable": true
-              },
-              "shortName": {
-                "type": "string",
-                "nullable": true
-              },
-              "setupStatus": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "workflowIds": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "Auditable": {
-        "type": "object",
-        "x-abstract": true,
-        "additionalProperties": false,
-        "properties": {
-          "createdBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModifiedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastModified": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "WorkflowsDumpVm": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "workflowTypes": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/WorkflowTypeDto"
-            }
-          },
-          "workflows": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PaginatedListOfWorkflowsDumpDto"
-              }
-            ]
-          }
-        }
-      },
-      "WorkflowTypeDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "value": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "PaginatedListOfWorkflowsDumpDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/WorkflowsDumpDto"
-            }
-          },
-          "pageIndex": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "hasPreviousPage": {
-            "type": "boolean"
-          },
-          "hasNextPage": {
-            "type": "boolean"
-          }
-        }
-      },
-      "WorkflowsDumpDto": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Auditable"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "setupId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "name": {
-                "type": "string",
-                "nullable": true
-              },
-              "description": {
-                "type": "string",
-                "nullable": true
-              },
-              "type": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "useCaseIds": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              },
-              "diagramIds": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              },
-              "primaryDiagramId": {
-                "type": "integer",
-                "format": "int32",
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "PaginatedListOfUseCasesDumpDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/UseCasesDumpDto"
-            }
-          },
-          "pageIndex": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "hasPreviousPage": {
-            "type": "boolean"
-          },
-          "hasNextPage": {
-            "type": "boolean"
-          }
-        }
-      },
-      "UseCasesDumpDto": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Auditable"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "workflowId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "name": {
-                "type": "string",
-                "nullable": true
-              },
-              "description": {
-                "type": "string",
-                "nullable": true
-              },
-              "actorIds": {
-                "type": "array",
-                "nullable": true,
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              },
-              "preconditions": {
-                "type": "string",
-                "nullable": true
-              },
-              "postconditions": {
-                "type": "string",
-                "nullable": true
-              },
-              "normalCourse": {
-                "type": "string",
-                "nullable": true
-              },
-              "altCourse": {
-                "type": "string",
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
       "PaginatedListOfUCActorDto": {
         "type": "object",
         "additionalProperties": false,
@@ -1672,7 +1258,117 @@
           }
         }
       },
-      "PaginatedListOfDiagramsInfoDto": {
+      "UCActorDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Auditable"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "guid"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "setup": {
+                "type": "string",
+                "format": "guid"
+              },
+              "useCases": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Auditable": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateActorCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "setupId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateActorCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Unit": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "DeleteActorCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "PaginatedListOfDiagramsMetaDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1680,7 +1376,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/DiagramsInfoDto"
+              "$ref": "#/components/schemas/DiagramsMetaDto"
             }
           },
           "pageIndex": {
@@ -1703,7 +1399,7 @@
           }
         }
       },
-      "DiagramsInfoDto": {
+      "DiagramsMetaDto": {
         "allOf": [
           {
             "$ref": "#/components/schemas/Auditable"
@@ -1712,43 +1408,98 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "workflowId": {
+                "type": "string",
+                "format": "guid"
+              },
               "id": {
-                "type": "integer",
-                "format": "int32"
+                "type": "string",
+                "format": "guid"
               },
               "name": {
                 "type": "string",
                 "nullable": true
               },
-              "mimeType": {
+              "contentType": {
                 "type": "string",
                 "nullable": true
-              },
-              "workflowId": {
-                "type": "integer",
-                "format": "int32"
               }
             }
           }
         ]
       },
-      "SetupsVm": {
+      "DeleteDiagramCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "setupStatus": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
+      },
+      "EnumInfoVm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "workflowTypes": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/SetupStatusDto"
+              "$ref": "#/components/schemas/EnumInfoDto"
             }
           },
-          "setups": {
+          "setupStatuses": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/EnumInfoDto"
+            }
+          }
+        }
+      },
+      "EnumInfoDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PaginatedListOfSetupsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
             "type": "array",
             "nullable": true,
             "items": {
               "$ref": "#/components/schemas/SetupsDto"
             }
+          },
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
           }
         }
       },
@@ -1762,14 +1513,18 @@
             "additionalProperties": false,
             "properties": {
               "id": {
-                "type": "integer",
-                "format": "int32"
+                "type": "string",
+                "format": "guid"
               },
               "name": {
                 "type": "string",
                 "nullable": true
               },
               "shortName": {
+                "type": "string",
+                "nullable": true
+              },
+              "description": {
                 "type": "string",
                 "nullable": true
               },
@@ -1780,6 +1535,50 @@
               "workflowCount": {
                 "type": "integer",
                 "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "SingleSetupDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Auditable"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "guid"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "shortName": {
+                "type": "string",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "actors": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/UCActorDto"
+                }
+              },
+              "workflowIds": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
               }
             }
           }
@@ -1796,6 +1595,10 @@
           "shortName": {
             "type": "string",
             "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1804,14 +1607,18 @@
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "guid"
           },
           "name": {
             "type": "string",
             "nullable": true
           },
           "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
             "type": "string",
             "nullable": true
           },
@@ -1832,115 +1639,17 @@
           1
         ]
       },
-      "Unit": {
-        "type": "object",
-        "additionalProperties": false
-      },
       "DeleteSetupCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "guid"
           }
         }
       },
-      "CreateUseCaseCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "workflowId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "actors": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "preconditions": {
-            "type": "string",
-            "nullable": true
-          },
-          "postconditions": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalCourse": {
-            "type": "string",
-            "nullable": true
-          },
-          "altCourse": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "UpdateUseCaseDetailsCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "actors": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "preconditions": {
-            "type": "string",
-            "nullable": true
-          },
-          "postconditions": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalCourse": {
-            "type": "string",
-            "nullable": true
-          },
-          "altCourse": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "DeleteUseCaseCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "PaginatedListOfUseCasesDto": {
+      "PaginatedListOfUseCaseDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1948,7 +1657,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/UseCasesDto"
+              "$ref": "#/components/schemas/UseCaseDto"
             }
           },
           "pageIndex": {
@@ -1971,7 +1680,7 @@
           }
         }
       },
-      "UseCasesDto": {
+      "UseCaseDto": {
         "allOf": [
           {
             "$ref": "#/components/schemas/Auditable"
@@ -1981,8 +1690,12 @@
             "additionalProperties": false,
             "properties": {
               "id": {
-                "type": "integer",
-                "format": "int32"
+                "type": "string",
+                "format": "guid"
+              },
+              "workflowId": {
+                "type": "string",
+                "format": "guid"
               },
               "name": {
                 "type": "string",
@@ -2014,26 +1727,104 @@
               "altCourse": {
                 "type": "string",
                 "nullable": true
-              },
-              "workflowId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "setupId": {
-                "type": "integer",
-                "format": "int32"
-              },
-              "workflowName": {
-                "type": "string",
-                "nullable": true
-              },
-              "setupName": {
-                "type": "string",
-                "nullable": true
               }
             }
           }
         ]
+      },
+      "CreateUseCaseCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "workflowId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "actors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          "preconditions": {
+            "type": "string",
+            "nullable": true
+          },
+          "postconditions": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalCourse": {
+            "type": "string",
+            "nullable": true
+          },
+          "altCourse": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateUseCaseDetailsCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "preconditions": {
+            "type": "string",
+            "nullable": true
+          },
+          "postconditions": {
+            "type": "string",
+            "nullable": true
+          },
+          "actors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string",
+              "format": "guid"
+            }
+          },
+          "normalCourse": {
+            "type": "string",
+            "nullable": true
+          },
+          "altCourse": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DeleteUseCaseCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          }
+        }
       },
       "WeatherForecast": {
         "type": "object",
@@ -2057,85 +1848,58 @@
           }
         }
       },
-      "CreateWorkflowCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "setupId": {
-            "type": "integer",
-            "format": "int32"
+      "SingleWorkflowDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Auditable"
           },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "type": {
-            "$ref": "#/components/schemas/WorkflowType"
-          }
-        }
-      },
-      "WorkflowType": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "MainFlow",
-          "SubFlow"
-        ],
-        "enum": [
-          0,
-          1
-        ]
-      },
-      "UpdateWorkflowDetailsCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "type": {
-            "$ref": "#/components/schemas/WorkflowType"
-          },
-          "primaryDiagramId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          }
-        }
-      },
-      "WorkflowsVm": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "workflowTypes": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/WorkflowTypeDto"
-            }
-          },
-          "workflows": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PaginatedListOfWorkflowsDto"
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "guid"
+              },
+              "setupId": {
+                "type": "string",
+                "format": "guid"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "description": {
+                "type": "string",
+                "nullable": true
+              },
+              "workflowType": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "useCaseIds": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              },
+              "diagramIds": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              },
+              "primaryDiagramId": {
+                "type": "string",
+                "format": "guid"
               }
-            ]
+            }
           }
-        }
+        ]
       },
       "PaginatedListOfWorkflowsDto": {
         "type": "object",
@@ -2178,8 +1942,8 @@
             "additionalProperties": false,
             "properties": {
               "id": {
-                "type": "integer",
-                "format": "int32"
+                "type": "string",
+                "format": "guid"
               },
               "name": {
                 "type": "string",
@@ -2189,52 +1953,82 @@
                 "type": "string",
                 "nullable": true
               },
-              "type": {
+              "workflowType": {
                 "type": "integer",
                 "format": "int32"
               },
               "setupId": {
-                "type": "integer",
-                "format": "int32"
+                "type": "string",
+                "format": "guid"
               },
               "primaryDiagramId": {
-                "type": "integer",
-                "format": "int32",
+                "type": "string",
+                "format": "guid",
                 "nullable": true
               },
               "diagramCount": {
                 "type": "integer",
-                "format": "int32"
+                "format": "int64"
               },
               "useCaseCount": {
                 "type": "integer",
-                "format": "int32"
+                "format": "int64"
               }
             }
           }
         ]
+      },
+      "CreateWorkflowCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "setupId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "workflowType": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "UpdateWorkflowDetailsCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "workflowType": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
       },
       "DeleteWorkflowCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "CopyWorkflowCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "workflowId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "setupId": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "guid"
           }
         }
       }

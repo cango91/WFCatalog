@@ -27,8 +27,9 @@ namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
         public async Task<bool> BeUniqueAbbreviation(string abb, CancellationToken cancellationToken)
         {
             
-            return await _context.Setups
+            var val = await _context.Setups
                 .AllAsync(a => !String.Equals(a.ShortName.ToLower(), abb.ToLowerInvariant()));
+            return val;
         }
     }
 

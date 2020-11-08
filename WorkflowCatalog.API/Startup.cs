@@ -73,13 +73,14 @@ namespace WorkflowCatalog.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseStaticFiles();
 
             app.UseRouting();
 
             //app.UseOpenIdConnectAuthentication(a);
+            app.UseCors();
 
             app.UseAuthentication();
 
@@ -90,6 +91,7 @@ namespace WorkflowCatalog.API
                 settings.Path = "/api";
                 settings.DocumentPath = "/api/specification.json";
             });
+            
 
             app.UseEndpoints(endpoints =>
             {
