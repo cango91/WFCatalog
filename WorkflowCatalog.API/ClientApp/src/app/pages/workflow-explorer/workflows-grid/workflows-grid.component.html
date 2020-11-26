@@ -1,0 +1,2 @@
+<ng2-smart-table [source]="source" [settings]="settings" (rowSelect)="onSelect($event)" #table></ng2-smart-table>
+<ngb-pagination style="margin: 3px;" *ngIf="source.pageCount > 1" [ellipses]="false" [pageSize]="source.pageSize" [collectionSize]="source.itemCount" [rotate]="true" [boundaryLinks]="true" [(page)]="source.page" (pageChange)="handlePageChange($event)"></ngb-pagination>

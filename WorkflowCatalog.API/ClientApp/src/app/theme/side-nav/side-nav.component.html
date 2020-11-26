@@ -1,0 +1,16 @@
+<nb-card>
+    <nb-card-header>
+        Card Header
+    </nb-card-header>
+    <nb-card-body>
+        <nb-menu tag="menu" autoCollapse="true" [items]="items"></nb-menu>
+    </nb-card-body>
+    <nb-card-footer>
+        <div>
+    <a *ngIf="showActorEditOptions" href="pages/editactors" class="editSetups"><span class="material-icons">supervisor_account</span> Edit Actors</a>
+</div>
+<div>
+    <a  *ngIf="showSetupEditOptions" href="pages/editsetups" class="editSetups"><span class="material-icons">security</span> Edit Setups </a>
+</div>
+    </nb-card-footer>
+</nb-card>

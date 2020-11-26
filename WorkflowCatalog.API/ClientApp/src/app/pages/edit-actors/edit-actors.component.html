@@ -1,0 +1,14 @@
+<nb-card>
+    <nb-card-header>
+        Edit Actors of <strong *ngIf="setupId">{{setupName}} ({{setupAbbreviation}})</strong>
+    </nb-card-header>
+    <nb-card-body>
+
+        <nb-select placeholder="Choose a setup..." outline status="info" [(selected)]="setupId" (selectedChange)="handleSetupChange($event)">
+            <nb-option *ngFor="let setup of setups" value="{{setup.id}}">{{setup.shortName}} - {{setup.name}}</nb-option>
+        </nb-select>
+    </nb-card-body>
+    <nb-card-body *ngIf="setupId">
+        <app-edit-actors-grid setupId="{{setupId}}"></app-edit-actors-grid> 
+    </nb-card-body>
+</nb-card>

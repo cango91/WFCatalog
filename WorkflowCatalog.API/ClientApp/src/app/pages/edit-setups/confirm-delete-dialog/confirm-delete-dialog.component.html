@@ -1,0 +1,24 @@
+<nb-card>
+    <nb-card-header>
+        Confirm Deletion of Setup <strong>{{setupName}} ({{setupAbb}})</strong>
+        <span style="float:right"><button nbButton status ="danger" size="tiny" (click)="cancelDialog()"><mat-icon>close</mat-icon></button></span>
+    </nb-card-header>
+    <nb-card-body>
+        <p>
+            This action will <strong><span class="warning">permanently delete</span></strong> this <strong><i>setup</i></strong> with all associated <strong><i>workflows, use cases</i></strong> and <strong><i>actors.</i></strong> This action is <strong>not reversible.</strong>
+        </p>
+        <p>
+            If you want to remove the setup from the side navigation listing, edit the setup and choose "Passive" in the Status field. This will remove the setup from the side navigation listing and will make it (as well as the workflows and use cases associated) inaccessible to users, however they will not be removed from the database and can be restored by selecting "Active" for the status field.
+        </p>
+        <p>
+            If you understand and still wish to continue, type "<strong><i>I understand what I am doing</i></strong>" in the box below and click confirm to move forward with deleting the setup and all associated workflows and use cases.
+        </p>
+        
+            <input class="form-control" type="text" [formControl]="confirmationInput">
+        
+    </nb-card-body>
+    <nb-card-footer>
+        <span style="float:right;"><button nbButton status ="info" size="small" (click)="cancelDialog()" style="margin:3px;">Cancel</button><button [attr.disabled]="enableDelete ? null : 'disabled' " nbButton status ="danger" size="small" (click)="cancelDialog()" style="margin:3px;">Delete Setup</button></span>
+    </nb-card-footer>
+
+</nb-card>

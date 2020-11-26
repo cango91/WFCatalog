@@ -14,7 +14,7 @@ namespace WorkflowCatalog.Application.Common.Models
         public long TotalCount { get; }
         public PaginatedList(List<T> items, long count, int pageIndex, int pageSize)
         {
-            PageIndex = pageIndex;
+            PageIndex = pageIndex <= 0 ? 1 : pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             TotalCount = count;
             Items = items;

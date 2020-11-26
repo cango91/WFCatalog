@@ -10,8 +10,11 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Workflow> builder)
         {
             builder.HasOne(x => x.Setup)
-                .WithMany(x => x.Workflows).
-                IsRequired();
+                .WithMany(x => x.Workflows)
+                .IsRequired();
+
+            builder.Property(x => x.Type)
+                .IsRequired();
                 
             builder.Property(k => k.Name)
                 .IsRequired();

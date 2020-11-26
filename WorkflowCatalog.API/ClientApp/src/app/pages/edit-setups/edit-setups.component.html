@@ -1,0 +1,20 @@
+        <nb-card>
+            <nb-card-header>
+                Edit Setups
+            </nb-card-header>
+            <nb-card-body>
+                <ng2-smart-table [source]="source" [settings]="settings"
+                (deleteConfirm)="confirmDelete($event)" (editConfirm)="confirmEdit($event)" (createConfirm)="confirmCreate($event)"></ng2-smart-table>
+               <ngb-pagination style="margin: 3px;" *ngIf="source.pageCount > 1" [ellipses]="false" [pageSize]="source.pageSize" [collectionSize]="source.itemCount" [rotate]="true" [boundaryLinks]="true" [(page)]="source.page" (pageChange)="handlePageChange($event)">
+
+               </ngb-pagination>
+            </nb-card-body>
+            <nb-card-footer>
+                <nb-toggle [(checked)]="showDeleteAction"
+                status="{{showDeleteAction ? 'danger':'danger'}}"
+                (checkedChange)="updateSettings()"
+                labelPosition="start" ><span style="color:#dc3545;">
+                    <span class="material-icons">security</span>
+                Enable Delete Action</span></nb-toggle>
+            </nb-card-footer>
+        </nb-card>

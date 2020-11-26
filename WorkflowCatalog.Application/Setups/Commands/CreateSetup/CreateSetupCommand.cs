@@ -32,6 +32,7 @@ namespace WorkflowCatalog.Application.Setups.Commands.CreateSetup
                 Name = request.Name,
                 ShortName = request.ShortName,
                 Status = SetupStatus.Active,
+                Description = request.Description,
                 Workflows = new HashSet<Workflow>()
 
             };

@@ -1,0 +1,12 @@
+<nb-card>
+    <nb-card-header [innerHtml]="headerText">
+    </nb-card-header>
+    <nb-card-body [innerHtml]="bodyText"> 
+    </nb-card-body>
+    <nb-card-footer>
+        <span style="float: right;">
+            <button style="margin: 3px;" nbButton [attr.hero]="buttonStyle==='hero'?'hero':null" [attr.outline]="buttonStyle==='outline' ? 'outline' : null" status="{{cancelButtonStatus}}" (click)="cancel()" [innerHtml]="cancelButtonContent"></button>
+            <button style="margin: 3px;" nbButton [attr.hero]="buttonStyle==='hero'?'hero':null" [attr.outline]="buttonStyle==='outline' ? 'outline' : null"  status="{{confirmButtonStatus}}" (click)="confirm()" [innerHtml]="confirmButtonContent"></button>
+        </span>
+    </nb-card-footer>
+</nb-card>
