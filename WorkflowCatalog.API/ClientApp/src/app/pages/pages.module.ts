@@ -4,7 +4,7 @@ import { PagesComponent } from './pages.component';
 import { WorkflowExplorerComponent } from './workflow-explorer/workflow-explorer.component';
 import { FunctionExplorerComponent } from './function-explorer/function-explorer.component';
 import { PagesRoutingModule } from './pages-routing.module';
-import { NbButtonModule, NbCardModule, NbContextMenuModule, NbDialogModule, NbLayoutModule, NbMenuModule, NbMenuService, NbPopoverModule, NbSelectModule, NbToastrModule, NbToggleModule } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbContextMenuModule, NbDialogModule, NbInputModule, NbLayoutModule, NbMenuModule, NbMenuService, NbPopoverModule, NbSelectModule, NbToastrModule, NbToggleModule } from '@nebular/theme';
 import { RouterModule } from '@angular/router';
 import { EditSetupsComponent } from './edit-setups/edit-setups.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -21,6 +21,7 @@ import { UseCasesGridComponent } from './workflow-explorer/use-cases-grid/use-ca
 import { ActorsFilterComponent } from './workflow-explorer/use-cases-grid/actors/actors-filter/actors-filter.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { SetupService } from '../_providers/setup.service';
+import { WorkflowFormComponent } from './workflow-form/workflow-form.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { SetupService } from '../_providers/setup.service';
     WorkflowsGridComponent,
     ItemActionsComponent,
     UseCasesGridComponent, 
-    ActorsFilterComponent,
+    ActorsFilterComponent, 
+    WorkflowFormComponent,
     
   ],
   imports: [
@@ -43,6 +45,7 @@ import { SetupService } from '../_providers/setup.service';
     NbCardModule,
     NbLayoutModule,
     RouterModule,
+    NbInputModule,
     Ng2SmartTableModule,
     NbToggleModule,
     NbToastrModule.forRoot(),

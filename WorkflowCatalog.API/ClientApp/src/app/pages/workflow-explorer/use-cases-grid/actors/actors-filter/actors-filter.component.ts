@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { DefaultFilter } from 'ng2-smart-table';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { ActorsClient, UCActorDto } from 'src/app/web-api-client';
@@ -9,7 +9,7 @@ import { SetupService } from 'src/app/_providers/setup.service';
   templateUrl: './actors-filter.component.html',
   styleUrls: ['./actors-filter.component.scss']
 })
-export class ActorsFilterComponent extends DefaultFilter implements OnInit {
+export class ActorsFilterComponent extends DefaultFilter implements OnInit, OnChanges {
 
   actorsList : UCActorDto[];
   items: Array<any>;
@@ -21,7 +21,7 @@ export class ActorsFilterComponent extends DefaultFilter implements OnInit {
                 textField: 'text',
                 selectAllText: 'Select All',
                 unSelectAllText: 'UnSelect All',
-                itemsShowLimit: 3,
+                itemsShowLimit: 1,
                 allowSearchFilter: true
   }
 
@@ -30,12 +30,17 @@ export class ActorsFilterComponent extends DefaultFilter implements OnInit {
   constructor(private actorsClient: ActorsClient, private setupService: SetupService) { 
     super();
   }
+    ngOnChanges(changes: SimpleChanges): void {
+        // throw new Error("Method not implemented.");
+    }
 
   ngOnInit(): void {
     this.setupService.currentSetupId.subscribe(x => {
       this.setupId = x
+      if (this.setupId) {
+        this.refreshActorsList();
+      }
     })
-    this.refreshActorsList();
   }
 
   setSetupId(id: string){

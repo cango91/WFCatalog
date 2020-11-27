@@ -4,11 +4,18 @@
 
 @include nb-install() {
   @include nb-theme-global();
-};
+}
+
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .modal-half {
   max-width: 480px !important;
@@ -17,3 +24,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+
+
+.nb-theme-corporate ng2-smart-table table tr.ng2-smart-titles th {
+  padding-top: 0.5em 1em !important;
+}
+
+.custom-card-title {
+  line-height: 30px;
+}
+
+.ng2-smart-titles {
+  background-color: #3598DC !important;
+}
+
+tr.ng2-smart-titles th a, .nb-theme-corporate ng2-smart-table table tr th {
+  color: white !important;
+  font-weight: bold!important;
+}

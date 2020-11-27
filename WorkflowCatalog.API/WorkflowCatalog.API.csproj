@@ -30,6 +30,7 @@
     <PackageReference Include="Sieve" Version="2.3.3" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\pages\NewFolder\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>

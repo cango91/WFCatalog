@@ -7,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  items = [
+    { title: 'Settings' },
+    { title: 'Logout' },
+  ];
+
   constructor() { }
 
   ngOnInit(): void {

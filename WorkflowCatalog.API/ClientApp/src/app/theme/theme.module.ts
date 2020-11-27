@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
-import { NbButtonModule, NbCardModule, NbDialogModule, NbMenuModule, NbMenuService } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbDialogModule, NbMenuModule, NbMenuService, NbContextMenuModule } from '@nebular/theme';
 import { ConfirmationPromptComponent } from './confirmation-prompt/confirmation-prompt.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -17,8 +17,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NbCardModule,
     NbDialogModule,
     NgbModule,
-    NbButtonModule,
-    
+    NbContextMenuModule,
+    NbButtonModule
   ],
   exports: [
     CommonModule, 

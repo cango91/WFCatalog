@@ -34,6 +34,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     NbSidebarModule.forRoot(),
     PagesModule,
+    NbMenuModule.forRoot(),
     NgbModule
   ],
   providers: [

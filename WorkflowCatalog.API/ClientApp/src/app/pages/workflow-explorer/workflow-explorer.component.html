@@ -1,25 +1,37 @@
 <nb-layout>
-<nb-layout-column>
-    <nb-card>
-        <nb-card-header>
+  <nb-layout-column>
+    <nb-card class="dashboard-card">
+      <nb-card-header>
+        <div class="row">
+          <div class="col-6 custom-card-title">
             <strong>{{setup ? setup.name: ''}}</strong> Workflows
-            <button nbButton hero shape="round" status="info" style="float: right;"><span class="material-icons">add</span></button>
-        </nb-card-header>
-        <nb-card-body>
-            <app-workflows-grid [setupId]="setupId" (onWorkflowSelected)="handleWorkflowSelect($event)"></app-workflows-grid>
-        </nb-card-body>
+          </div>
+          <div class="col-6">
+            <button nbButton hero shape="round" size="tiny" (click)="onAddWorkflow()" status="info" style="float: right;"><span class="material-icons">add</span></button>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <app-workflows-grid [setupId]="setupId" (onWorkflowSelected)="handleWorkflowSelect($event)"></app-workflows-grid>
+      </nb-card-body>
     </nb-card>
-</nb-layout-column>
-<nb-layout-column *ngIf="workflowId">
-    <nb-card>
-        <nb-card-header>
+  </nb-layout-column>
+  <nb-layout-column *ngIf="workflowId">
+    <nb-card class="dashboard-card">
+      <nb-card-header>
+        <div class="row">
+          <div class="col-6 custom-card-title">
             <strong>{{workflowName ? workflowName : ''}}</strong> Use Cases
-            <button nbButton hero shape="round" status="info" style="float: right;"><span class="material-icons">add</span></button>
-        </nb-card-header>
-    <nb-card-body>
+          </div>
+          <div class="col-6">
+            <button nbButton hero shape="round" size="tiny" status="info" style="float: right;"><span class="material-icons">add</span></button>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
         <app-use-cases-grid [setupId]="setupId"></app-use-cases-grid>
-    </nb-card-body>
+      </nb-card-body>
     </nb-card>
-    
-</nb-layout-column>
+
+  </nb-layout-column>
 </nb-layout>

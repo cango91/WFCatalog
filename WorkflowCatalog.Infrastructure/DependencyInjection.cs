@@ -8,6 +8,7 @@ using WorkflowCatalog.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 
 namespace WorkflowCatalog.Infrastructure
 {
@@ -39,7 +40,7 @@ namespace WorkflowCatalog.Infrastructure
                        ValidateIssuerSigningKey = false,
                        ValidIssuer = configuration["Token:Issuer"],
                        ValidAudience = configuration["Token:Audience"],
-                       IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(configuration["Token:Secret"]))
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:Secret"]))
                    };
                });
 

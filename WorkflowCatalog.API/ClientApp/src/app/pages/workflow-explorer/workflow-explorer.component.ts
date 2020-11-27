@@ -1,8 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NbDialogService } from '@nebular/theme';
 import { AppComponent } from 'src/app/app.component';
 import { SetupsClient, SingleSetupDto, SingleWorkflowDto } from 'src/app/web-api-client';
 import { SetupService } from 'src/app/_providers/setup.service';
+import { WorkflowFormComponent } from '../workflow-form/workflow-form.component';
+import { UseCasesGridComponent } from './use-cases-grid/use-cases-grid.component';
 
 @Component({
   selector: 'app-workflow-explorer',
@@ -14,23 +17,33 @@ export class WorkflowExplorerComponent implements OnInit {
   workflowId: string;
   setup: SingleSetupDto;
   workflowName: string;
-  
-  constructor(protected activatedRoute: ActivatedRoute,protected setupsClient: SetupsClient, @Inject(AppComponent) protected parent: AppComponent, private setupService: SetupService) { }
+
+  @ViewChild(UseCasesGridComponent) useCasesComponent: UseCasesGridComponent
+
+  constructor(protected activatedRoute: ActivatedRoute, protected dialogService: NbDialogService, protected setupsClient: SetupsClient, @Inject(AppComponent) protected parent: AppComponent, private setupService: SetupService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(data => {
       this.setupId = data.id;
       console.log(`Nexting ${this.setupId}`);
-      this.setupService.currentSetupId.next(this.setupId);
-      this.setupsClient.getSetupById(this.setupId).subscribe( x => {
+      //this.setupService.currentSetupId.next(this.setupId);
+      this.setupsClient.getSetupById(this.setupId).subscribe(x => {
         this.setup = x;
+        this.setupService.currentSetupId.next(this.setupId);
       });
     });
   }
 
-  handleWorkflowSelect(event: any){
+  handleWorkflowSelect(event: any) {
     this.workflowId = event.id;
     this.workflowName = event.name;
+  }
+
+  onAddWorkflow() {
+    const ref = this.dialogService.open(WorkflowFormComponent);
+    ref.onClose.subscribe(res => {
+      this.useCasesComponent.refresh();
+    })
   }
 
 }
