@@ -6,6 +6,7 @@ import { SetupsClient, SingleSetupDto, SingleWorkflowDto } from 'src/app/web-api
 import { SetupService } from 'src/app/_providers/setup.service';
 import { WorkflowFormComponent } from '../workflow-form/workflow-form.component';
 import { UseCasesGridComponent } from './use-cases-grid/use-cases-grid.component';
+import { WorkflowsGridComponent } from './workflows-grid/workflows-grid.component';
 
 @Component({
   selector: 'app-workflow-explorer',
@@ -19,13 +20,14 @@ export class WorkflowExplorerComponent implements OnInit {
   workflowName: string;
 
   @ViewChild(UseCasesGridComponent) useCasesComponent: UseCasesGridComponent
+  @ViewChild(WorkflowsGridComponent) workflowGridComponent: WorkflowsGridComponent
 
   constructor(protected activatedRoute: ActivatedRoute, protected dialogService: NbDialogService, protected setupsClient: SetupsClient, @Inject(AppComponent) protected parent: AppComponent, private setupService: SetupService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(data => {
       this.setupId = data.id;
-      console.log(`Nexting ${this.setupId}`);
+      //console.log(`Nexting ${this.setupId}`);
       //this.setupService.currentSetupId.next(this.setupId);
       this.setupsClient.getSetupById(this.setupId).subscribe(x => {
         this.setup = x;
@@ -42,7 +44,7 @@ export class WorkflowExplorerComponent implements OnInit {
   onAddWorkflow() {
     const ref = this.dialogService.open(WorkflowFormComponent);
     ref.onClose.subscribe(res => {
-      this.useCasesComponent.refresh();
+      this.workflowGridComponent.refresh();
     })
   }
 

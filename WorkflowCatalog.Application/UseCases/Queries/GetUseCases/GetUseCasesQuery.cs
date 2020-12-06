@@ -6,9 +6,11 @@ using Sieve.Models;
 using Sieve.Services;
 using System.Threading;
 using System.Threading.Tasks;
+using WorkflowCatalog.Application.Common;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Application.Common.Models;
 using WorkflowCatalog.Application.Extensions;
+using WorkflowCatalog.Domain.Entities;
 
 namespace WorkflowCatalog.Application.UseCases.Queries.GetUseCases
 {
@@ -20,8 +22,8 @@ namespace WorkflowCatalog.Application.UseCases.Queries.GetUseCases
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly SieveProcessor _processor;
-        public GetUseCasesQueryHandler(IMapper mapper, IApplicationDbContext context, SieveProcessor processor)
+        private readonly ApplicationSieveProcessor _processor;
+        public GetUseCasesQueryHandler(IMapper mapper, IApplicationDbContext context, ApplicationSieveProcessor processor)
         {
             _context = context;
             _mapper = mapper;
@@ -31,8 +33,12 @@ namespace WorkflowCatalog.Application.UseCases.Queries.GetUseCases
         {
             var entity = _context.UseCases
                 .AsNoTracking()
-                .ProjectTo<UseCaseDto>(_mapper.ConfigurationProvider);
-            return await entity.Paginate(_processor, query);
+                .Include(x => x.UseCaseActors)
+                .Include(x => x.Workflow);
+/*                .Include(x => x.Actors)
+                .Include(x => x.Workflow);*/
+
+            return await entity.Paginate<UseCase,UseCaseDto>(_processor, query,_mapper);
         }
     }
 }

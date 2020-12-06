@@ -9,7 +9,7 @@ using WorkflowCatalog.Domain.Entities;
 
 namespace WorkflowCatalog.Application.UCActors.Queries
 {
-    public class UCActorDto : Auditable, IMapFrom<UseCaseActor>
+    public class ActorDto : Auditable, IMapFrom<Actor>
     {
 
         [Sieve(CanFilter = true, CanSort = false)]
@@ -21,17 +21,16 @@ namespace WorkflowCatalog.Application.UCActors.Queries
         public string Description { get; set; }
         [Sieve(CanFilter = true, CanSort = true)]
         public Guid Setup { get; set; }
-        [Sieve(CanFilter = false, CanSort = false)]
+
         public List<Guid> UseCases { get; set; }
         
 
 
             public void Mapping(Profile profile)
             {
-                profile.CreateMap<UseCaseActor, UCActorDto>()
+                profile.CreateMap<Actor, ActorDto>()
                     .ForMember(x => x.Setup, opt => opt.MapFrom(d => d.Setup.Id))
-                    .ForMember(x => x.UseCases, opt => opt.MapFrom(d => d.UseCases.Select(x=>x.Id)));
-
+                    .ForMember(x => x.UseCases, opt => opt.MapFrom(d => d.UseCaseActors.Select(x => x.UseCaseId)));
             }
 
 

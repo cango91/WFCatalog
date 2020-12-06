@@ -15,7 +15,7 @@ namespace WorkflowCatalog.Application.Common.Interfaces
         DbSet<Workflow> Workflows { get; set; }
         DbSet<UseCase> UseCases { get; set; }
         DbSet<WorkflowDiagram> Diagrams { get; set; }
-        DbSet<UseCaseActor> Actors { get; set; }
+        DbSet<Actor> Actors { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

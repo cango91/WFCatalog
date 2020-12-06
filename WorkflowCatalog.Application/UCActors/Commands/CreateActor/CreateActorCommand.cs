@@ -35,7 +35,7 @@ namespace WorkflowCatalog.Application.UCActors.Commands.CreateActor
             {
                 throw new NotFoundException(nameof(Setup), command.SetupId);
             }
-            var entity = new UseCaseActor
+            var entity = new Actor
             {
                 Name = command.Name,
                 Description = command.Description,

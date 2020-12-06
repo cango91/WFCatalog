@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
+using WorkflowCatalog.Application.Common;
 using WorkflowCatalog.Application.Common.Models;
 
 namespace WorkflowCatalog.Application.Extensions
 {
     public static class SieveExtension
     {
-       public async static Task<PaginatedList<T>> Paginate<T>(this IQueryable<T> query,SieveProcessor processor,SieveModel model)
+       public async static Task<PaginatedList<T>> Paginate<T>(this IQueryable<T> query,ApplicationSieveProcessor processor,SieveModel model)
         {
             long totalRecords;
             var q = processor.Apply(model, query, applyPagination: false);
@@ -20,6 +23,19 @@ namespace WorkflowCatalog.Application.Extensions
             q = processor.Apply(model, q, applyFiltering: false, applySorting: false);
 
             return new PaginatedList<T>(await q.ToListAsync(), totalRecords, model.Page ?? 0, model.PageSize ?? 10);
+        }
+
+        public async static Task<PaginatedList<P>> Paginate<T,P>(this IQueryable<T> query,ApplicationSieveProcessor processor, SieveModel model, IMapper mapper)
+        {
+            long totalRecords;
+            var q = processor.Apply(model, query, applyPagination: false);
+            totalRecords = await q.LongCountAsync();
+
+            q = processor.Apply(model, q, applyFiltering: false, applySorting: false);
+
+            return new PaginatedList<P>(await q.ProjectTo<P>(mapper.ConfigurationProvider).ToListAsync(), totalRecords, model.Page ?? 0, model.PageSize ?? 10);
+            
+
         }
 
         public async static Task<IList<T>> FilterAndSort<T> (this IQueryable<T> query, SieveProcessor processor, SieveModel model)

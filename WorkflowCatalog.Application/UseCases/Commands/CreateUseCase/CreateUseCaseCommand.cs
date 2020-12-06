@@ -43,7 +43,10 @@ namespace WorkflowCatalog.Application.UseCases.Commands.CreateUseCase
             {
                 Name = command.Name,
                 Description = command.Description,
-                Actors = actors,
+                UseCaseActors = actors.Select(a => new UseCaseActor
+                {
+                    ActorId = a.Id
+                }).ToList(),
                 Preconditions = command.Preconditions,
                 Postconditions = command.Postconditions,
                 NormalCourse = command.NormalCourse,

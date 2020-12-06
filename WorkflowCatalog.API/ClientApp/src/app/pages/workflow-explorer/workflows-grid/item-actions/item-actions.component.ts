@@ -38,7 +38,7 @@ export class ItemActionsComponent implements OnInit, OnDestroy {
     }];
 
     if(this.rowData.primaryDiagramId){
-      this.items = [{ title: 'View Diagram', data: 'diagram'}].concat(...this.items);
+      this.items = [{ title: 'Download Diagram', data: {action: 'diagram', id: this.rowData.id}}].concat(...this.items);
     };
 
     this.subscription = this.nbMenuService.onItemClick()

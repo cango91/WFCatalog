@@ -1,6 +1,6 @@
 <div>
-<ng2-smart-table [source]="source" [settings]="settings" (createConfirm)="confirmCreate($event)" (deleteConfirm)="confirmDelete($event)" (editConfirm)="confirmSave($event)"></ng2-smart-table>
+<ng2-smart-table [source]="source" [settings]="settings" (deleteConfirm)="confirmDelete($event)"></ng2-smart-table>
 </div>
 <div>
-    <ngb-pagination style="margin: 3px;" *ngIf="source.pageCount > 1" [ellipses]="false" [pageSize]="source.pageSize" [collectionSize]="source.itemCount" [rotate]="true" [boundaryLinks]="true" [(page)]="source.page" (pageChange)="handlePageChange($event)"></ngb-pagination>
+    <ngb-pagination style="margin: 3px;" *ngIf="paging.itemsCount > paging.pageSize" [ellipses]="false" [pageSize]="paging.pageSize" [collectionSize]="paging.itemsCount" [rotate]="true" [boundaryLinks]="true" [page]="1" (pageChange)="handlePageChange($event)"></ngb-pagination>
 </div>

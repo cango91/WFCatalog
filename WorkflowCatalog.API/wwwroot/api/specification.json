@@ -62,7 +62,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfUCActorDto"
+                  "$ref": "#/components/schemas/PaginatedListOfActorDto"
                 }
               }
             }
@@ -99,7 +99,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UCActorDto"
+                  "$ref": "#/components/schemas/ActorDto"
                 }
               }
             }
@@ -1227,7 +1227,7 @@
   },
   "components": {
     "schemas": {
-      "PaginatedListOfUCActorDto": {
+      "PaginatedListOfActorDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1235,7 +1235,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/UCActorDto"
+              "$ref": "#/components/schemas/ActorDto"
             }
           },
           "pageIndex": {
@@ -1258,7 +1258,7 @@
           }
         }
       },
-      "UCActorDto": {
+      "ActorDto": {
         "allOf": [
           {
             "$ref": "#/components/schemas/Auditable"
@@ -1569,7 +1569,7 @@
                 "type": "array",
                 "nullable": true,
                 "items": {
-                  "$ref": "#/components/schemas/UCActorDto"
+                  "$ref": "#/components/schemas/ActorDto"
                 }
               },
               "workflowIds": {
@@ -1731,6 +1731,24 @@
             }
           }
         ]
+      },
+      "UCActorDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "CreateUseCaseCommand": {
         "type": "object",
@@ -1968,11 +1986,11 @@
               },
               "diagramCount": {
                 "type": "integer",
-                "format": "int64"
+                "format": "int32"
               },
               "useCaseCount": {
                 "type": "integer",
-                "format": "int64"
+                "format": "int32"
               }
             }
           }

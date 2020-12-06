@@ -17,7 +17,7 @@ namespace WorkflowCatalog.Application.Setups.Queries.GetSetupById
         public string Name { get; set; }
         public string ShortName { get; set; }
         public string Description { get; set; }
-        public List<UCActorDto> Actors { get; set; }
+        public List<ActorDto> Actors { get; set; }
         public List<Guid> WorkflowIds { get; set; }
 
         public void Configure(Profile profile)

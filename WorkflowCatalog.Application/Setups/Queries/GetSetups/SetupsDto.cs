@@ -22,7 +22,7 @@ namespace WorkflowCatalog.Application.Setups.Queries.GetSetups
         [Sieve(CanFilter = true, CanSort = true)]
         public string Description { get; set; }
 
-        [Sieve(CanFilter = true, CanSort = false)]
+        [Sieve(CanFilter = true, CanSort = true)]
         public int Status { get; set; }
 
         [Sieve(CanFilter = true, CanSort = true)]

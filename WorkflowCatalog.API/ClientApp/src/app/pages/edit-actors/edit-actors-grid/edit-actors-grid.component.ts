@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NbDialogRef, NbDialogService} from '@nebular/theme';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { NbDialogRef, NbDialogService } from '@nebular/theme';
+import { NgbPagination, NgbPaginationConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationPromptComponent } from 'src/app/theme/confirmation-prompt/confirmation-prompt.component';
-import { ActorsClient, UCActorDto } from 'src/app/web-api-client';
-import { PaginatedQueryConfig } from 'src/app/_models/paginated-query-config.model';
+import { ActorsClient } from 'src/app/web-api-client';
 import { ActorsDataSource } from './edit-actors-grid.datasource';
 
 @Component({
@@ -14,24 +14,26 @@ export class EditActorsGridComponent implements OnInit {
 
   @Input()
   get setupId(): string { return this.__setupId; }
-  set setupId(id:string) {
+  set setupId(id: string) {
     this.__setupId = id;
-    this.refresh();
+    if (id) {
+      //debugger;
+      this.source = new ActorsDataSource(this.setupId, this.actorsClient);
+      this.source.setPaging(1, 5, null);
+      this.source.paging.subscribe(x => {
+        this.paging = Object.assign({},{itemsCount: x.itemsCount, pageSize: x.pageSize});
+      })
+    }
+  }
+
+  paging = {
+    itemsCount: 0,
+    pageSize: 5,
   }
 
   private __setupId;
-  
-  actors: UCActorDto[];
+
   source: ActorsDataSource;
-
-  pageSize: number = 5;
-
-  queryConfig = {
-    page: 1,
-    pageSize: this.pageSize,
-    filters: null,
-    sorts: null,
-  }
 
 
   settings = {
@@ -41,11 +43,14 @@ export class EditActorsGridComponent implements OnInit {
       edit: true,
       position: 'right',
     },
+    pager: {
+      hide: true,
+      perPage: 5,
+    },
     edit: {
       editButtonContent: '<span class="material-icons">edit</span>',
       cancelButtonContent: '<span class="material-icons">cancel</span>',
       saveButtonContent: '<span class="material-icons">check</span>',
-      confirmSave: true,
     },
     delete: {
       deleteButtonContent: '<span class="material-icons">delete</span>',
@@ -55,7 +60,6 @@ export class EditActorsGridComponent implements OnInit {
       addButtonContent: '<span class="material-icons">add</span>',
       cancelButtonContent: '<span class="material-icons">cancel</span>',
       createButtonContent: '<span class="material-icons">check</span>',
-      confirmCreate: true,
     },
     columns: {
       id: {
@@ -76,6 +80,7 @@ export class EditActorsGridComponent implements OnInit {
         },
       },
     },
+    
   };
 
   confirmDialogContext = {
@@ -86,75 +91,39 @@ export class EditActorsGridComponent implements OnInit {
   }
 
 
-  constructor(protected actorsClient:ActorsClient, protected dialogService: NbDialogService) {
-    this.source = new ActorsDataSource(this.setupId,this.actorsClient,this.queryConfig)
-   }
+  constructor(protected actorsClient: ActorsClient, protected dialogService: NbDialogService) {
+    this.source = new ActorsDataSource(this.setupId,this.actorsClient)
+  }
 
   ngOnInit(): void {
-
+    this.source.paging.subscribe(res => this.paging = res);
+    //this.source.setPaging(1, 5, null);
+    this.source.onChanged().subscribe(res => {
+      if (res.action === 'filter') {
+        this.source.setPaging(1, 5, true);
+      }
+    })
   }
 
-  refresh(query?:PaginatedQueryConfig){
-    if(query){
-      this.source = new ActorsDataSource(this.setupId,this.actorsClient,query);
-      return;
-    }
-    this.queryConfig = {
-      page: 1,
-      pageSize: this.pageSize,
-      filters: null,
-      sorts: null,
-    }
-    this.source = new ActorsDataSource(this.setupId,this.actorsClient,this.queryConfig);
-  }
 
-  confirmCreate(event: any){
-    event.confirm.resolve();
-    setTimeout(() => {
-      let sorts = this.source.getSort();
-      let filters = this.source.getFilter();
-      this.queryConfig.sorts = sorts;
-      this.queryConfig.filters = filters;
-      this.refresh(this.queryConfig);
-    },500);
-  }
 
-  confirmDelete(event: any){
-    this.dialogService.open(ConfirmationPromptComponent,{context: this.confirmDialogContext}).onClose.subscribe(x => {
-      if(x){
+  confirmDelete(event: any) {
+    this.dialogService.open(ConfirmationPromptComponent, { context: this.confirmDialogContext }).onClose.subscribe(x => {
+      if (x) {
         event.confirm.resolve()
         setTimeout(() => {
-          let sorts = this.source.getSort();
-      let filters = this.source.getFilter();
-      this.queryConfig.sorts = sorts;
-      this.queryConfig.filters = filters;
-      this.refresh(this.queryConfig);
-        },300);
-      }else{
+          event.confirm.resolve();
+        }, 300);
+      } else {
         event.confirm.reject();
       }
     })
   }
 
-  confirmSave(event:any){
-    event.confirm.resolve();
-    setTimeout(() => {
-      let sorts = this.source.getSort();
-      let filters = this.source.getFilter();
-      this.queryConfig.sorts = sorts;
-      this.queryConfig.filters = filters;
-      this.refresh(this.queryConfig);
-    },500);
-  }
 
-  handlePageChange(event: any){
-    this.queryConfig.page = event;
-    let sorts = this.source.getSort();
-    let filters = this.source.getFilter();
-    this.queryConfig.filters = filters;
-    this.queryConfig.sorts = sorts;
-    this.source = new ActorsDataSource(this.setupId,this.actorsClient,this.queryConfig);
 
+  handlePageChange(event: any) {
+    this.source.setPaging(event, this.paging.pageSize, true);
   }
 
 }

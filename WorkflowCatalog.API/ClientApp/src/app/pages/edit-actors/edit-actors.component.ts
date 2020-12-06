@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NbDialogService } from '@nebular/theme';
 import { ActorsClient, SetupsClient, SetupsDto } from 'src/app/web-api-client';
 import { EditActorsGridComponent} from './edit-actors-grid/edit-actors-grid.component';
 
@@ -9,6 +10,8 @@ import { EditActorsGridComponent} from './edit-actors-grid/edit-actors-grid.comp
   styleUrls: ['./edit-actors.component.scss']
 })
 export class EditActorsComponent implements OnInit {
+
+  @ViewChild(EditActorsGridComponent) actorsGrid: EditActorsGridComponent;
 
   setupId: string;
   get setupName(): string {

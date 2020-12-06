@@ -4,8 +4,8 @@
             </nb-card-header>
             <nb-card-body>
                 <ng2-smart-table [source]="source" [settings]="settings"
-                (deleteConfirm)="confirmDelete($event)" (editConfirm)="confirmEdit($event)" (createConfirm)="confirmCreate($event)"></ng2-smart-table>
-               <ngb-pagination style="margin: 3px;" *ngIf="source.pageCount > 1" [ellipses]="false" [pageSize]="source.pageSize" [collectionSize]="source.itemCount" [rotate]="true" [boundaryLinks]="true" [(page)]="source.page" (pageChange)="handlePageChange($event)">
+                (deleteConfirm)="confirmDelete($event)"></ng2-smart-table>
+               <ngb-pagination style="margin: 3px;" *ngIf="paging.itemsCount > paging.pageSize" [ellipses]="false" [pageSize]="paging.pageSize" [collectionSize]="paging.itemsCount" [rotate]="true" [boundaryLinks]="true" [page]="1" (pageChange)="handlePageChange($event)">
 
                </ngb-pagination>
             </nb-card-body>

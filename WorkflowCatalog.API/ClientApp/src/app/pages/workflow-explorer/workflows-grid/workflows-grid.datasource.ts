@@ -1,86 +1,88 @@
-import { AfterViewInit } from '@angular/core';
+import { NgbPaginationNumber } from '@ng-bootstrap/ng-bootstrap';
+import { doesNotReject } from 'assert';
 import { LocalDataSource } from 'ng2-smart-table';
+import { BehaviorSubject } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { CreateWorkflowCommand, DeleteWorkflowCommand, EnumInfoDto, EnumsClient, PaginatedListOfWorkflowsDto, UpdateWorkflowDetailsCommand, WorkflowsClient } from 'src/app/web-api-client';
-import { PaginatedQueryConfig } from 'src/app/_models/paginated-query-config.model';
+import { CreateWorkflowCommand, DeleteWorkflowCommand, EnumInfoDto, EnumsClient, PaginatedListOfWorkflowsDto, UpdateWorkflowDetailsCommand, WorkflowsClient, WorkflowsDto } from 'src/app/web-api-client';
 
 export class WokrflowsGridDataSource extends LocalDataSource {
 
-    private _page: number = 1;
-    private _pageSize: number = 5;
-    private _sorts = '';
-    private _filters = '';
-
-    paginatedWorkflows: PaginatedListOfWorkflowsDto;
-    lastRequestCount: number;
-
-    workflowTypes;
-
+    workflowTypes: EnumInfoDto[];
+    paging: BehaviorSubject<{ pageSize: number, itemsCount: number }> = new BehaviorSubject({ pageSize: 5, itemsCount: 0 });
     setupId: string;
 
-    get filters(): string {
-        return this._filters;
-    }
-    set filters(val: string) {
-        this._filters = val;
-    }
-
-    get sorts(): string {
-        return this._sorts;
-    }
-
-    set sorts(val:string){
-        this._sorts = val;
-    }
-
-    get pageCount(): number {
-        return this.paginatedWorkflows ? (this.paginatedWorkflows.totalPages ? this.paginatedWorkflows.totalPages : 0) : 0;
-    }
-    get pageSize(): number {
-        return this._pageSize;
-    };
-    set pageSize(val: number){
-        this._pageSize = val;
-    }
-
-    get page():number {
-        return this._page;
-    }
-
-    set page(val:number){
-        this._page = val;
-    }
-
-    get itemCount(): number{
-        return this.paginatedWorkflows ? (this.paginatedWorkflows.totalCount ? this.paginatedWorkflows.totalCount : 0) : 0;
-    }
-
-    constructor(setupId: string, private workflowsClient: WorkflowsClient, private enumsClient: EnumsClient, config: PaginatedQueryConfig){
+    constructor(setupId: string, private workflowsClient: WorkflowsClient, private enumsClient: EnumsClient){
         super();
+
         this.setupId = setupId;
-        this.page = config.page;
-        this.pageSize = config.pageSize;
-
-        if(config.filters){
-            this.filterConf = config.filters;
-        }
-
-        if(config.sorts){
-            this.sortConf = config.sorts;
-        }
-
         this.enumsClient.getEnumsInfo().subscribe(x => {
             this.workflowTypes = x.workflowTypes;
         })
     }
     
+    find(element: WorkflowsDto): Promise<any> {
+        const found = this.data.find(el => el.id === element.id);
+        if (found) {
+            return Promise.resolve(found);
+        }
+
+        return Promise.reject(new Error('Element was not found in the dataset'));
+    }
+
+    update(element: WorkflowsDto, values) {
+        return new Promise((resolve, reject) => {
+            this.workflowsClient.updateWorkflow(element.id, new UpdateWorkflowDetailsCommand(
+                {
+                    id: element.id,
+                    name: values.name,
+                    description: values.description,
+                    workflowType: values.workflowType,
+                    
+                }
+            )).subscribe(res => {
+                super.update(element, values)
+                    .then(() => {
+                        resolve();
+                    })
+                    .catch(er => {
+                        reject(er)
+                    });
+            }, err => {
+                reject(err);
+            })
+        })
+    }
+
+    remove(element: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.workflowsClient.deleteWorkflow(element.id, new DeleteWorkflowCommand({ id: element.id })).subscribe(res => {
+                super.remove(element).then(() => resolve()).catch(err => reject(err));
+            }, err => {
+                reject(err);
+            });
+        })
+    }
+
+    add(element) {
+        return new Promise((resolve, reject) => {
+            this.workflowsClient.createWorkflow(new CreateWorkflowCommand(element)).subscribe(res => {
+                super.add(element).then(() => resolve()).catch(err => reject(err));
+            }, err => {
+                reject(err);
+            })
+        })
+    }
+
+    setPage(page, doEmit) {
+        return this;
+    }
 
     getElements(): Promise<any>{
         const query = {
-            page: this.page,
-            pageSize: this.pageSize,
-            filters: this.filters,
-            sorts: this.sorts,
+            page: 1,
+            pageSize: 5,
+            filters: '',
+            sorts: '',
         };
 
         if (this.sortConf) {
@@ -89,6 +91,10 @@ export class WokrflowsGridDataSource extends LocalDataSource {
                 sorting = sorting + `${fieldConf.direction.toUpperCase() === 'DESC' ? '-' : ''}${fieldConf.field},`;
             });
             query.sorts = sorting;
+        }
+        if (this.pagingConf && this.pagingConf['page'] && this.pagingConf['perPage']) {
+            query.page = this.pagingConf['page'];
+            query.pageSize = this.pagingConf['perPage'];
         }
         if (this.filterConf.filters) {
             let filter = '';
@@ -104,41 +110,19 @@ export class WokrflowsGridDataSource extends LocalDataSource {
             filter += `${filter.length > 0 ? ',' : ''}setupId==${this.setupId}`;
             query.filters = filter;
         }
+        
 
         return this.workflowsClient.getWorkflows(query.filters,query.sorts,query.page,query.pageSize)
         .pipe(
             map(res => {
-                this.lastRequestCount = +res.totalCount;
-                this.paginatedWorkflows = res;
-                return this.paginatedWorkflows.items;
+                    this.paging.next({ pageSize: query.pageSize, itemsCount: +res.totalCount });
+                    this.data = res.items;
+                    return res.items;
             }),
             debounceTime(300),
         ).toPromise();
     }
 
-    remove(element: any): Promise<any>{
-        return this.workflowsClient.deleteWorkflow(element.id,new DeleteWorkflowCommand({id: element.id})).toPromise();
-    }
-
-    update(element: any, values: any): Promise<any>{
-        return this.workflowsClient.updateWorkflow(element.id,
-            new UpdateWorkflowDetailsCommand({
-                id: element.id,
-                name: values.name,
-                description: values.description,
-                workflowType: parseInt(values.type),
-            })).toPromise();
-    }
-
-
-     prepend(element: any) : Promise<any> {
-        return this.workflowsClient.createWorkflow(new CreateWorkflowCommand({
-            name: element.name,
-            description: element.description,
-            workflowType: parseInt(element.workflowType),
-            setupId: element.setupId,
-        })).toPromise();
-    } 
 
 
 

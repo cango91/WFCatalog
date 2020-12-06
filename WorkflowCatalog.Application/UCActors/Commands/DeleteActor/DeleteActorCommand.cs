@@ -32,7 +32,7 @@ namespace WorkflowCatalog.Application.UCActors.Commands.DeleteActor
 
             if(entity == null)
             {
-                throw new NotFoundException(nameof(UseCaseActor), command.Id);
+                throw new NotFoundException(nameof(Actor), command.Id);
             }
 
             _context.Actors.Remove(entity);

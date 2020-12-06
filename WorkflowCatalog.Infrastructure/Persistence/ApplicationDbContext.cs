@@ -34,7 +34,7 @@ namespace WorkflowCatalog.Infrastructure.Persistence
         public DbSet<Workflow> Workflows { get; set; }
         public DbSet<UseCase> UseCases { get; set; }
         public DbSet<WorkflowDiagram> Diagrams { get; set; }
-        public DbSet<UseCaseActor> Actors { get; set; }
+        public DbSet<Actor> Actors { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

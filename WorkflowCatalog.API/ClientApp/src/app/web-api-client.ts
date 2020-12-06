@@ -15,8 +15,8 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IActorsClient {
-    getActors(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<PaginatedListOfUCActorDto>;
-    geActortById(actorId: string): Observable<UCActorDto>;
+    getActors(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<PaginatedListOfActorDto>;
+    geActortById(actorId: string): Observable<ActorDto>;
     updateActor(actorId: string, command: UpdateActorCommand): Observable<FileResponse>;
     deleteActor(actorId: string, command: DeleteActorCommand): Observable<Unit>;
     createActor(setupId: string, command: CreateActorCommand): Observable<string>;
@@ -35,7 +35,7 @@ export class ActorsClient implements IActorsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getActors(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<PaginatedListOfUCActorDto> {
+    getActors(filters: string | null | undefined, sorts: string | null | undefined, page: number | null | undefined, pageSize: number | null | undefined): Observable<PaginatedListOfActorDto> {
         let url_ = this.baseUrl + "/api/Actors?";
         if (filters !== undefined && filters !== null)
             url_ += "Filters=" + encodeURIComponent("" + filters) + "&";
@@ -62,14 +62,14 @@ export class ActorsClient implements IActorsClient {
                 try {
                     return this.processGetActors(<any>response_);
                 } catch (e) {
-                    return <Observable<PaginatedListOfUCActorDto>><any>_observableThrow(e);
+                    return <Observable<PaginatedListOfActorDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<PaginatedListOfUCActorDto>><any>_observableThrow(response_);
+                return <Observable<PaginatedListOfActorDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetActors(response: HttpResponseBase): Observable<PaginatedListOfUCActorDto> {
+    protected processGetActors(response: HttpResponseBase): Observable<PaginatedListOfActorDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -80,7 +80,7 @@ export class ActorsClient implements IActorsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PaginatedListOfUCActorDto.fromJS(resultData200);
+            result200 = PaginatedListOfActorDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -88,10 +88,10 @@ export class ActorsClient implements IActorsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<PaginatedListOfUCActorDto>(<any>null);
+        return _observableOf<PaginatedListOfActorDto>(<any>null);
     }
 
-    geActortById(actorId: string): Observable<UCActorDto> {
+    geActortById(actorId: string): Observable<ActorDto> {
         let url_ = this.baseUrl + "/api/Actors/{actorId}";
         if (actorId === undefined || actorId === null)
             throw new Error("The parameter 'actorId' must be defined.");
@@ -113,14 +113,14 @@ export class ActorsClient implements IActorsClient {
                 try {
                     return this.processGeActortById(<any>response_);
                 } catch (e) {
-                    return <Observable<UCActorDto>><any>_observableThrow(e);
+                    return <Observable<ActorDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<UCActorDto>><any>_observableThrow(response_);
+                return <Observable<ActorDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGeActortById(response: HttpResponseBase): Observable<UCActorDto> {
+    protected processGeActortById(response: HttpResponseBase): Observable<ActorDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -131,7 +131,7 @@ export class ActorsClient implements IActorsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UCActorDto.fromJS(resultData200);
+            result200 = ActorDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -139,7 +139,7 @@ export class ActorsClient implements IActorsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<UCActorDto>(<any>null);
+        return _observableOf<ActorDto>(<any>null);
     }
 
     updateActor(actorId: string, command: UpdateActorCommand): Observable<FileResponse> {
@@ -1546,15 +1546,15 @@ export class WorkflowsClient implements IWorkflowsClient {
     }
 }
 
-export class PaginatedListOfUCActorDto implements IPaginatedListOfUCActorDto {
-    items?: UCActorDto[] | undefined;
+export class PaginatedListOfActorDto implements IPaginatedListOfActorDto {
+    items?: ActorDto[] | undefined;
     pageIndex?: number;
     totalPages?: number;
     totalCount?: number;
     hasPreviousPage?: boolean;
     hasNextPage?: boolean;
 
-    constructor(data?: IPaginatedListOfUCActorDto) {
+    constructor(data?: IPaginatedListOfActorDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1568,7 +1568,7 @@ export class PaginatedListOfUCActorDto implements IPaginatedListOfUCActorDto {
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
-                    this.items!.push(UCActorDto.fromJS(item));
+                    this.items!.push(ActorDto.fromJS(item));
             }
             this.pageIndex = _data["pageIndex"];
             this.totalPages = _data["totalPages"];
@@ -1578,9 +1578,9 @@ export class PaginatedListOfUCActorDto implements IPaginatedListOfUCActorDto {
         }
     }
 
-    static fromJS(data: any): PaginatedListOfUCActorDto {
+    static fromJS(data: any): PaginatedListOfActorDto {
         data = typeof data === 'object' ? data : {};
-        let result = new PaginatedListOfUCActorDto();
+        let result = new PaginatedListOfActorDto();
         result.init(data);
         return result;
     }
@@ -1601,8 +1601,8 @@ export class PaginatedListOfUCActorDto implements IPaginatedListOfUCActorDto {
     }
 }
 
-export interface IPaginatedListOfUCActorDto {
-    items?: UCActorDto[] | undefined;
+export interface IPaginatedListOfActorDto {
+    items?: ActorDto[] | undefined;
     pageIndex?: number;
     totalPages?: number;
     totalCount?: number;
@@ -1656,14 +1656,14 @@ export interface IAuditable {
     lastModified?: Date;
 }
 
-export class UCActorDto extends Auditable implements IUCActorDto {
+export class ActorDto extends Auditable implements IActorDto {
     id?: string;
     name?: string | undefined;
     description?: string | undefined;
     setup?: string;
     useCases?: string[] | undefined;
 
-    constructor(data?: IUCActorDto) {
+    constructor(data?: IActorDto) {
         super(data);
     }
 
@@ -1682,9 +1682,9 @@ export class UCActorDto extends Auditable implements IUCActorDto {
         }
     }
 
-    static fromJS(data: any): UCActorDto {
+    static fromJS(data: any): ActorDto {
         data = typeof data === 'object' ? data : {};
-        let result = new UCActorDto();
+        let result = new ActorDto();
         result.init(data);
         return result;
     }
@@ -1705,7 +1705,7 @@ export class UCActorDto extends Auditable implements IUCActorDto {
     }
 }
 
-export interface IUCActorDto extends IAuditable {
+export interface IActorDto extends IAuditable {
     id?: string;
     name?: string | undefined;
     description?: string | undefined;
@@ -2230,7 +2230,7 @@ export class SingleSetupDto extends Auditable implements ISingleSetupDto {
     name?: string | undefined;
     shortName?: string | undefined;
     description?: string | undefined;
-    actors?: UCActorDto[] | undefined;
+    actors?: ActorDto[] | undefined;
     workflowIds?: string[] | undefined;
 
     constructor(data?: ISingleSetupDto) {
@@ -2247,7 +2247,7 @@ export class SingleSetupDto extends Auditable implements ISingleSetupDto {
             if (Array.isArray(_data["actors"])) {
                 this.actors = [] as any;
                 for (let item of _data["actors"])
-                    this.actors!.push(UCActorDto.fromJS(item));
+                    this.actors!.push(ActorDto.fromJS(item));
             }
             if (Array.isArray(_data["workflowIds"])) {
                 this.workflowIds = [] as any;
@@ -2290,7 +2290,7 @@ export interface ISingleSetupDto extends IAuditable {
     name?: string | undefined;
     shortName?: string | undefined;
     description?: string | undefined;
-    actors?: UCActorDto[] | undefined;
+    actors?: ActorDto[] | undefined;
     workflowIds?: string[] | undefined;
 }
 
@@ -2566,6 +2566,50 @@ export interface IUseCaseDto extends IAuditable {
     postconditions?: string | undefined;
     normalCourse?: string | undefined;
     altCourse?: string | undefined;
+}
+
+export class UCActorDto implements IUCActorDto {
+    id?: string;
+    name?: string | undefined;
+    description?: string | undefined;
+
+    constructor(data?: IUCActorDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): UCActorDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UCActorDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        return data; 
+    }
+}
+
+export interface IUCActorDto {
+    id?: string;
+    name?: string | undefined;
+    description?: string | undefined;
 }
 
 export class CreateUseCaseCommand implements ICreateUseCaseCommand {

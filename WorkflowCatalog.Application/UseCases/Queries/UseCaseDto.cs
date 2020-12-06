@@ -2,6 +2,7 @@
 using Sieve.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using WorkflowCatalog.Application.Common.Mappings;
 using WorkflowCatalog.Application.Common.Models;
@@ -20,7 +21,9 @@ namespace WorkflowCatalog.Application.UseCases.Queries
         public string Name { get; set; }
         [Sieve(CanFilter = true, CanSort = true)]
         public string Description { get; set; }
+
         public List<UCActorDto> Actors { get; set; }
+
         [Sieve(CanFilter = true, CanSort = true)]
         public string Preconditions { get; set; }
         [Sieve(CanFilter = true, CanSort = true)]
@@ -30,11 +33,18 @@ namespace WorkflowCatalog.Application.UseCases.Queries
         [Sieve(CanFilter = true, CanSort = true)]
         public string AltCourse { get; set; }
 
-        public void Configure(Profile profile)
+        public UseCaseDto()
+        {
+            Actors = new List<UCActorDto>();
+        }
+
+        public void Mapping(Profile profile)
         {
             profile.CreateMap<UseCase, UseCaseDto>()
-                .ForMember(x => x.WorkflowId, opt => opt.MapFrom(x => x.Workflow.Id));
+                .ForMember(x => x.WorkflowId, opt => opt.MapFrom(x => x.Workflow.Id))
+                .ForMember(x => x.Actors, opt => opt.MapFrom(x => x.UseCaseActors.Select(uca => uca.Actor)));
         }
+
 
     }
 }

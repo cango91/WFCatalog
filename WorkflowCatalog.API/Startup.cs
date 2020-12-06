@@ -13,6 +13,7 @@ using System.Linq;
 using Sieve.Services;
 using Sieve.Models;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using WorkflowCatalog.Application.Common;
 
 namespace WorkflowCatalog.API
 {
@@ -38,7 +39,10 @@ namespace WorkflowCatalog.API
 
             services.AddLogging();
 
-            services.AddScoped<SieveProcessor>();
+            //services.AddScoped<SieveProcessor>();
+            services.AddScoped<ISieveCustomFilterMethods, CustomFilterMethods>();
+            services.AddScoped<ISieveCustomSortMethods, CustomSortMethods>();
+            services.AddScoped<ApplicationSieveProcessor>();
 
             services.Configure<SieveOptions>(Configuration.GetSection("Sieve"));
 

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { EnumsClient, WorkflowsClient } from 'src/app/web-api-client';
-import { PaginatedQueryConfig } from 'src/app/_models/paginated-query-config.model';
+import { DiagramsClient, EnumsClient, WorkflowsClient } from 'src/app/web-api-client';
 import { ItemActionsComponent } from './item-actions/item-actions.component';
 import { WokrflowsGridDataSource } from './workflows-grid.datasource';
 import { isNil } from 'lodash';
@@ -8,38 +7,36 @@ import {  NbDialogService } from '@nebular/theme';
 import { ConfirmationPromptComponent } from 'src/app/theme/confirmation-prompt/confirmation-prompt.component';
 import { AppComponent } from 'src/app/app.component';
 import { Ng2SmartTableComponent } from 'ng2-smart-table';
+import { SetupService } from 'src/app/_providers/setup.service';
 
 @Component({
   selector: 'app-workflows-grid',
   templateUrl: './workflows-grid.component.html',
   styleUrls: ['./workflows-grid.component.scss']
 })
-export class WorkflowsGridComponent implements OnInit, OnChanges {
+export class WorkflowsGridComponent implements OnInit {
 
   @Input()
   get setupId(): string { return this.__setupId; }
   set setupId(id:string) {
     this.__setupId = id;
-    this.refresh();
+    if(id){
+      this.refresh();
+    }
+    
   }
 
   @Output()
   onWorkflowSelected: EventEmitter<string> = new EventEmitter<string>();
 
 
-  @ViewChild('table') table: Ng2SmartTableComponent;
+  //@ViewChild('table') table: Ng2SmartTableComponent;
   source: WokrflowsGridDataSource;
   
-  pageSize: number = 5;
-
-  queryConfig: PaginatedQueryConfig = {
-    page: 1,
-    pageSize: this.pageSize,
-    sorts: null,
-    filters: null,
-  };
-
-  
+  paging = {
+    itemsCount: 0,
+    pageSize: 5,
+  }
 
   private __setupId: string;
 
@@ -49,12 +46,6 @@ export class WorkflowsGridComponent implements OnInit, OnChanges {
       edit: false,
       delete: false,
       position: 'right',
-    },
-    add: {
-      addButtonContent: '<span class="material-icons">add</span>',
-      cancelButtonContent: '<span class="material-icons">cancel</span>',
-      createButtonContent: '<span class="material-icons">check</span>',
-      confirmCreate: true,
     },
     columns:
       {
@@ -66,6 +57,9 @@ export class WorkflowsGridComponent implements OnInit, OnChanges {
         },
         name: {
           title: 'Name',
+        },
+        primaryDiagramId: {
+          hide: true
         },
         description: {
           title: 'Description',
@@ -95,6 +89,11 @@ export class WorkflowsGridComponent implements OnInit, OnChanges {
           },
 
            valuePrepareFunction: val => {
+             //console.log(val);
+             return [
+              {value: 0, title: 'Main Flow'},
+              {value: 1, title: 'Sub-flow'}]
+              .find(x => x.value === parseInt(val)).title;
            return val ? this.source.workflowTypes.find(x => x.value === parseInt(val)).name : null;
             
           }
@@ -111,10 +110,14 @@ export class WorkflowsGridComponent implements OnInit, OnChanges {
               this.handleAction(x)
             })
           }
-        } 
+        },
 
       },
       mode: 'external',
+      pager: {
+        hide: true,
+        perPage: 5,
+      },  
        
   }
 
@@ -125,41 +128,51 @@ export class WorkflowsGridComponent implements OnInit, OnChanges {
     confirmButtonStatus: 'danger',
   }
 
-  constructor(private workflowsClient:WorkflowsClient, private enumsClient: EnumsClient, private nbDialogService: NbDialogService, @Inject(AppComponent) protected parent:AppComponent) {
-    this.source = new WokrflowsGridDataSource(this.setupId,workflowsClient, enumsClient, this.queryConfig);
+  constructor(
+    private workflowsClient:WorkflowsClient, 
+    private enumsClient: EnumsClient, 
+    private nbDialogService: NbDialogService, 
+    @Inject(AppComponent) protected parent:AppComponent, 
+    private diagramService:DiagramsClient, 
+    private currentSetupService: SetupService) {
+      currentSetupService.currentSetupId.subscribe(x => this.setupId = x);
+      this.source = new WokrflowsGridDataSource(this.setupId,workflowsClient, enumsClient);
    }
-  ngOnChanges(changes: SimpleChanges): void {
+
+/*   ngOnChanges(changes: SimpleChanges): void {
     if(changes && changes.selectedWorkflowId && changes.selectedWorkflowId.previousValue && changes.selectedWorkflowId.currentValue && changes.selectedWorkflowId.currentValue !== changes.selectedWorkflowId.previousValue){
 
     }
-  }
+  } */
 
-  refresh(query?: PaginatedQueryConfig){
-    if(query){
-      this.source = new WokrflowsGridDataSource(this.setupId,this.workflowsClient, this.enumsClient, query);
-      return;
-    }
-    this.queryConfig = {
-      page: 1,
-      pageSize: this.pageSize,
-      sorts: null,
-      filters: null,
-    };
-    this.source = new WokrflowsGridDataSource(this.setupId,this.workflowsClient, this.enumsClient, this.queryConfig);
+  refresh(){
+    this.source = new WokrflowsGridDataSource(this.setupId,this.workflowsClient, this.enumsClient);
+    //this.source.setPaging(1,this.paging.pageSize,true);
+    this.source.paging.subscribe(x => {
+      this.paging = Object.assign({},{itemsCount: x.itemsCount, pageSize: x.pageSize});
+    })
+    this.parent.refresh();
+    this.source.onChanged().subscribe(res => {
+      this.parent.refresh();
+      if (res.action === 'filter') {
+        this.source.setPaging(1, 5);
+      }
+    });
   }
 
   ngOnInit(): void {
+    //this.source.paging.subscribe(res => this.paging = res);
 
+    /* this.source.onChanged().subscribe(res => {
+      this.parent.refresh();
+      if (res.action === 'filter') {
+        this.source.setPaging(1, 5);
+      }
+    }); */
   }
 
   handlePageChange(event: any){
-    this.queryConfig.page = event;
-    let sorts = this.source.getSort();
-    let filters = this.source.getFilter();
-    this.queryConfig.sorts = sorts;
-    this.queryConfig.filters = filters;
-    this.source = new WokrflowsGridDataSource(this.setupId,this.workflowsClient,this.enumsClient,this.queryConfig);
-
+    this.source.setPaging(event, this.paging.pageSize, true);
   }
 
   handleAction(event:any){
@@ -170,18 +183,21 @@ export class WorkflowsGridComponent implements OnInit, OnChanges {
       case 'delete':
         this.nbDialogService.open(ConfirmationPromptComponent, { context: this.confirmDialogContext }).onClose.subscribe(x => {
           if(x){
-            this.source.remove(event.element);
-            
+            this.source.remove(event.element); 
             setTimeout( () => {
-              let sorts = this.source.getSort();
-              let filters = this.source.getFilter();
-              this.queryConfig.sorts = sorts;
-              this.queryConfig.filters = filters;
-              this.source = new WokrflowsGridDataSource(this.setupId,this.workflowsClient,this.enumsClient,this.queryConfig);
               this.parent.refresh();
             },300);
 
           }
+        });
+        break;
+      case 'diagram':
+        this.diagramService.getDiagramById(event.element.primaryDiagramId).subscribe((res)=>{
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(res.data);
+          a.download = res.fileName;
+          a.click();
+          a.remove();
         });
         break;
     }

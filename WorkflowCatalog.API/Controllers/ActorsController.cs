@@ -17,13 +17,13 @@ namespace WorkflowCatalog.API.Controllers
     public class ActorsController : ApiController
     {
         [HttpGet]
-        public async Task<PaginatedList<UCActorDto>> GetActors([FromQuery] GetActorsQuery query)
+        public async Task<PaginatedList<ActorDto>> GetActors([FromQuery] GetActorsQuery query)
         {
             return await Mediator.Send(query);
         }
 
         [HttpGet("{actorId}")]
-        public async Task<UCActorDto> GeActortById(Guid actorId)
+        public async Task<ActorDto> GeActortById(Guid actorId)
         {
             return await Mediator.Send(new GetActorByIdQuery { Id = actorId });
         }

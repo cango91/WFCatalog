@@ -22,11 +22,11 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflows
         [Sieve(CanSort = true, CanFilter = true)]
         public Guid? PrimaryDiagramId { get; set; }
         [Sieve(CanSort = true, CanFilter = true)]
-        public long DiagramCount { get; set; }
+        public int DiagramCount { get; set; }
         [Sieve(CanSort = true, CanFilter = true)]
-        public long UseCaseCount { get; set; }
+        public int UseCaseCount { get; set; }
 
-        public void Configure(Profile profile)
+        public void Mapping(Profile profile)
         {
             profile.CreateMap<Workflow, WorkflowsDto>()
                 .ForMember(x => x.DiagramCount, opt => opt.MapFrom(x => x.Diagrams.Count))

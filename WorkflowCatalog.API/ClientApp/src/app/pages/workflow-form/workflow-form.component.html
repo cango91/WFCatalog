@@ -5,9 +5,9 @@
     <nb-card-body>
         <div class="form-group">
             <label for="exampleInputEmail1" class="label">Type</label>
-            <nb-select placeholder="Select Showcase" fullWidth [(selected)]="request.workflowType">
-                <nb-option value="0">Main Flow</nb-option>
-                <nb-option value="1">Sub-Flow</nb-option>
+            <nb-select placeholder="Select Type" fullWidth [(selected)]="request.workflowType">
+                <nb-option [value]="0">Main Flow</nb-option>
+                <nb-option [value]="1">Sub-Flow</nb-option>
             </nb-select>
         </div>
         <div class="form-group">
@@ -20,7 +20,7 @@
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1" class="label">Diagram</label>
-            <input type="file" (change)="handleFileInput($event.target.files)" nbInput fullWidth>
+            <input type="file" (change)="handleFileInput($event.target.files)" nbInput fullWidth multiple="multiple">
         </div>
     </nb-card-body>
     <nb-card-footer>

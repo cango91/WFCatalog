@@ -48,7 +48,10 @@ namespace WorkflowCatalog.Application.UseCases.Commands.UpdateUseCaseDetails
             entity.Postconditions = command.Postconditions;
             entity.NormalCourse = command.NormalCourse;
             entity.AltCourse = command.AltCourse;
-            entity.Actors = actors;
+            entity.UseCaseActors = actors.Select(a => new UseCaseActor
+            {
+                ActorId = a.Id
+            }).ToList();
 
             await _context.SaveChangesAsync(cancellationToken);
 

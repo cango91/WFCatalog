@@ -1,86 +1,30 @@
 import { LocalDataSource } from 'ng2-smart-table';
 import { debounceTime, map } from 'rxjs/operators';
-import { CreateUseCaseCommand, DeleteUseCaseCommand, PaginatedListOfUseCaseDto, UpdateUseCaseDetailsCommand, UseCasesClient } from 'src/app/web-api-client';
-import { PaginatedQueryConfig } from 'src/app/_models/paginated-query-config.model';
+import { CreateUseCaseCommand, DeleteUseCaseCommand, PaginatedListOfUseCaseDto, UpdateUseCaseDetailsCommand, UseCaseDto, UseCasesClient } from 'src/app/web-api-client';
 import { isNil } from 'lodash';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 export class UseCasesGridDataSource extends LocalDataSource {
 
-  private _page: number = 1;
-  private _pageSize: number = 5;
-  private _sorts = '';
-  private _filters = '';
-
-  paginatedUseCases: PaginatedListOfUseCaseDto;
-  lastRequestCount: number;
+paging: BehaviorSubject<{ pageSize: number, itemsCount: number }> = new BehaviorSubject({ pageSize: 5, itemsCount: 0 });
 
   workflowId: string;
 
-  get filters(): string {
-    return this._filters;
-  }
-  set filters(val: string) {
-    this._filters = val;
-  }
+  
 
-  get sorts(): string {
-    return this._sorts;
-  }
-
-  set sorts(val: string) {
-    this._sorts = val;
-  }
-
-  get pageCount(): number {
-    return this.paginatedUseCases ? (this.paginatedUseCases.totalPages ? this.paginatedUseCases.totalPages : 0) : 0;
-  }
-  get pageSize(): number {
-    return this._pageSize;
-  };
-  set pageSize(val: number) {
-    this._pageSize = val;
-  }
-
-  get page(): number {
-    return this._page;
-  }
-
-  set page(val: number) {
-    this._page = val;
-  }
-
-  get itemCount(): number {
-    return this.paginatedUseCases ? (this.paginatedUseCases.totalCount ? this.paginatedUseCases.totalCount : 0) : 0;
-  }
-
-
-  constructor(workflowId: string, private useCasesClient: UseCasesClient, config: PaginatedQueryConfig) {
+  constructor(workflowId: string, private useCasesClient: UseCasesClient) {
     super();
+    this.workflowId = workflowId;
 
-    this.page = config.page;
-    this.pageSize = config.pageSize;
-
-    if (config.filters) {
-      this.filterConf = config.filters;
-    }
-
-    if (config.sorts) {
-      this.sortConf = config.sorts;
-    }
   }
 
   getElements(): Promise<any> {
 
-    if (isNil(this.workflowId)) {
-      return of([]).toPromise();
-    }
-
     const query = {
-      page: this.page,
-      pageSize: this.pageSize,
-      filters: this.filters,
-      sorts: this.sorts,
+      page: 1,
+      pageSize: 5,
+      filters: '',
+      sorts: '',
     };
 
     if (this.sortConf) {
@@ -89,6 +33,10 @@ export class UseCasesGridDataSource extends LocalDataSource {
         sorting = sorting + `${fieldConf.direction.toUpperCase() === 'DESC' ? '-' : ''}${fieldConf.field},`;
       });
       query.sorts = sorting;
+    }
+    if (this.pagingConf && this.pagingConf['page'] && this.pagingConf['perPage']) {
+        query.page = this.pagingConf['page'];
+        query.pageSize = this.pagingConf['perPage'];
     }
     if (this.filterConf.filters) {
       let filter = '';
@@ -108,43 +56,73 @@ export class UseCasesGridDataSource extends LocalDataSource {
     return this.useCasesClient.getUseCases(query.filters, query.sorts, query.page, query.pageSize)
       .pipe(
         map(res => {
-          this.lastRequestCount = +res.totalCount;
-          this.paginatedUseCases = res;
-          return this.paginatedUseCases.items;
+          this.paging.next({pageSize: query.pageSize, itemsCount: res.totalCount})
+          this.data = res.items;
+          return this.data;
         }),
         debounceTime(300),
       ).toPromise();
   }
 
-  remove(element: any): Promise<any> {
-    return this.useCasesClient.deleteUseCase(element.id, new DeleteUseCaseCommand({ id: element.id })).toPromise();
-  }
+  find(element: UseCaseDto): Promise<any> {
+    const found = this.data.find(el => el.id === element.id);
+    if (found) {
+        return Promise.resolve(found);
+    }
 
-  update(element: any, values: any): Promise<any> {
-    return this.useCasesClient.updateUseCaseDetails(element.id,
-      new UpdateUseCaseDetailsCommand({
-        id: element.id,
-        name: values.name,
-        description: values.description,
-        actors: values.actors,
-        preconditions: values.preconditions,
-        postconditions: values.postconditions,
-        normalCourse: values.normalCourse,
-        altCourse: values.altCourse
-      })).toPromise();
-  }
+    return Promise.reject(new Error('Element was not found in the dataset'));
+}
 
+update(element: UseCaseDto, values) {
+    return new Promise((resolve, reject) => {
+        this.useCasesClient.updateUseCaseDetails(element.id, new UpdateUseCaseDetailsCommand(
+            {
+                id: element.id,
+                name: values.name,
+                description: values.description,
+                altCourse: values.altCourse,
+                normalCourse: values.normalCourse,
+                preconditions: values.preconditions,
+                postconditions: values.postconditions,
+                actors: values.actors,
+            }
+        )).subscribe(res => {
+            super.update(element, values)
+                .then(() => {
+                    resolve();
+                })
+                .catch(er => {
+                    reject(er)
+                });
+        }, err => {
+            reject(err);
+        })
+    })
+}
 
-  prepend(element: any): Promise<any> {
-    return this.useCasesClient.createUseCase(new CreateUseCaseCommand({
-      workflowId: this.workflowId,
-      name: element.name,
-      description: element.description,
-      actors: element.actors,
-      preconditions: element.preconditions,
-      postconditions: element.postconditions,
-      normalCourse: element.normalCourse,
-      altCourse: element.altCourse,
-    })).toPromise();
-  }
+remove(element: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+        this.useCasesClient.deleteUseCase(element.id, new DeleteUseCaseCommand({ id: element.id })).subscribe(res => {
+            super.remove(element).then(() => resolve()).catch(err => reject(err));
+        }, err => {
+            reject(err);
+        });
+    })
+}
+
+add(element) {
+    return new Promise((resolve, reject) => {
+        this.useCasesClient.createUseCase(new CreateUseCaseCommand(element)).subscribe(res => {
+            super.add(element).then(() => resolve()).catch(err => reject(err));
+        }, err => {
+            reject(err);
+        })
+    })
+}
+
+setPage(page, doEmit) {
+    return this;
+}
+
+  
 }

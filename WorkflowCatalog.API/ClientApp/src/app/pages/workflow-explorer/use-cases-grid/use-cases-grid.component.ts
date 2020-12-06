@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { UseCasesClient } from 'src/app/web-api-client';
-import { PaginatedQueryConfig } from 'src/app/_models/paginated-query-config.model';
 import { ActorsFilterComponent } from './actors/actors-filter/actors-filter.component';
 import { UseCasesGridDataSource } from './use-cases-grid.datasource';
 
@@ -23,17 +22,6 @@ export class UseCasesGridComponent implements OnInit {
 
   @Input()
   setupId: string;
-
-  pageSize = 5;
-
-  queryConfig= {
-    page: 1,
-    pageSize: this.pageSize,
-    sorts: null,
-    filters: null,
-  };
-
-  
 
   source: UseCasesGridDataSource;
 
@@ -105,24 +93,13 @@ export class UseCasesGridComponent implements OnInit {
   constructor(private useCasesClient: UseCasesClient,private nbDialogService: NbDialogService) { }
 
   ngOnInit(): void {
-    this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient,this.queryConfig);
-
+    this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient);
   }
 
 
 
-  refresh(query?:PaginatedQueryConfig){
-    if(query){
-      this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient, query);
-      return;
-    }
-    this.queryConfig = {
-      page: 1,
-      pageSize: this.pageSize,
-      sorts: null,
-      filters: null,
-    };
-    this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient, this.queryConfig);
+  refresh(){
+    this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient);
   }
 
   onSelect(event:any){

@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
   }
 
   public refresh(){
-    this.setupsClient.getSetups('status==1',null,null,null).subscribe(res =>{
+    this.setupsClient.getSetups('status==1',null,1,100).subscribe(res =>{
       this.updateSetups(res.items);
     })
   }

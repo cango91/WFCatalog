@@ -53,7 +53,7 @@ export class ActorsFilterComponent extends DefaultFilter implements OnInit, OnCh
   }
 
   refreshActorsList(){
-    this.actorsClient.getActors(`setup==${this.setupId}`,'name',null,null)
+    this.actorsClient.getActors(`setup.id==${this.setupId}`,'name',null,null)
     .pipe(
       map(x => x.items))
     .subscribe(x => {

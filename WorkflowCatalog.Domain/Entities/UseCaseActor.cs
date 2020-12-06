@@ -1,13 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WorkflowCatalog.Domain.Common;
 
 namespace WorkflowCatalog.Domain.Entities
 {
     public class UseCaseActor : AuditableEntity
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public HashSet<UseCase> UseCases { get; set; } = new HashSet<UseCase>();
-        public Setup Setup { get; set; }
+        public Guid UseCaseId { get; set; }
+        public UseCase UseCase { get; set; }
+        public Guid ActorId { get; set; }
+        public Actor Actor { get; set; }
+
+        public UseCaseActor()
+        {
+
+        }
     }
 }

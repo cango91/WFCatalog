@@ -14,11 +14,11 @@ using WorkflowCatalog.Domain.Entities;
 
 namespace WorkflowCatalog.Application.UCActors.Queries.GetActorById
 {
-    public class GetActorByIdQuery : IRequest<UCActorDto>
+    public class GetActorByIdQuery : IRequest<ActorDto>
     {
         public Guid Id { get; set; }
     }
-    public class GetActorByIdQueryHandler: IRequestHandler<GetActorByIdQuery,UCActorDto>
+    public class GetActorByIdQueryHandler: IRequestHandler<GetActorByIdQuery,ActorDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -29,15 +29,15 @@ namespace WorkflowCatalog.Application.UCActors.Queries.GetActorById
             _mapper = mapper;
         }
 
-        public async Task<UCActorDto> Handle(GetActorByIdQuery query, CancellationToken cancellationToken)
+        public async Task<ActorDto> Handle(GetActorByIdQuery query, CancellationToken cancellationToken)
         {
             var entity = await _context.Actors
                 .AsNoTracking()
-                .ProjectTo<UCActorDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ActorDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(c => c.Id == query.Id, cancellationToken);
             if(entity == null)
             {
-                throw new NotFoundException(nameof(UseCaseActor), query.Id);
+                throw new NotFoundException(nameof(Actor), query.Id);
             }
 
             return entity;

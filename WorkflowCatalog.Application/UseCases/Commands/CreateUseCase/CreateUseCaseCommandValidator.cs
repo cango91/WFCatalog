@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,11 @@ namespace WorkflowCatalog.Application.UseCases.Commands.CreateUseCase
 
         public async Task<bool> BeValidActorIds (CreateUseCaseCommand command, List<Guid> actors, CancellationToken cancellationToken)
         {
-            var wf = await _context.Workflows.FindAsync(command.WorkflowId);
+            //var wf = await _context.Workflows.AsNoTracking().FirstOrDefaultAsync(x => x.Id == command.WorkflowId);
+            var wf = await _context.Workflows
+                .Include(x => x.Setup)
+                .ThenInclude(x => x.Actors)
+                .FirstOrDefaultAsync(x => x.Id == command.WorkflowId);
             return actors.All(x => wf.Setup.Actors.Select(a => a.Id).Contains(x));
         }
     }

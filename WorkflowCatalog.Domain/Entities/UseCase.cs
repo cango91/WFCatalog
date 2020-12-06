@@ -10,12 +10,22 @@ namespace WorkflowCatalog.Domain.Entities
     {
         public string Name { get;  set; }
         public string Description { get;  set; }
-        public List<UseCaseActor> Actors { get; set; } = new List<UseCaseActor>();
+
+
+/*        public ICollection<Actor> Actors 
+        { 
+            get => this.UseCaseActors.Select(x => x.Actor).ToList(); 
+            private set => this.SetActors(value); 
+        }*/
+        public ICollection<UseCaseActor> UseCaseActors { get; set; }
+
         public string Preconditions { get;  set; }
         public string Postconditions { get;  set; }
         public string NormalCourse { get;  set; }
         public string AltCourse { get;  set; }
         public Workflow Workflow { get; set; }
+
+
 
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
     }

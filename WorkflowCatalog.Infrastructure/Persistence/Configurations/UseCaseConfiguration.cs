@@ -17,8 +17,6 @@ namespace WorkflowCatalog.Infrastructure.Persistence.Configurations
             builder.HasOne(x => x.Workflow)
                 .WithMany(s => s.UseCases)
                 .IsRequired();
-             
-            builder.HasMany(x => x.Actors);
                 
 
         }

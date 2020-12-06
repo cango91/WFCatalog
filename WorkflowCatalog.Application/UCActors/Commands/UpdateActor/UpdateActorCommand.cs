@@ -30,7 +30,7 @@ namespace WorkflowCatalog.Application.UCActors.Commands.UpdateActor
             var entity = await _context.Actors.FindAsync(command.Id);
             if(entity == null)
             {
-                throw new NotFoundException(nameof(UseCaseActor), command.Id);
+                throw new NotFoundException(nameof(Actor), command.Id);
             }
 
             entity.Name = command.Name;

@@ -6,6 +6,7 @@ using Sieve.Models;
 using Sieve.Services;
 using System.Threading;
 using System.Threading.Tasks;
+using WorkflowCatalog.Application.Common;
 using WorkflowCatalog.Application.Common.Interfaces;
 using WorkflowCatalog.Application.Common.Models;
 using WorkflowCatalog.Application.Extensions;
@@ -20,9 +21,9 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflows
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly SieveProcessor _processor;
+        private readonly ApplicationSieveProcessor _processor;
 
-        public GetWorkflowsQueryHandler(IApplicationDbContext context, IMapper mapper, SieveProcessor processor)
+        public GetWorkflowsQueryHandler(IApplicationDbContext context, IMapper mapper, ApplicationSieveProcessor processor)
         {
             _context = context;
             _mapper = mapper;
