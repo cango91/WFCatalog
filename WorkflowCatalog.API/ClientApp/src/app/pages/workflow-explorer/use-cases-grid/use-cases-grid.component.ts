@@ -19,6 +19,10 @@ export class UseCasesGridComponent implements OnInit {
     return this.__workflowId;
   }
   set workflowId(val: string){
+    debugger;
+    if(val===this.__workflowId){
+      return;
+    }
     this.__workflowId = val;
     this.refresh();
   }
@@ -105,18 +109,18 @@ export class UseCasesGridComponent implements OnInit {
     }
   }
 
-  constructor(private useCasesClient: UseCasesClient,private nbDialogService: NbDialogService,protected workflowService: WorkflowService,setupService: SetupService) { 
+  constructor(private useCasesClient: UseCasesClient,private nbDialogService: NbDialogService,protected workflowService: WorkflowService) { 
     workflowService.selectedWorkflowId.subscribe(x => {
       if(x){
-        this.__workflowId = x;
-        //this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient);
-        this.refresh();
+        if(x!==this.__workflowId){
+          this.__workflowId = x;
+          //this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient);
+          this.refresh();
+        }
+
       }
       
     })
-    setupService.currentSetupId.subscribe(x => {
-
-    });
   }
 
   ngOnInit(): void {
