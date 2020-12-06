@@ -6,7 +6,6 @@ import { isNil } from 'lodash';
 import {  NbDialogService } from '@nebular/theme';
 import { ConfirmationPromptComponent } from 'src/app/theme/confirmation-prompt/confirmation-prompt.component';
 import { AppComponent } from 'src/app/app.component';
-import { Ng2SmartTableComponent } from 'ng2-smart-table';
 import { SetupService } from 'src/app/_providers/setup.service';
 
 @Component({
@@ -30,7 +29,6 @@ export class WorkflowsGridComponent implements OnInit {
   onWorkflowSelected: EventEmitter<string> = new EventEmitter<string>();
 
 
-  //@ViewChild('table') table: Ng2SmartTableComponent;
   source: WokrflowsGridDataSource;
   
   paging = {

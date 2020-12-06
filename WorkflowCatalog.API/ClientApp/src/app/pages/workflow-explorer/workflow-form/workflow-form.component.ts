@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
-import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { CreateWorkflowCommand, DeleteWorkflowCommand, DiagramsClient, ICreateWorkflowCommand, WorkflowsClient } from 'src/app/web-api-client';
 import { SetupService } from 'src/app/_providers/setup.service';
 

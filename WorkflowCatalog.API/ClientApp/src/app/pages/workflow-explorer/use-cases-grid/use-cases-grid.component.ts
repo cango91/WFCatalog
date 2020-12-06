@@ -20,6 +20,11 @@ export class UseCasesGridComponent implements OnInit {
     this.refresh();
   }
 
+  paging = {
+    itemsCount: 0,
+    pageSize: 5,
+  }
+
   @Input()
   setupId: string;
 

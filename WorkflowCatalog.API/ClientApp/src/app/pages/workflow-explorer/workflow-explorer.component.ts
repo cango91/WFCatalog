@@ -4,7 +4,7 @@ import { NbDialogService } from '@nebular/theme';
 import { AppComponent } from 'src/app/app.component';
 import { SetupsClient, SingleSetupDto, SingleWorkflowDto } from 'src/app/web-api-client';
 import { SetupService } from 'src/app/_providers/setup.service';
-import { WorkflowFormComponent } from '../workflow-form/workflow-form.component';
+import { WorkflowFormComponent } from './workflow-form/workflow-form.component';
 import { UseCasesGridComponent } from './use-cases-grid/use-cases-grid.component';
 import { WorkflowsGridComponent } from './workflows-grid/workflows-grid.component';
 

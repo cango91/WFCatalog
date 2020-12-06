@@ -21,7 +21,7 @@ import { UseCasesGridComponent } from './workflow-explorer/use-cases-grid/use-ca
 import { ActorsFilterComponent } from './workflow-explorer/use-cases-grid/actors/actors-filter/actors-filter.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { SetupService } from '../_providers/setup.service';
-import { WorkflowFormComponent } from './workflow-form/workflow-form.component';
+import { WorkflowFormComponent } from './workflow-explorer/workflow-form/workflow-form.component';
 
 @NgModule({
   declarations: [
