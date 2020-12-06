@@ -30,6 +30,21 @@ namespace WorkflowCatalog.Application.Common
             mapper.Property<UseCase>(uc => uc.Workflow.Id)
                 .CanSort()
                 .CanFilter();
+            mapper.Property<UseCase>(uc => uc.Description)
+                .CanFilter()
+                .CanSort();
+            mapper.Property<UseCase>(uc => uc.Preconditions)
+                .CanSort()
+                .CanFilter();
+            mapper.Property<UseCase>(uc => uc.Postconditions)
+                .CanFilter()
+                .CanSort();
+            mapper.Property<UseCase>(uc => uc.AltCourse)
+                .CanSort()
+                .CanFilter();
+            mapper.Property<UseCase>(uc => uc.NormalCourse)
+                .CanFilter()
+                .CanSort();
 
             mapper.Property<Actor>(a => a.Id)
                 .CanFilter()
@@ -43,30 +58,7 @@ namespace WorkflowCatalog.Application.Common
             mapper.Property<Actor>(a => a.Setup.Id)
                 .CanFilter();
 
-
-            //mapper.Property < UseCase >(uc => uc.)
-
-
-
             return mapper;
         }
     }
 }
-
-/*[Sieve(CanFilter = true, CanSort = false)]
-public Guid Id { get; set; }
-[Sieve(CanFilter = true, CanSort = true)]
-public Guid WorkflowId { get; set; }
-[Sieve(CanFilter = true, CanSort = true)]
-public string Name { get; set; }
-[Sieve(CanFilter = true, CanSort = true)]
-public string Description { get; set; }
-public List<UCActorDto> Actors { get; set; }
-[Sieve(CanFilter = true, CanSort = true)]
-public string Preconditions { get; set; }
-[Sieve(CanFilter = true, CanSort = true)]
-public string Postconditions { get; set; }
-[Sieve(CanFilter = true, CanSort = true)]
-public string NormalCourse { get; set; }
-[Sieve(CanFilter = true, CanSort = true)]
-public string AltCourse { get; set; }*/

@@ -16,6 +16,7 @@ export class WorkflowFormComponent implements OnInit {
     workflowType: null,
     setupId: null
   }
+  
 
   diagramFile: File = null;
 
@@ -29,8 +30,12 @@ export class WorkflowFormComponent implements OnInit {
     this.diagramFile = files[0];
   }
 
+  closeDialog(){
+    this.dialogRef.close();
+  }
+
   create() {
-    debugger;
+    //debugger;
     this.request.workflowType = parseInt(this.request.workflowType.toString(), 0);
     this.workflowService.createWorkflow(new CreateWorkflowCommand(this.request)).subscribe(res => {
       if (this.diagramFile) {

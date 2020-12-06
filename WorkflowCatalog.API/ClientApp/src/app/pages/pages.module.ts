@@ -22,6 +22,8 @@ import { ActorsFilterComponent } from './workflow-explorer/use-cases-grid/actors
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { SetupService } from '../_providers/setup.service';
 import { WorkflowFormComponent } from './workflow-explorer/workflow-form/workflow-form.component';
+import { UsesCasesFormComponent } from './workflow-explorer/uses-cases-form/uses-cases-form.component';
+import { WorkflowService } from '../_providers/workflow.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { WorkflowFormComponent } from './workflow-explorer/workflow-form/workflo
     ItemActionsComponent,
     UseCasesGridComponent, 
     ActorsFilterComponent, 
-    WorkflowFormComponent,
+    WorkflowFormComponent, 
+    UsesCasesFormComponent,
     
   ],
   imports: [
@@ -63,6 +66,6 @@ import { WorkflowFormComponent } from './workflow-explorer/workflow-form/workflo
     NgMultiSelectDropDownModule,
   ],
   exports: [PagesComponent],
-  providers: [SetupService]
+  providers: [SetupService, WorkflowService]
 })
 export class PagesModule { }

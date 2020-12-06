@@ -1,0 +1,41 @@
+<nb-card style="max-width:95vw; max-height: 95vh;">
+    <nb-card-header>
+        Add Use Case
+    </nb-card-header>
+    <nb-card-body>
+        <div class="form-group">
+            <label for="exampleInputPassword1" class="label">Name</label>
+            <input type="text" [(ngModel)]="request.name" nbInput fullWidth placeholder="Name">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1" class="label">Description</label>
+            <input type="text" [(ngModel)]="request.description" nbInput fullWidth placeholder="Description">
+        </div>
+        <div class="form-group">
+            <label class="label">Actors</label>
+            <ng-multiselect-dropdown name="actors" [data]="actorItems" [placeholder]="'Select actors'" [settings]="settings" (onSelect)="addActor($event)" (onDeSelect)="removeActor($event)"></ng-multiselect-dropdown>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1" class="label">Pre-conditions</label>
+            <input type="text" [(ngModel)]="request.preconditions" nbInput fullWidth placeholder="Pre-conditions">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1" class="label">Post-conditions</label>
+            <input type="text" [(ngModel)]="request.postconditions" nbInput fullWidth placeholder="Post-conditions">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1" class="label">Normal Course</label>
+            <textarea [(ngModel)]="request.normalCourse" nbInput fullWidth placeholder="Normal Course"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1" class="label">Alternative Course</label>
+            <textarea [(ngModel)]="request.altCourse" nbInput fullWidth placeholder="Alternative Course"></textarea>
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="text-right">
+            <button nbButton size="small" status="danger" (click)="closeDialog()" class="mr-2"> Cancel </button>
+            <button nbButton size="small" (click)="create()" status="primary"> Add </button>
+        </div>
+    </nb-card-footer>
+</nb-card>

@@ -49,7 +49,7 @@ paging: BehaviorSubject<{ pageSize: number, itemsCount: number }> = new Behavior
           filter = filter + `${filter.length > 0 ? ',' : ''}${fieldConf['field']}${condition}${fieldConf['search']}`;
         }
       });
-      filter += `${filter.length > 0 ? ',' : ''}workflowId==${this.workflowId}`;
+      filter += `${filter.length > 0 ? ',' : ''}workflow.id==${this.workflowId}`;
       query.filters = filter;
     }
 

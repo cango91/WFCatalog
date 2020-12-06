@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
+import { map } from 'rxjs/operators';
 import { UseCasesClient } from 'src/app/web-api-client';
+import { SetupService } from 'src/app/_providers/setup.service';
+import { WorkflowService } from 'src/app/_providers/workflow.service';
 import { ActorsFilterComponent } from './actors/actors-filter/actors-filter.component';
 import { UseCasesGridDataSource } from './use-cases-grid.datasource';
 
@@ -70,6 +73,9 @@ export class UseCasesGridComponent implements OnInit {
           onComponentInitFunction: (x) => {
             x.setupId = this.setupId;
           }
+        },
+        valuePrepareFunction: (x)=> {
+          return x.map(s => s.name);
         }
 
       },
@@ -92,23 +98,52 @@ export class UseCasesGridComponent implements OnInit {
         hide: true,
       },
 
+    },
+    pager: {
+      hide: true,
+      perPage: 5,
     }
   }
 
-  constructor(private useCasesClient: UseCasesClient,private nbDialogService: NbDialogService) { }
+  constructor(private useCasesClient: UseCasesClient,private nbDialogService: NbDialogService,protected workflowService: WorkflowService,setupService: SetupService) { 
+    workflowService.selectedWorkflowId.subscribe(x => {
+      if(x){
+        this.__workflowId = x;
+        //this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient);
+        this.refresh();
+      }
+      
+    })
+    setupService.currentSetupId.subscribe(x => {
+
+    });
+  }
 
   ngOnInit(): void {
-    this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient);
+    
   }
 
 
 
   refresh(){
     this.source = new UseCasesGridDataSource(this.workflowId,this.useCasesClient);
+    this.source.paging.subscribe(x => {
+      this.paging = Object.assign({},{itemsCount: x.itemsCount, pageSize: x.pageSize});
+    });
+    this.source.onChanged().subscribe(res => {
+      if (res.action === 'filter') {
+        this.source.setPaging(1, 5);
+      }
+    });
+
   }
 
   onSelect(event:any){
 
+  }
+
+  handlePageChange(event){
+    this.source.setPaging(event,this.paging.pageSize,true);
   }
 
 }

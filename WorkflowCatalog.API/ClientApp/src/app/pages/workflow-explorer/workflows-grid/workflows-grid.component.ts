@@ -7,6 +7,7 @@ import {  NbDialogService } from '@nebular/theme';
 import { ConfirmationPromptComponent } from 'src/app/theme/confirmation-prompt/confirmation-prompt.component';
 import { AppComponent } from 'src/app/app.component';
 import { SetupService } from 'src/app/_providers/setup.service';
+import { WorkflowService } from 'src/app/_providers/workflow.service';
 
 @Component({
   selector: 'app-workflows-grid',
@@ -132,7 +133,8 @@ export class WorkflowsGridComponent implements OnInit {
     private nbDialogService: NbDialogService, 
     @Inject(AppComponent) protected parent:AppComponent, 
     private diagramService:DiagramsClient, 
-    private currentSetupService: SetupService) {
+    private currentSetupService: SetupService,
+    protected workflowService: WorkflowService) {
       currentSetupService.currentSetupId.subscribe(x => this.setupId = x);
       this.source = new WokrflowsGridDataSource(this.setupId,workflowsClient, enumsClient);
    }
@@ -145,9 +147,12 @@ export class WorkflowsGridComponent implements OnInit {
 
   refresh(){
     this.source = new WokrflowsGridDataSource(this.setupId,this.workflowsClient, this.enumsClient);
-    //this.source.setPaging(1,this.paging.pageSize,true);
     this.source.paging.subscribe(x => {
       this.paging = Object.assign({},{itemsCount: x.itemsCount, pageSize: x.pageSize});
+      if(this.paging.itemsCount===0){
+        this.onWorkflowSelected.emit(null);
+        this.workflowService.selectedWorkflowId.next(null);
+      }
     })
     this.parent.refresh();
     this.source.onChanged().subscribe(res => {
@@ -202,7 +207,9 @@ export class WorkflowsGridComponent implements OnInit {
   }
 
   onSelect({data}){
+    //debugger;
     this.onWorkflowSelected.emit(data);
+    this.workflowService.selectedWorkflowId.next(data.id);
   }
 
 }

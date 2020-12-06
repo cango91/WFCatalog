@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card style="max-width:95vw; max-height: 95vh;"> 
     <nb-card-header>
         Add Workflow
     </nb-card-header>
@@ -25,7 +25,7 @@
     </nb-card-body>
     <nb-card-footer>
         <div class="text-right">
-            <button nbButton size="small" status="danger" (click)="dialogRef.close()" class="mr-2"> Cancel </button>
+            <button nbButton size="small" status="danger" (click)="closeDialog()" class="mr-2"> Cancel </button>
             <button nbButton size="small" (click)="create()" status="primary"> Add </button>
         </div>
     </nb-card-footer>

@@ -35,7 +35,9 @@ export class ActorsFilterComponent extends DefaultFilter implements OnInit, OnCh
     }
 
   ngOnInit(): void {
+    console.log('filter inited');
     this.setupService.currentSetupId.subscribe(x => {
+      console.log('new setupid received')
       this.setupId = x
       if (this.setupId) {
         this.refreshActorsList();
