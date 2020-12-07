@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Sieve.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,8 +12,11 @@ namespace WorkflowCatalog.Application.Diagrams.Queries.GetDiagramsMetaData
 {
     public class DiagramsMetaDto : Auditable, IMapFrom<WorkflowDiagram>
     {
+        [Sieve(CanSort =true, CanFilter =true)]
         public Guid WorkflowId { get; set; }
+        [Sieve(CanSort = true, CanFilter = true)]
         public Guid Id { get; set; }
+        [Sieve(CanSort = true, CanFilter = true)]
         public string Name { get; set; }
         public string ContentType { get; set; }
         
