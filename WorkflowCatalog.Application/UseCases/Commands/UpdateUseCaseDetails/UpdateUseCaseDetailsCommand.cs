@@ -33,7 +33,10 @@ namespace WorkflowCatalog.Application.UseCases.Commands.UpdateUseCaseDetails
         }
         public async Task<Unit> Handle(UpdateUseCaseDetailsCommand command, CancellationToken cancellationToken)
         {
-            var entity = await _context.UseCases.FindAsync(command.Id);
+            var entity = await _context.UseCases
+                .Include(x=> x.UseCaseActors)
+                .Where(x => x.Id == command.Id)
+                .SingleOrDefaultAsync();
             if(entity == null)
             {
                 throw new NotFoundException(nameof(UseCase), command.Id);

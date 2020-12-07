@@ -1,10 +1,12 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { map } from 'rxjs/operators';
+import { ConfirmationPromptComponent } from 'src/app/theme/confirmation-prompt/confirmation-prompt.component';
 import { UseCasesClient } from 'src/app/web-api-client';
-import { SetupService } from 'src/app/_providers/setup.service';
 import { WorkflowService } from 'src/app/_providers/workflow.service';
+import { UsesCasesFormComponent } from '../uses-cases-form/uses-cases-form.component';
 import { ActorsFilterComponent } from './actors/actors-filter/actors-filter.component';
+import { UCItemActionsComponent } from './item-actions/item-actions.component';
 import { UseCasesGridDataSource } from './use-cases-grid.datasource';
 
 @Component({
@@ -43,7 +45,7 @@ export class UseCasesGridComponent implements OnInit {
 
 
   confirmDialogContext = {
-    bodyText: "Are yousure you want to delete the <strong>use case</strong> and all associated <strong>actors</strong>? This action is <strong>irreversible.</strong>",
+    bodyText: "Are yousure you want to delete the <strong>use case</strong>? This action is <strong>irreversible.</strong>",
     headerText: "Confirm Use Case Deletion",
     cancelButtonStatus: 'info',
     confirmButtonStatus: 'danger',
@@ -87,7 +89,7 @@ export class UseCasesGridComponent implements OnInit {
         title: 'Pre-conditions',
         hide: true,
       },
-      postcondtions: {
+      postconditions: {
         title: 'Post-conditions',
         hide: true,
       },
@@ -101,6 +103,19 @@ export class UseCasesGridComponent implements OnInit {
         editor: 'textarea',
         hide: true,
       },
+      actions: {
+        title: 'Actions',
+        filter: false,
+        sort: false,  
+        type: 'custom',
+        renderComponent: UCItemActionsComponent,
+        onComponentInitFunction: (comp) =>{
+          comp.setEditAuthority(true);
+          comp.onClick.subscribe(x => {
+            this.handleAction(x)
+          })
+        }
+      },
 
     },
     pager: {
@@ -109,7 +124,7 @@ export class UseCasesGridComponent implements OnInit {
     }
   }
 
-  constructor(private useCasesClient: UseCasesClient,private nbDialogService: NbDialogService,protected workflowService: WorkflowService) { 
+  constructor(private useCasesClient: UseCasesClient,private nbDialogService: NbDialogService,protected workflowService: WorkflowService, protected toast: NbToastrService) { 
     workflowService.selectedWorkflowId.subscribe(x => {
       if(x){
         if(x!==this.__workflowId){
@@ -144,6 +159,43 @@ export class UseCasesGridComponent implements OnInit {
 
   onSelect(event:any){
 
+  }
+
+  handleAction(event: any){
+    switch(event.action){
+      case 'edit':
+        //console.log('Action: view/edit');
+        this.nbDialogService.open(UsesCasesFormComponent,{context: 
+          {mode: 'edit',
+           element: {
+             id: event.element.id,
+             name: event.element.name,
+             description: event.element.description,
+             preconditions: event.element.preconditions,
+             postconditions: event.element.postconditions,
+             normalCourse: event.element.normalCourse,
+             altCourse: event.element.altCourse,
+             actors: event.element.actors.map(x =>({
+               id: x.id,
+               text: x.name
+             }))
+           }
+        }}).onClose.subscribe(x => {
+          this.refresh();
+        })
+        break;
+      case 'delete':
+        this.nbDialogService.open(ConfirmationPromptComponent,{context:this.confirmDialogContext}).onClose.subscribe(x => {
+          if(x){
+            this.source.remove(event.element).then(()=> {
+              this.toast.success('Use Case removed successfully');
+            }).catch(err => {
+              this.toast.danger('Could not remove use case:'.concat(err));
+            });
+          }
+        })
+        break;
+    }
   }
 
   handlePageChange(event){

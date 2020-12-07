@@ -3,7 +3,7 @@ import { DiagramsClient, EnumsClient, WorkflowsClient } from 'src/app/web-api-cl
 import { ItemActionsComponent } from './item-actions/item-actions.component';
 import { WokrflowsGridDataSource } from './workflows-grid.datasource';
 import { isNil } from 'lodash';
-import {  NbDialogService } from '@nebular/theme';
+import {  NbDialogService, NbToastrService } from '@nebular/theme';
 import { ConfirmationPromptComponent } from 'src/app/theme/confirmation-prompt/confirmation-prompt.component';
 import { AppComponent } from 'src/app/app.component';
 import { SetupService } from 'src/app/_providers/setup.service';
@@ -134,7 +134,8 @@ export class WorkflowsGridComponent implements OnInit {
     @Inject(AppComponent) protected parent:AppComponent, 
     private diagramService:DiagramsClient, 
     private currentSetupService: SetupService,
-    protected workflowService: WorkflowService) {
+    protected workflowService: WorkflowService,
+    protected toast: NbToastrService) {
       currentSetupService.currentSetupId.subscribe(x => this.setupId = x);
       this.source = new WokrflowsGridDataSource(this.setupId,workflowsClient, enumsClient);
    }
@@ -186,7 +187,11 @@ export class WorkflowsGridComponent implements OnInit {
       case 'delete':
         this.nbDialogService.open(ConfirmationPromptComponent, { context: this.confirmDialogContext }).onClose.subscribe(x => {
           if(x){
-            this.source.remove(event.element); 
+            this.source.remove(event.element).then(()=> {
+              this.toast.success('Workflow successfully removed');
+            }).catch(err => {
+              this.toast.danger('Could not remove workflow: '.concat(err));
+            }); 
             setTimeout( () => {
               this.parent.refresh();
             },300);

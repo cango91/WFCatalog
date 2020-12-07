@@ -71,7 +71,7 @@ export class WorkflowExplorerComponent implements OnInit {
   }
 
   onAddUseCase() {
-    const ref = this.dialogService.open(UsesCasesFormComponent);
+    const ref = this.dialogService.open(UsesCasesFormComponent,{context: {mode: 'new'}});
     ref.onClose.subscribe(res => {
       this.useCasesComponent.refresh();
     })
