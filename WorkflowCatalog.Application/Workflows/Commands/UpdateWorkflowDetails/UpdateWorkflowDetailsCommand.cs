@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
         public string Name { get; set; }
         public string Description { get; set; }
         public int WorkflowType { get; set; }
+        public Guid PrimaryDiagramId { get; set; }
     }
     public class UpdateWorkflowDetailsCommandHandler : IRequestHandler<UpdateWorkflowDetailsCommand>
     {
@@ -33,9 +36,14 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
             {
                 throw new NotFoundException(nameof(Workflow), command.Id);
             }
+
+            var diag = await _context.Diagrams.FindAsync(command.PrimaryDiagramId);
+
             entity.Name = command.Name;
             entity.Description = command.Description;
             entity.Type = (WorkflowType) command.WorkflowType;
+            entity.Primary = diag;
+           
 
             await _context.SaveChangesAsync(cancellationToken);
 

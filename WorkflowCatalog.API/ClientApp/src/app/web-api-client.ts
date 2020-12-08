@@ -3095,6 +3095,7 @@ export class UpdateWorkflowDetailsCommand implements IUpdateWorkflowDetailsComma
     name?: string | undefined;
     description?: string | undefined;
     workflowType?: number;
+    primaryDiagramId?: string;
 
     constructor(data?: IUpdateWorkflowDetailsCommand) {
         if (data) {
@@ -3111,6 +3112,7 @@ export class UpdateWorkflowDetailsCommand implements IUpdateWorkflowDetailsComma
             this.name = _data["name"];
             this.description = _data["description"];
             this.workflowType = _data["workflowType"];
+            this.primaryDiagramId = _data["primaryDiagramId"];
         }
     }
 
@@ -3127,6 +3129,7 @@ export class UpdateWorkflowDetailsCommand implements IUpdateWorkflowDetailsComma
         data["name"] = this.name;
         data["description"] = this.description;
         data["workflowType"] = this.workflowType;
+        data["primaryDiagramId"] = this.primaryDiagramId;
         return data; 
     }
 }
@@ -3136,6 +3139,7 @@ export interface IUpdateWorkflowDetailsCommand {
     name?: string | undefined;
     description?: string | undefined;
     workflowType?: number;
+    primaryDiagramId?: string;
 }
 
 export class DeleteWorkflowCommand implements IDeleteWorkflowCommand {

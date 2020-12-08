@@ -42,6 +42,7 @@
                 </tbody>
             </table>
         </div>
+        <app-diagram [workflowId]="workflowId" [currentPrimaryDiagramId]="request.primaryDiagramId"></app-diagram>
         <div class="form-group">
             <label for="exampleInputPassword1" class="label">Add Diagram</label>
             <input type="file" (change)="handleFileInput($event.target.files)" nbInput fullWidth multiple="multiple">

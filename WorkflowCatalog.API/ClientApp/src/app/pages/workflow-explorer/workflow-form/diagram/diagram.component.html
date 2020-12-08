@@ -1,0 +1,27 @@
+<div *ngIf="editMode">
+    <div>
+        <table class="table">
+        <thead>
+            <tr>
+                <th> 
+                <nb-checkbox [checked]="checked" (checkedChange)="toggleRow($event)" nbTooltip="Select all files" nbTooltipStatus="primary"></nb-checkbox>
+                <span nbTooltip="Delete selected files" nbTooltipStatus="primary"><a href="#" style="color: crimson;" ><span class="material-icons">delete</span></a></span>
+                <span nbTooltip="Make selected diagram primary" nbTooltipStatus="primary"><a href="#" style="color:darkolivegreen;" ><span class="material-icons">loyalty</span></a></span>
+            </th>
+                <th>File Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of tableItems">
+                <td>
+                    <nb-checkbox [checked]="checked" (checkedChange)="toggleRow($event)"></nb-checkbox>
+                </td>
+                <td>{{item.name}}</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <div>
+        <ngb-pagination style="margin: 3px;" *ngIf="itemsCount > pageSize" [ellipses]="false" [(pageSize)]="pageSize" [collectionSize]="itemsCount" [rotate]="true" [boundaryLinks]="true" [(page)]="page" (pageChange)="handlePageChange($event)"></ngb-pagination>
+    </div>
+</div>

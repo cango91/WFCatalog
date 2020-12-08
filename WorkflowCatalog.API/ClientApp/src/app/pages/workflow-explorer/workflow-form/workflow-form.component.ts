@@ -17,7 +17,8 @@ export class WorkflowFormComponent implements OnInit {
     name: null,
     description: null,
     workflowType: null,
-    setupId: null
+    setupId: null,
+    primaryDiagramId: null,
   };
 
   @Input() workflowId: string;
@@ -42,6 +43,7 @@ export class WorkflowFormComponent implements OnInit {
           name: res.name,
           description: res.description,
           workflowType: res.workflowType,
+          primaryDiagramId: res.primaryDiagramId,
         };
 
         this.diagramService.getDiagramsMetaData('workflowId==' + this.workflowId, '', 1, 500).subscribe(res => {

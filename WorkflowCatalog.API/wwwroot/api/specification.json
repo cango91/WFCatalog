@@ -2037,6 +2037,10 @@
           "workflowType": {
             "type": "integer",
             "format": "int32"
+          },
+          "primaryDiagramId": {
+            "type": "string",
+            "format": "guid"
           }
         }
       },

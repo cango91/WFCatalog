@@ -4,7 +4,7 @@ import { PagesComponent } from './pages.component';
 import { WorkflowExplorerComponent } from './workflow-explorer/workflow-explorer.component';
 import { FunctionExplorerComponent } from './function-explorer/function-explorer.component';
 import { PagesRoutingModule } from './pages-routing.module';
-import { NbButtonModule, NbCardModule, NbContextMenuModule, NbDialogModule, NbInputModule, NbLayoutModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbToastrModule, NbToggleModule } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbCheckboxComponent, NbCheckboxModule, NbContextMenuModule, NbDialogModule, NbInputModule, NbLayoutModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbToastrModule, NbToggleModule, NbTooltipModule } from '@nebular/theme';
 import { RouterModule } from '@angular/router';
 import { EditSetupsComponent } from './edit-setups/edit-setups.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -25,6 +25,7 @@ import { WorkflowFormComponent } from './workflow-explorer/workflow-form/workflo
 import { UsesCasesFormComponent } from './workflow-explorer/uses-cases-form/uses-cases-form.component';
 import { WorkflowService } from '../_providers/workflow.service';
 import { UCItemActionsComponent } from './workflow-explorer/use-cases-grid/item-actions/item-actions.component';
+import { DiagramComponent } from './workflow-explorer/workflow-form/diagram/diagram.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { UCItemActionsComponent } from './workflow-explorer/use-cases-grid/item-
     WorkflowFormComponent, 
     UsesCasesFormComponent,
     UCItemActionsComponent,
+    DiagramComponent,
     
   ],
   imports: [
@@ -66,6 +68,8 @@ import { UCItemActionsComponent } from './workflow-explorer/use-cases-grid/item-
     NbContextMenuModule,
     NbMenuModule.forRoot(),
     NgMultiSelectDropDownModule,
+    NbCheckboxModule,
+    NbTooltipModule,
   ],
   exports: [PagesComponent],
   providers: [SetupService, WorkflowService]
