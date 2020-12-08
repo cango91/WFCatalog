@@ -119,6 +119,10 @@ export class EditSetupsComponent implements OnInit {
       if (res.action === 'filter') {
         this.source.setPaging(1, 5);
       }
+
+      if(res.action === 'update'){
+        this.source.refresh();
+      }
     });
     /*this.source.onChanged().subscribe(change => {
        console.log(change);

@@ -50,10 +50,6 @@ export class ActorsFilterComponent extends DefaultFilter implements OnInit, OnCh
     this.refreshActorsList();
   }
 
-  refreshValue(data: any){
-    console.log('refreshed');
-  }
-
   refreshActorsList(){
     this.actorsClient.getActors(`setup.id==${this.setupId}`,'name',null,null)
     .pipe(
@@ -65,13 +61,9 @@ export class ActorsFilterComponent extends DefaultFilter implements OnInit, OnCh
     console.log('refresh called');
   }
 
-  selected(data: any){
-    console.log('item selected');
-    this.filteredActors.push(this.actorsList.find(x => x.id === data.id));
-  }
-
-  removed(data: any){
-    this.filteredActors.splice(this.filteredActors.findIndex(x => x.id === data.id));
+  refreshFilterValue(data){
+    this.query = data.map(s => s.id).join('|');
+    this.setFilter();
   }
 
 }

@@ -8,6 +8,7 @@ import { ConfirmationPromptComponent } from 'src/app/theme/confirmation-prompt/c
 import { AppComponent } from 'src/app/app.component';
 import { SetupService } from 'src/app/_providers/setup.service';
 import { WorkflowService } from 'src/app/_providers/workflow.service';
+import { WorkflowFormComponent } from '../workflow-form/workflow-form.component';
 
 @Component({
   selector: 'app-workflows-grid',
@@ -182,7 +183,12 @@ export class WorkflowsGridComponent implements OnInit {
   handleAction(event:any){
     switch(event.action){
       case 'edit':
-        console.log('Action: view/edit');
+        this.nbDialogService.open(WorkflowFormComponent, { context: {workflowId:event.element.id}}).onClose.subscribe(x => {
+          this.source.refresh();
+          setTimeout( () => {
+            this.parent.refresh();
+          },300);
+        });
         break;
       case 'delete':
         this.nbDialogService.open(ConfirmationPromptComponent, { context: this.confirmDialogContext }).onClose.subscribe(x => {

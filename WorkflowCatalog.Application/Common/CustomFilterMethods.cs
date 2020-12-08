@@ -11,7 +11,7 @@ namespace WorkflowCatalog.Application.Common
 
     public class CustomFilterMethods : ISieveCustomFilterMethods
     {
-        public IQueryable<UseCase> HasActors(IQueryable<UseCase> source, string op, string[] values)
+        public IQueryable<UseCase> Actors(IQueryable<UseCase> source, string op, string[] values)
         {
             var ids = values.Select(a => Guid.TryParse(a, out Guid b) ? b : Guid.Empty).ToList();
             return source.Where(x => x.UseCaseActors.Any(y => ids.Any(a => a == y.ActorId)));

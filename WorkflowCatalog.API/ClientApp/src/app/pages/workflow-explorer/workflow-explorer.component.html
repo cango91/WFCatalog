@@ -1,14 +1,14 @@
 <nb-layout>
     <nb-layout-column>
         <div class="row">
-            <div [ngClass]="{'col-12': !workflowId, 'col-sm-12 col-md-6': workflowId}">
+            <div [ngClass]="(workflowId !== null) ? 'col-12 col-xxl-6': 'col-12'">
                 <nb-card class="dashboard-card">
                     <nb-card-header>
                         <div class="row">
-                            <div class="col-6 custom-card-title">
+                            <div class="col-9 custom-card-title">
                                 <strong>{{setup ? setup.name: ''}}</strong> Workflows
                             </div>
-                            <div class="col-6">
+                            <div class="col-3">
                                 <button nbButton hero shape="round" size="tiny" (click)="onAddWorkflow()" status="info"
                                     style="float: right;"><span class="material-icons">add</span></button>
                             </div>
@@ -20,14 +20,14 @@
                     </nb-card-body>
                 </nb-card>
             </div>
-            <div class="col-sm-12 col-md-6" *ngIf="workflowId">
+            <div class="col-12 col-xxl-6" *ngIf="workflowId">
                 <nb-card class="dashboard-card">
                     <nb-card-header>
                         <div class="row">
-                            <div class="col-6 custom-card-title">
+                            <div class="col-9 custom-card-title">
                                 <strong>{{workflowName ? workflowName : ''}}</strong> Use Cases
                             </div>
-                            <div class="col-6">
+                            <div class="col-3">
                                 <button nbButton hero shape="round" size="tiny" (click)="onAddUseCase()" status="info"
                                     style="float: right;"><span class="material-icons">add</span></button>
                             </div>

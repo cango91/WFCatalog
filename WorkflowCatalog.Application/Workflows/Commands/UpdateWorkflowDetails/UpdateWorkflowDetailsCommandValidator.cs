@@ -28,7 +28,9 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
 
         public async Task<bool> BeUniqueNameForSetup(UpdateWorkflowDetailsCommand command, string name, CancellationToken cancellationToken)
         {
-            var wf = await _context.Workflows.FindAsync(command.Id);
+            var wf = await _context.Workflows
+                .Include(s => s.Setup)
+                .FirstOrDefaultAsync( x=> x.Id == command.Id);
             if (wf == null)
             {
                 throw new NotFoundException(nameof(Workflow), command.Id);

@@ -1,1 +1,1 @@
-<ng-multiselect-dropdown name="actors" placeholder="filter actors" [data]="items" [settings]="settings" (onSelect)="refreshValue($event)"></ng-multiselect-dropdown>
+<ng-multiselect-dropdown name="actors" style="height:calc(1.5em + 0.75rem + 2px);" placeholder="filter actors" [data]="items" [settings]="settings" (ngModelChange)="refreshFilterValue($event)" [(ngModel)]="filteredActors"></ng-multiselect-dropdown>

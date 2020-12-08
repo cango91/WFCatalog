@@ -46,6 +46,7 @@ namespace WorkflowCatalog.Application.Common
                 .CanFilter()
                 .CanSort();
 
+
             mapper.Property<Actor>(a => a.Id)
                 .CanFilter()
                 .CanSort();

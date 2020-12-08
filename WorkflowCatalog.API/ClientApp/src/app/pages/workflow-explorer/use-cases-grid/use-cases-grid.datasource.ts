@@ -43,11 +43,13 @@ paging: BehaviorSubject<{ pageSize: number, itemsCount: number }> = new Behavior
       this.filterConf.filters.forEach((fieldConf) => {
         if (fieldConf['search']) {
           let condition = '@=*';
-          if (fieldConf['field'] === 'id' || fieldConf['field'] === 'status' || fieldConf['field'] === 'workflowId') {
+          if (fieldConf['field'] === 'id' || fieldConf['field'] === 'status' || fieldConf['field'] === 'workflowId' || fieldConf['field'] === 'actors') {
             condition = '==';
           }
+          //const fieldName =
           filter = filter + `${filter.length > 0 ? ',' : ''}${fieldConf['field']}${condition}${fieldConf['search']}`;
         }
+        
       });
       filter += `${filter.length > 0 ? ',' : ''}workflow.id==${this.workflowId}`;
       query.filters = filter;

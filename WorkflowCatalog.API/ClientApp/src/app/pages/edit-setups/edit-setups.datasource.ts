@@ -1,6 +1,7 @@
 import { LocalDataSource } from "ng2-smart-table"
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
+import { deepExtend } from 'src/app/helpers/objects';
 import { CreateSetupCommand, DeleteSetupCommand, EnumsClient, PaginatedListOfSetupsDto, SetupsClient, SetupsDto, UpdateSetupDetailsCommand } from 'src/app/web-api-client';
 
 export class SetupsDataSource extends LocalDataSource {
@@ -31,13 +32,12 @@ export class SetupsDataSource extends LocalDataSource {
                     status: values.status
                 }
             )).subscribe(res => {
-                super.update(element, values)
-                    .then(() => {
-                        resolve();
-                    })
-                    .catch(er => {
-                        reject(er)
-                    });
+                this.find(element).then((found) => {
+                    found = deepExtend(found, values);
+                    /*const elIndx = this.data.findIndex(s => s.id === element.id);
+                    this.data[elIndx] = found;*/
+                    super.update(found, values).then(resolve).catch(reject);
+                }).catch(reject);
             }, err => {
                 reject(err);
             })

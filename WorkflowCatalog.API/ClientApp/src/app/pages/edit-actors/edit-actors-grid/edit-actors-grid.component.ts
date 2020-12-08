@@ -97,10 +97,12 @@ export class EditActorsGridComponent implements OnInit {
 
   ngOnInit(): void {
     this.source.paging.subscribe(res => this.paging = res);
-    //this.source.setPaging(1, 5, null);
     this.source.onChanged().subscribe(res => {
       if (res.action === 'filter') {
         this.source.setPaging(1, 5, true);
+      }
+      if(res.action === 'update'){
+        this.source.refresh();
       }
     })
   }
