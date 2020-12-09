@@ -2,14 +2,14 @@
     <nb-menu tag="menu" autoCollapse="true" [items]="items"></nb-menu>
     <div class="p-3 pt-4">
         <div>
-            <a nbButton appearance="ghost" *ngIf="showActorEditOptions" href="pages/editactors" class="editSetups">
+            <button nbButton appearance="ghost" *ngIf="showActorEditOptions" class="editSetups" (click)="onClickMenuNavItem($event)"  [id]="'nav-button-actors'">
                 <span class="material-icons">supervisor_account</span>
                 Edit Actors
-            </a>
+            </button>
         </div>
         <div>
-            <button nbButton *ngIf="showSetupEditOptions" appearance="ghost" class="editSetups">
-                <span class="material-icons" (click)="onClickMenuNavItem($event)" [id]="'nav-button-setups-2'">security</span>
+            <button nbButton *ngIf="showSetupEditOptions" appearance="ghost" class="editSetups" (click)="onClickMenuNavItem($event)" [id]="'nav-button-setups'">
+                <span class="material-icons" >security</span>
                 Edit Setups
             </button>
         </div>
