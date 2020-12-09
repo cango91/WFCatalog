@@ -72,11 +72,7 @@ import { DiagramUploadComponent } from './workflow-explorer/workflow-form/diagra
     NgMultiSelectDropDownModule,
     NbCheckboxModule,
     NbTooltipModule,
-<<<<<<< HEAD
-    NbSpinnerModule,
-=======
     NbSpinnerModule
->>>>>>> 3e2b026c129924e706e9f51ab7b642ac7fe8a975
   ],
   exports: [PagesComponent, NbSpinnerModule],
   providers: [WorkflowService]
