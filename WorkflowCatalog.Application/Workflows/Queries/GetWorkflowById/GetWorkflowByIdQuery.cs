@@ -30,6 +30,7 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById
         {
             var entity = await _context.Workflows
                 .AsNoTracking()
+                .Include(s => s.Primary)
                 .ProjectTo<SingleWorkflowDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 

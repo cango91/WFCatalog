@@ -21,7 +21,7 @@ export class UseCasesGridComponent implements OnInit {
     return this.__workflowId;
   }
   set workflowId(val: string){
-    debugger;
+    //debugger;
     if(val===this.__workflowId){
       return;
     }
