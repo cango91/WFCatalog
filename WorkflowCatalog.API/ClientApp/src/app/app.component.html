@@ -1,21 +1,25 @@
 <nb-layout>
 
   <nb-layout-header fixed>
-  <ng-progress #progressBar></ng-progress>
-  <app-header></app-header>
+    <div class="menu-fab-container" *ngIf="sidebarState==='collapsed'">
+    <button class="menu-fab" nbButton hero status="success" (click)="toggleMenuFab()"><span class="material-icons" >menu</span></button></div>
+    <ng-progress #progressBar></ng-progress>
+    <app-header></app-header>
   </nb-layout-header>
 
-  
-  
+
+
+
   <nb-sidebar responsive>
-    <app-side-nav [items]="items"></app-side-nav>
+    <nb-sidebar-header *ngIf="sidebarState==='expanded'"><button nbButton fullWidth ghost class="menu-toggle-wide-button" (click)="toggleSideBar()"><span class="material-icons mr-3">menu</span>Navigation Menu<span class="material-icons ml-4 icon"></span></button></nb-sidebar-header>
+    <app-side-nav [items]="items" [menuState]="sidebarState"></app-side-nav>
   </nb-sidebar>
-<nb-layout-column>
-  <app-pages></app-pages>
-</nb-layout-column>
-  <nb-layout-footer fixed>
-  <!-- Insert footer here -->
-  <app-footer></app-footer>
-  </nb-layout-footer>
+
+  <nb-layout-column>
+
+      
+      <app-pages></app-pages>
+
+  </nb-layout-column>
 
 </nb-layout>

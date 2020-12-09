@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { NbMenuItem, NB_TIME_PICKER_CONFIG } from '@nebular/theme';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, SimpleChange, TemplateRef, ViewChild } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { NbDialogService, NbMenuItem, NbSidebarComponent, NbSidebarService, NbThemeService, NbMediaBreakpoint } from '@nebular/theme';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { OverlayNavComponent } from './theme/overlay-nav/overlay-nav.component';
 import { PaginatedListOfSetupsDto, SetupsClient } from './web-api-client';
 
 @Component({
@@ -8,7 +12,7 @@ import { PaginatedListOfSetupsDto, SetupsClient } from './web-api-client';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'Workflow Catalog';
   preventAbuse = false;
 
@@ -26,10 +30,46 @@ export class AppComponent implements OnInit {
     link : '/pages/fc',}
   ]
 
+  overlayMenuOpen: boolean = false;
+  sidebarState: string = 'expanded';
+  sidebarDesiredState: string = 'expanded';
+  @ViewChild(NbSidebarComponent) sidebar: NbSidebarComponent;
+
   /**
    *
    */
-  constructor(private http: HttpClient, private setupsClient: SetupsClient) {
+  constructor(private http: HttpClient, private setupsClient: SetupsClient,protected dialogService: NbDialogService,protected sidebarService: NbSidebarService, protected themeService: NbThemeService,private cd: ChangeDetectorRef,protected router: Router) {
+  }
+  ngAfterViewInit(): void {
+  
+    this.themeService.onMediaQueryChange()
+      .subscribe(([prev,current]:[NbMediaBreakpoint,NbMediaBreakpoint]) => {
+        const isCollapsed = this.sidebar.collapsedBreakpoints.includes(current.name);
+        const isCompacted = this.sidebar.compactedBreakpoints.includes(current.name);
+
+        if(isCompacted){
+          this.sidebarState = 'compacted';
+          this.sidebarDesiredState = 'compacted';
+        }
+        if(isCollapsed){
+          this.sidebarState = 'collapsed';
+          this.sidebarDesiredState = 'collapsed';
+        }
+        if(!isCollapsed && !isCompacted && prev.width < current.width){
+          this.sidebarState = 'expanded';
+          this.sidebarDesiredState = 'expanded';
+        }
+
+        this.cd.detectChanges();
+      })
+
+      this.sidebarService.onExpand().subscribe(x => {
+        this.sidebarState = 'expanded';
+      });
+      this.sidebarService.onCompact().subscribe(x => {
+        this.sidebarState = 'compacted';
+      });
+    
   }
 
   testHttp(){
@@ -43,9 +83,34 @@ export class AppComponent implements OnInit {
       })
   }
 
+
   ngOnInit(){
     this.setupsClient.getSetups('status==1',null,null,null).subscribe(res =>{
       this.updateSetups(res.items);
+    });
+
+    this.router.events.subscribe(event => {
+      if(event instanceof NavigationEnd){
+        if(this.sidebarState !== this.sidebarDesiredState){
+          switch(this.sidebarDesiredState){
+            case 'expanded':
+              if(this.sidebarState !== 'compacted'){
+                this.sidebarService.expand();
+                this.sidebarState = this.sidebarDesiredState;
+              }
+              break;
+            case 'compacted':
+              this.sidebarService.compact();
+              this.sidebarState = this.sidebarDesiredState;
+              break;
+            case 'collapsed':
+              this.sidebarService.collapse();
+              this.sidebarState = this.sidebarDesiredState;
+              break;
+          }
+          
+        }
+      }
     })
   }
 
@@ -78,4 +143,18 @@ export class AppComponent implements OnInit {
       children: children
     }];
   }
+
+  toggleMenuFab(){
+    if(this.overlayMenuOpen){
+
+    }else{
+      this.dialogService.open(OverlayNavComponent, {dialogClass:'menu-overlay'});
+
+    }
+  }
+
+  toggleSideBar(){
+    this.sidebarService.compact();
+  }
+
 }

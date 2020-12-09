@@ -1,15 +1,36 @@
-<nb-menu tag="menu" autoCollapse="true" [items]="items"></nb-menu>
-<div class="p-3 pt-4">
-  <div>
-    <a nbButton appearance="ghost" *ngIf="showActorEditOptions" href="pages/editactors" class="editSetups">
-      <span class="material-icons">supervisor_account</span>
-      Edit Actors
-    </a>
-  </div>
-  <div>
-    <a nbButton *ngIf="showSetupEditOptions" appearance="ghost" href="pages/editsetups" class="editSetups">
-      <span class="material-icons">security</span>
-      Edit Setups
-    </a>
-  </div>
+<div *ngIf="menuState==='expanded'">
+    <nb-menu tag="menu" autoCollapse="true" [items]="items"></nb-menu>
+    <div class="p-3 pt-4">
+        <div>
+            <a nbButton appearance="ghost" *ngIf="showActorEditOptions" href="pages/editactors" class="editSetups">
+                <span class="material-icons">supervisor_account</span>
+                Edit Actors
+            </a>
+        </div>
+        <div>
+            <a nbButton *ngIf="showSetupEditOptions" appearance="ghost" href="pages/editsetups" class="editSetups">
+                <span class="material-icons">security</span>
+                Edit Setups
+            </a>
+        </div>
+    </div>
+</div>
+<div *ngIf="menuState==='compacted'">
+    <div class="row">
+        <button nbButton ghost fullWidth class="menu-button" (click)="toggleSidebar()"><span class="material-icons">menu</span></button>
+    </div>
+    
+    <div class="row" *ngFor="let item of itemsCompact">
+        <button nbButton ghost fullWidth style="padding-top: 1rem;"  [ngClass]="(item.setupId === _setup) ? 'nav-button selected' : 'nav-button'" (click)="onClickMenuNavItem($event)" [id]="'nav-button-setup-' + item.setupId">{{item.title.length > 3 ? item.title.slice(0,3) : item.title}}</button>
+    </div>
+    <div class="row">
+        <a nbButton fullWidth appearance="ghost" *ngIf="showActorEditOptions" href="pages/editactors" [ngClass]="(editActors === true) ? 'nav-button selected' : 'nav-button'" class="nav-button">
+            <span class="material-icons">supervisor_account</span></a>
+    </div>
+    <div class="row">
+        <a nbButton fullWidth appearance="ghost" *ngIf="showActorEditOptions" href="pages/editsetups" [ngClass]="(editSetups === true) ? 'nav-button selected' : 'nav-button'" class="nav-button">
+            <span class="material-icons">security</span></a>
+    </div>
+    
+
 </div>

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbMenuModule, NbMenuService, NbSidebarModule, NbSidebarComponent, NbSidebarService, NbCardModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbMenuModule, NbSidebarModule, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthorizeInterceptor } from './_services/authorize.interceptor';
@@ -13,6 +13,7 @@ import { NgProgressModule } from 'ngx-progressbar';
 import { NgProgressHttpModule } from 'ngx-progressbar/http';
 import { PagesModule } from './pages/pages.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SetupService } from './_providers/setup.service';
 
 @NgModule({
   declarations: [
@@ -35,11 +36,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NbSidebarModule.forRoot(),
     PagesModule,
     NbMenuModule.forRoot(),
-    NgbModule
+    NgbModule,
+    
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true},
-    NbSidebarService
+    NbSidebarService, NbThemeService, SetupService,
   ],
   bootstrap: [AppComponent]
 })

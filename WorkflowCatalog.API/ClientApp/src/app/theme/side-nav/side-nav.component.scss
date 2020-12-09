@@ -5,3 +5,24 @@
     line-height: 1.5rem;
     flex: 1 0 auto;
 }
+
+.menu-button{
+    &:hover {
+        box-shadow: 0px 6px 15px #0000ff61;
+    }
+}
+
+.nav-button{
+    margin: 1ch 0ch 0ch 0ch;
+    &:hover {
+        box-shadow: 0px 1px 10px #0000ff61 !important;
+    }
+
+}
+
+.nav-button.selected{
+    box-shadow: 0px 1px 6px #0000ff61 !important;
+    margin: 1ch 0ch 0ch 1ch;
+    position: relative;
+    background-color: honeydew;
+}

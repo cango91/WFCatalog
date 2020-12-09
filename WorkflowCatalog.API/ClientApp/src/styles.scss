@@ -18,8 +18,23 @@ body {
 }
 
 .modal-half {
+  //min-width: 100%;
   max-width: 480px !important;
   //max-height: 50% !important;
+
+}
+
+.menu-overlay{
+  min-width: 100% !important;
+  min-height: 90% !important;
+  background-color: honeydew;
+  align-content: center;
+  align-items: center;
+  nb-dialog-container{
+    width: 100% !important;
+    align-content: center;
+  align-items: center;
+}
 }
 
 /* Importing Bootstrap SCSS file. */
@@ -44,5 +59,11 @@ tr.ng2-smart-titles th a, .nb-theme-corporate ng2-smart-table table tr th {
 }
 
  .nb-theme-corporate ng2-smart-table table tr td{
-  padding: 0.3rem 0.3rem !important
+  padding: 0.3rem 0.3rem !important;
+}
+
+@media (max-width: 991.98px){
+  .nb-theme-corporate nb-layout .layout .layout-container .content .columns nb-layout-column {
+    padding: 0rem 0.5rem 1rem;
+  }
 }
