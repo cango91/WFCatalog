@@ -5,6 +5,8 @@ import { SetupService } from 'src/app/_providers/setup.service';
 import { isNil } from 'lodash';
 import { of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
+import { DiagramUploadItem } from './diagram-upload/diagram-upload-item';
+import { Guid } from 'src/app/helpers/guid';
 
 @Component({
   selector: 'app-workflow-form',
@@ -21,14 +23,15 @@ export class WorkflowFormComponent implements OnInit {
     primaryDiagramId: null,
   };
 
+  loading = false;
+
   @Input() workflowId: string;
 
   editMode = false;
 
-  uploadedFiles: DiagramsMetaDto[] = [];
-  deletedFileIds: string[] = [];
-
-  diagramFiles: File[] = [];
+  diagramFiles: DiagramUploadItem[] = [];
+  filesToDelete: DiagramUploadItem[] = [];
+  filesToAdd: DiagramUploadItem[] = [];
 
   constructor(protected workflowService: WorkflowsClient, protected dialogRef: NbDialogRef<WorkflowFormComponent>, protected toast: NbToastrService, protected diagramService: DiagramsClient, protected setupService: SetupService) { }
 
@@ -45,55 +48,48 @@ export class WorkflowFormComponent implements OnInit {
           workflowType: res.workflowType,
           primaryDiagramId: res.primaryDiagramId,
         };
-
+        
         this.diagramService.getDiagramsMetaData('workflowId==' + this.workflowId, '', 1, 500).subscribe(res => {
-          this.uploadedFiles = res.items;
+          this.diagramFiles = res.items.map(a => ({
+            id: a.id,
+            name: a.name,
+            generatedId: Guid.newGuid(),
+            isDefault: false,
+            data: null
+          }));
         })
       })
     }
-  }
-
-  handleFileInput(files: File[]) {
-    const fileArray = [...files];
-    this.diagramFiles.push(...fileArray);
-
-    const fileArr = this.uploadedFiles;
-    fileArr.push(...fileArray.map(a => (new DiagramsMetaDto({id:null,name:a.name}))));
-    this.uploadedFiles = fileArr;
-
   }
 
   closeDialog() {
     this.dialogRef.close();
   }
 
-  onDelete(fileId) {
-    const fileArr = this.uploadedFiles;
-    fileArr.splice(fileArr.findIndex(s => s.id === fileId), 1);
-    this.uploadedFiles = fileArr;
-    this.deletedFileIds.push(fileId);
-  }
-
   create() {
+    this.loading = true;
     //debugger;
     this.request.workflowType = parseInt(this.request.workflowType.toString(), 0);
     this.workflowService.createWorkflow(new CreateWorkflowCommand(this.request)).subscribe(res => {
       if (this.diagramFiles.length > 0) {
-        of(...this.diagramFiles).pipe(mergeMap(a =>  this.diagramService.createDiagram(res, {
-          data: a,
+        of(...this.filesToAdd).pipe(mergeMap(a => this.diagramService.createDiagram(res, {
+          data: a.id,
           fileName: a.name
         })))
-       .subscribe(res => {
-        
-        }, err => {
-          this.workflowService.deleteWorkflow(res, new DeleteWorkflowCommand({ id: res })).subscribe(a => {
-            this.toast.danger("Please select a valid PDF file!");
-          })
-        },() => {
-          this.toast.success("Workflow added!");
-          this.dialogRef.close();
-        });
+          .subscribe(res => {
+
+          }, err => {
+            this.workflowService.deleteWorkflow(res, new DeleteWorkflowCommand({ id: res })).subscribe(a => {
+              this.toast.danger("Please select a valid PDF file!");
+            })
+            this.loading = false;
+          }, () => {
+            this.loading = false;
+            this.toast.success("Workflow added!");
+            this.dialogRef.close();
+          });
       } else {
+        this.loading = false;
         this.toast.success("Workflow added!");
         this.dialogRef.close();
       }
@@ -101,14 +97,19 @@ export class WorkflowFormComponent implements OnInit {
   }
 
   edit() {
-    // silinmişse dosyaları sil
-
+    this.loading = true;
     this.request.workflowType = parseInt(this.request.workflowType.toString(), 0);
     this.request.id = this.workflowId;
     this.workflowService.updateWorkflow(this.workflowId, this.request).subscribe(res => {
-      of(...this.deletedFileIds).pipe(mergeMap(s => this.diagramService.deleteDiagram(s, new DeleteDiagramCommand({ id: s })))).subscribe(() => { }, err => { }, () => {
-        this.toast.success("Workflow updated!");
-        this.dialogRef.close();
+      of(...this.filesToDelete).pipe(mergeMap(s => this.diagramService.deleteDiagram(s.id, new DeleteDiagramCommand({ id: s.id })))).subscribe(() => { }, err => { }, () => {
+        of(...this.filesToAdd).pipe(mergeMap(s => this.diagramService.createDiagram(this.workflowId, {
+          data: s.data,
+          fileName: s.name
+        }))).subscribe(res => { }, err => { }, () => {
+          this.loading = false;
+          this.toast.success("Workflow updated!");
+          this.dialogRef.close();
+        })
       })
     })
   }

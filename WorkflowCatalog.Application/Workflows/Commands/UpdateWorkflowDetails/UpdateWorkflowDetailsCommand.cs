@@ -20,7 +20,7 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
         public string Name { get; set; }
         public string Description { get; set; }
         public int WorkflowType { get; set; }
-        public Guid PrimaryDiagramId { get; set; }
+        public Guid? PrimaryDiagramId { get; set; }
     }
     public class UpdateWorkflowDetailsCommandHandler : IRequestHandler<UpdateWorkflowDetailsCommand>
     {

@@ -26,6 +26,7 @@ import { UsesCasesFormComponent } from './workflow-explorer/uses-cases-form/uses
 import { WorkflowService } from '../_providers/workflow.service';
 import { UCItemActionsComponent } from './workflow-explorer/use-cases-grid/item-actions/item-actions.component';
 import { DiagramComponent } from './workflow-explorer/workflow-form/diagram/diagram.component';
+import { DiagramUploadComponent } from './workflow-explorer/workflow-form/diagram-upload/diagram-upload.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { DiagramComponent } from './workflow-explorer/workflow-form/diagram/diag
     UsesCasesFormComponent,
     UCItemActionsComponent,
     DiagramComponent,
+    DiagramUploadComponent,
     
   ],
   imports: [

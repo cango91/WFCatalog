@@ -24,8 +24,11 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name can not be blank")
                 .MustAsync(BeUniqueNameForSetup).WithMessage("Workflow name must be unique for setup");
-            RuleFor(x => x.PrimaryDiagramId)
-                .MustAsync(ExistForWorkflow).WithMessage("Diagram does not exist");
+            When(s => s.PrimaryDiagramId.HasValue, () =>
+            {
+                RuleFor(x => x.PrimaryDiagramId)
+               .MustAsync(this.ExistForWorkflow).WithMessage("Diagram does not exist");
+            });
         }
 
         public async Task<bool> BeUniqueNameForSetup(UpdateWorkflowDetailsCommand command, string name, CancellationToken cancellationToken)
@@ -43,7 +46,7 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
                 .AnyAsync(a => a.Name.ToLower() == command.Name.ToLower(), cancellationToken);
         }
 
-        public async Task<bool> ExistForWorkflow(UpdateWorkflowDetailsCommand command,Guid id, CancellationToken cancellationToken)
+        public async Task<bool> ExistForWorkflow(UpdateWorkflowDetailsCommand command,Guid? id, CancellationToken cancellationToken)
         {
             var wf = await _context.Workflows
                 .Include(w => w.Diagrams)
