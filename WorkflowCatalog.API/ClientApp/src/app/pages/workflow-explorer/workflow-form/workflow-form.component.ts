@@ -48,7 +48,7 @@ export class WorkflowFormComponent implements OnInit {
           workflowType: res.workflowType,
           primaryDiagramId: res.primaryDiagramId,
         };
-        
+
         this.diagramService.getDiagramsMetaData('workflowId==' + this.workflowId, '', 1, 500).subscribe(res => {
           this.diagramFiles = res.items.map(a => ({
             id: a.id,
@@ -73,12 +73,13 @@ export class WorkflowFormComponent implements OnInit {
     this.workflowService.createWorkflow(new CreateWorkflowCommand(this.request)).subscribe(res => {
       if (this.diagramFiles.length > 0) {
         of(...this.filesToAdd).pipe(mergeMap(a => this.diagramService.createDiagram(res, {
-          data: a.id,
+          data: a.data,
           fileName: a.name
         })))
           .subscribe(res => {
 
           }, err => {
+            debugger;
             this.workflowService.deleteWorkflow(res, new DeleteWorkflowCommand({ id: res })).subscribe(a => {
               this.toast.danger("Please select a valid PDF file!");
             })

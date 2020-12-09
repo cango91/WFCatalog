@@ -15,9 +15,9 @@
                         <button nbButton (click)="makeDefault(file)" size="tiny" *ngIf="file.id !== defaultDiagram" status="primary">
                             <span class="metarial icons">set as default</span>
                         </button>
-                        <label *ngIf="file.id === defaultDiagram">
-                            Default
-                        </label>
+                        <button nbButton size="tiny" *ngIf="file.id === defaultDiagram" status="default" [disabled]="true">
+                            <span class="metarial icons">default</span>
+                        </button>
                     </ng-container>
                     <button nbButton (click)="delete(file)" size="tiny" class="ml-1" status="danger">
                         <span class="metarial icons">delete</span>

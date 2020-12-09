@@ -34,7 +34,7 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById
                 .ProjectTo<SingleWorkflowDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 
-            if(entity==null)
+            if (entity==null)
             {
                 throw new NotFoundException(nameof(Workflow), query.Id);
             }
