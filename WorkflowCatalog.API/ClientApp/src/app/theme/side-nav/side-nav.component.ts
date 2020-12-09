@@ -135,7 +135,7 @@ export class SideNavComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   onClickMenuNavItem(event) {
-    debugger;
+    //debugger;
     if (event.currentTarget.id.indexOf('nav-button-setup-') !== -1) {
       this.setupService.currentSetupId.next(event.currentTarget.id.slice('nav-button-setup-'.length));
       this.router.navigate(['pages/wf/' + event.currentTarget.id.slice('nav-button-setup-'.length)])
