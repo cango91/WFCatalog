@@ -1,7 +1,10 @@
 <nb-card>
     <nb-card-header>
+        <div class="row">
+            <div class="col-10">
         Confirm Deletion of Setup <strong>{{setupName}} ({{setupAbb}})</strong>
-        <span style="float:right"><button nbButton status ="danger" size="tiny" (click)="cancelDialog()"><mat-icon>close</mat-icon></button></span>
+    </div> <span class="col-2"><button nbButton status ="danger" size="tiny" (click)="cancelDialog()"><mat-icon>close</mat-icon></button></span>
+    </div>
     </nb-card-header>
     <nb-card-body>
         <p>

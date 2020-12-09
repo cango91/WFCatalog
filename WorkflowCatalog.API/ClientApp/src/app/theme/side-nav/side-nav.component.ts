@@ -90,6 +90,7 @@ export class SideNavComponent implements OnDestroy, OnInit, OnChanges {
       this.cd.detectChanges();
     });
 
+
     this.router.events.subscribe(event => {
       
       if (event instanceof NavigationStart) {
@@ -134,9 +135,22 @@ export class SideNavComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   onClickMenuNavItem(event) {
+    debugger;
     if (event.currentTarget.id.indexOf('nav-button-setup-') !== -1) {
       this.setupService.currentSetupId.next(event.currentTarget.id.slice('nav-button-setup-'.length));
       this.router.navigate(['pages/wf/' + event.currentTarget.id.slice('nav-button-setup-'.length)])
+    }else{
+      switch(event.currentTarget.id){
+        case 'nav-button-actors':
+          this.setupService.currentSetupId.next(null);
+          this.router.navigate(['pages/editactors']);
+          break;
+        case 'nav-button-setups':
+          this.setupService.currentSetupId.next(null);
+          this.router.navigate(['pages/editsetups']);
+          break;
+      }
+      
     }
   }
 

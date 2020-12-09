@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { EnumsClient, SetupsClient } from 'src/app/web-api-client';
 import { SetupsDataSource } from './edit-setups.datasource';
 import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog/confirm-delete-dialog.component';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { AppComponent } from 'src/app/app.component';
 import { HttpClient } from '@angular/common/http';
 
@@ -107,7 +107,7 @@ export class EditSetupsComponent implements OnInit {
   };
 
   constructor(http: HttpClient, private setupsClient: SetupsClient, private enumsClient: EnumsClient,
-    private dialogService: NbDialogService, @Inject(AppComponent) protected parent: AppComponent) {
+    private dialogService: NbDialogService, @Inject(AppComponent) protected parent: AppComponent,protected toast: NbToastrService) {
     this.source = new SetupsDataSource(setupsClient, enumsClient);
   }
 
@@ -122,6 +122,14 @@ export class EditSetupsComponent implements OnInit {
 
       if(res.action === 'update'){
         this.source.refresh();
+        this.toast.success('Setup updated successfully');
+      }
+      if(res.action === 'add' || res.action === 'prepend'){
+        this.source.refresh();
+        this.toast.success('Setup added successfully');
+      }
+      if(res.action === 'remove'){
+        this.toast.success('Setup removed successfully');
       }
     });
     /*this.source.onChanged().subscribe(change => {

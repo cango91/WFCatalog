@@ -13,9 +13,12 @@
 }
 
 .nav-button{
-    margin: 1ch 0ch 0ch 0ch;
+    margin: 0.5ch 0ch 0ch 0ch;
+    transition: all 0.3s;
     &:hover {
         box-shadow: 0px 1px 10px #0000ff61 !important;
+        margin: 0.5ch 0ch 0ch 1ch;
+        transition: all 0.3s;
     }
 
 }
@@ -24,5 +27,6 @@
     box-shadow: 0px 1px 6px #0000ff61 !important;
     margin: 1ch 0ch 0ch 1ch;
     position: relative;
-    background-color: honeydew;
+    background-color: #efefef;
+    transition: all 0.3s;
 }

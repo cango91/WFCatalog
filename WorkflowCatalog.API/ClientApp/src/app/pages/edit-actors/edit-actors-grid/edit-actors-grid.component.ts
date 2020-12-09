@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { NbDialogRef, NbDialogService } from '@nebular/theme';
+import { NbDialogRef, NbDialogService, NbToastrService } from '@nebular/theme';
 import { NgbPagination, NgbPaginationConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationPromptComponent } from 'src/app/theme/confirmation-prompt/confirmation-prompt.component';
 import { ActorsClient } from 'src/app/web-api-client';
@@ -91,7 +91,7 @@ export class EditActorsGridComponent implements OnInit {
   }
 
 
-  constructor(protected actorsClient: ActorsClient, protected dialogService: NbDialogService) {
+  constructor(protected actorsClient: ActorsClient, protected dialogService: NbDialogService, protected toast: NbToastrService) {
     this.source = new ActorsDataSource(this.setupId,this.actorsClient)
   }
 
@@ -102,7 +102,17 @@ export class EditActorsGridComponent implements OnInit {
         this.source.setPaging(1, 5, true);
       }
       if(res.action === 'update'){
+        this.toast.success('Actor updated successfully');
         this.source.refresh();
+      }
+      if(res.action === 'add' || res.action==='prepend'){
+        this.toast.success('Actor added successfully');
+        this.source.refresh();
+      }
+
+      if(res.action === 'remove'){
+        this.toast.success('Actor removed successfully')!;
+
       }
     })
   }

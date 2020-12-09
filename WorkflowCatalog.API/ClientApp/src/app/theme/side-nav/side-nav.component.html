@@ -8,10 +8,10 @@
             </a>
         </div>
         <div>
-            <a nbButton *ngIf="showSetupEditOptions" appearance="ghost" href="pages/editsetups" class="editSetups">
-                <span class="material-icons">security</span>
+            <button nbButton *ngIf="showSetupEditOptions" appearance="ghost" class="editSetups">
+                <span class="material-icons" (click)="onClickMenuNavItem($event)" [id]="'nav-button-setups-2'">security</span>
                 Edit Setups
-            </a>
+            </button>
         </div>
     </div>
 </div>
@@ -24,12 +24,12 @@
         <button nbButton ghost fullWidth style="padding-top: 1rem;"  [ngClass]="(item.setupId === _setup) ? 'nav-button selected' : 'nav-button'" (click)="onClickMenuNavItem($event)" [id]="'nav-button-setup-' + item.setupId">{{item.title.length > 3 ? item.title.slice(0,3) : item.title}}</button>
     </div>
     <div class="row">
-        <a nbButton fullWidth appearance="ghost" *ngIf="showActorEditOptions" href="pages/editactors" [ngClass]="(editActors === true) ? 'nav-button selected' : 'nav-button'" class="nav-button">
-            <span class="material-icons">supervisor_account</span></a>
+        <button nbButton fullWidth appearance="ghost" *ngIf="showActorEditOptions" (click)="onClickMenuNavItem($event)"  [id]="'nav-button-actors'" [ngClass]="(editActors === true) ? 'nav-button selected' : 'nav-button'" class="nav-button">
+            <span class="material-icons">supervisor_account</span></button>
     </div>
     <div class="row">
-        <a nbButton fullWidth appearance="ghost" *ngIf="showActorEditOptions" href="pages/editsetups" [ngClass]="(editSetups === true) ? 'nav-button selected' : 'nav-button'" class="nav-button">
-            <span class="material-icons">security</span></a>
+        <button nbButton fullWidth appearance="ghost" *ngIf="showActorEditOptions"  [ngClass]="(editSetups === true) ? 'nav-button selected' : 'nav-button'" class="nav-button" (click)="onClickMenuNavItem($event)" [id]="'nav-button-setups'">
+            <span class="material-icons">security</span></button>
     </div>
     
 

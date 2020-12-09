@@ -48,6 +48,10 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
 
         public async Task<bool> ExistForWorkflow(UpdateWorkflowDetailsCommand command,Guid? id, CancellationToken cancellationToken)
         {
+            if(id == null || id==default || id==Guid.Empty)
+            {
+                return true;
+            }
             var wf = await _context.Workflows
                 .Include(w => w.Diagrams)
                 .FirstOrDefaultAsync(x => x.Id == command.Id);
