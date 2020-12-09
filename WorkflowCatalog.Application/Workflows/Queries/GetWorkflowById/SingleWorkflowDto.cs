@@ -20,7 +20,7 @@ namespace WorkflowCatalog.Application.Workflows.Queries.GetWorkflowById
         public List<Guid> DiagramIds { get; set; }
         public Guid PrimaryDiagramId { get; set; }
 
-        public void Configure(Profile profile)
+        public void Mapping(Profile profile)
         {
             profile.CreateMap<Workflow, SingleWorkflowDto>()
                 .ForMember(x => x.SetupId, opt => opt.MapFrom(x => x.Setup.Id))

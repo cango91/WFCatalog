@@ -34,7 +34,7 @@ export class DiagramUploadComponent implements OnInit {
       this.addFiles.splice(this.addFiles.findIndex(a => a.generatedId === item.generatedId),1);
       this.addFilesChange.emit(this.addFiles);
     } else {
-      this.deleteFiles.splice(this.deleteFiles.findIndex(a => a.generatedId === item.generatedId),1);
+      this.deleteFiles.push(item);
       this.deleteFilesChange.emit(this.deleteFiles);
     }
 
