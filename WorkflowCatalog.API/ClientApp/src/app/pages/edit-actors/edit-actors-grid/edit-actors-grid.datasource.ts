@@ -74,10 +74,20 @@ export class ActorsDataSource extends LocalDataSource {
         return this;
     }
 
-    add(element) {
+    prepend(element) {
         return new Promise((resolve, reject) => {
-            this.actorsClient.createActor(this.setupId, new CreateActorCommand(element)).subscribe(res => {
-                super.add(element).then(() => resolve()).catch(err => reject(err));
+            this.actorsClient.createActor(this.setupId, new CreateActorCommand({setupId:this.setupId,name:element.name,description:element.description})).subscribe(res => {
+               let newelement = new ActorDto(element);
+                newelement.id = res;
+                newelement.setup = this.setupId;
+                this.data.push(newelement);
+                this.emitOnAdded(newelement);
+                this.emitOnChanged('add');
+                resolve();
+                //super.add(element)
+                //return super.prepend(newelement).then(()=>resolve() ).catch(err => reject(err));
+                //super.add(newelement).then(() =>{ resolve()}).catch(err => reject(err));
+
             }, err => {
                 reject(err);
             })

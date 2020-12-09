@@ -2040,7 +2040,8 @@
           },
           "primaryDiagramId": {
             "type": "string",
-            "format": "guid"
+            "format": "guid",
+            "nullable": true
           }
         }
       },

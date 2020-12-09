@@ -54,7 +54,8 @@ export class SetupsDataSource extends LocalDataSource {
         })
     }
 
-    add(element) {
+    prepend(element) {
+        debugger;
         return new Promise((resolve, reject) => {
             this.setupsClient.createSetup(new CreateSetupCommand(element)).subscribe(res => {
                 super.add(element).then(() => resolve()).catch(err => reject(err));

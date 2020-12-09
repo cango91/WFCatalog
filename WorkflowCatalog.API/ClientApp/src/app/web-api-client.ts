@@ -3095,7 +3095,7 @@ export class UpdateWorkflowDetailsCommand implements IUpdateWorkflowDetailsComma
     name?: string | undefined;
     description?: string | undefined;
     workflowType?: number;
-    primaryDiagramId?: string;
+    primaryDiagramId?: string | undefined;
 
     constructor(data?: IUpdateWorkflowDetailsCommand) {
         if (data) {
@@ -3139,7 +3139,7 @@ export interface IUpdateWorkflowDetailsCommand {
     name?: string | undefined;
     description?: string | undefined;
     workflowType?: number;
-    primaryDiagramId?: string;
+    primaryDiagramId?: string | undefined;
 }
 
 export class DeleteWorkflowCommand implements IDeleteWorkflowCommand {

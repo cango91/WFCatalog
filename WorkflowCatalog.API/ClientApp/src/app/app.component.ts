@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, SimpleChange, TemplateRef, ViewChild } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { NbDialogService, NbMenuItem, NbSidebarComponent, NbSidebarService, NbThemeService, NbMediaBreakpoint } from '@nebular/theme';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -22,12 +22,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     {
       title: 'Cerebral Plus',
       link : '/pages/fc',
+      pathMatch:'full',
     },
     {title: 'Team',
     link : '/pages/fc',
+    pathMatch:'full',
   },
     {title: 'MyTicket',
-    link : '/pages/fc',}
+    link : '/pages/fc',
+    pathMatch:'full',
+    }
+    
   ]
 
   overlayMenuOpen: boolean = false;
@@ -89,8 +94,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.updateSetups(res.items);
     });
 
+    //debugger;
+
     this.router.events.subscribe(event => {
       if(event instanceof NavigationEnd){
+        //debugger;
         if(this.sidebarState !== this.sidebarDesiredState){
           switch(this.sidebarDesiredState){
             case 'expanded':
@@ -126,6 +134,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         children.push({
           title: element.shortName.toLocaleUpperCase(),
           link: 'pages/wf/' + element.id,
+          pathMatch:'full',
         badge: {
           text: element.workflowCount.toString(),
           status: 'info'
