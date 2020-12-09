@@ -3,7 +3,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CookieService } from 'ngx-cookie-service/';
 import { CerebralToken } from '../_models/cerebral-token.model';
 
-export const TOKEN_KEY = 'access_token'
+export const TOKEN_KEY = 'api_token'
 export const helper = new JwtHelperService();
 
 @Injectable({providedIn:'root'})

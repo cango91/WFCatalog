@@ -24,8 +24,11 @@ namespace WorkflowCatalog.Application.Workflows.Commands.UpdateWorkflowDetails
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name can not be blank")
                 .MustAsync(BeUniqueNameForSetup).WithMessage("Workflow name must be unique for setup");
-            RuleFor(x => x.PrimaryDiagramId)
-                .MustAsync(ExistForWorkflow).WithMessage("Diagram does not exist");
+            When(s => s.PrimaryDiagramId.HasValue, () =>
+            {
+                RuleFor(x => x.PrimaryDiagramId)
+               .MustAsync(this.ExistForWorkflow).WithMessage("Diagram does not exist");
+            });
         }
 
         public async Task<bool> BeUniqueNameForSetup(UpdateWorkflowDetailsCommand command, string name, CancellationToken cancellationToken)
