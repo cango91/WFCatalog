@@ -148,7 +148,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     if(this.overlayMenuOpen){
 
     }else{
-      this.dialogService.open(OverlayNavComponent, {dialogClass:'menu-overlay'});
+      this.dialogService.open(OverlayNavComponent, {dialogClass:'menu-overlay', context: {items:this.items}});
 
     }
   }

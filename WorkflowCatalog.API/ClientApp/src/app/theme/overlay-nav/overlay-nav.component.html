@@ -1,1 +1,20 @@
-<nb-menu [items]="items"></nb-menu>
+<div class="back-fab-container">
+    <a nbButton ghost status="info" style="position: relative; top: 0;" (click)="closeMe()"><span
+            class="material-icons">keyboard_backspace</span></a>
+</div>
+
+<nb-menu [items]="items" autoCollapse="true" #overlay></nb-menu>
+<div class="p-3 pt-4" style="text-align: center;">
+    <div>
+        <a nbButton appearance="ghost" *ngIf="showActorEditOptions" href="pages/editactors" class="editSetups">
+            <span class="material-icons">supervisor_account</span>
+            Edit Actors
+        </a>
+    </div>
+    <div>
+        <a nbButton *ngIf="showSetupEditOptions" appearance="ghost" href="pages/editsetups" class="editSetups">
+            <span class="material-icons">security</span>
+            Edit Setups
+        </a>
+    </div>
+</div>
