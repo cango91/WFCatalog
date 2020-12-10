@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, 
 import { DiagramUploadItem } from './diagram-upload-item';
 import { isEmpty } from 'lodash';
 import { Guid } from 'src/app/helpers/guid';
+import { DiagramsClient } from 'src/app/web-api-client';
 
 @Component({
   selector: 'app-diagram-upload',
@@ -24,7 +25,7 @@ export class DiagramUploadComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
-  constructor(protected cdr: ChangeDetectorRef) { }
+  constructor(protected cdr: ChangeDetectorRef,protected diagramService:DiagramsClient) { }
 
   ngOnInit(): void {
   }
@@ -74,6 +75,19 @@ export class DiagramUploadComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
 
     this.cdr.detectChanges();
+  }
+
+  downloadFile(file){
+    if(file.id){
+      this.diagramService.getDiagramById(file.id).subscribe((res)=>{
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(res.data);
+        a.download = res.fileName;
+        a.click();
+        a.remove();
+      });
+
+    }
   }
 
 }

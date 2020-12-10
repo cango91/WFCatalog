@@ -1,0 +1,13 @@
+.btn-file{
+    text-align: left !important;
+    justify-content: start !important;
+
+    .icon::before{
+        content: "download";
+        left: 5% !important;
+        margin-right: 0.5rem;
+    }
+    &:hover{
+        box-shadow: 0px 0.1rem 0.5rem #0000ff61;
+    }
+}
