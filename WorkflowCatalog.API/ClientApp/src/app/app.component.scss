@@ -1,4 +1,4 @@
-.menu-fab-container{
+.menu-fab-container {
     background-color: #efefef !important;
     box-shadow: 0rem, 8px, 16px, 0rem, rgba(0, 0, 0, 0.5) !important;
     position: absolute !important;
@@ -19,15 +19,12 @@
 }
 
 .menu-fab {
-
-    
     position: relative !important;
     width: 100% !important;
     height: 100% !important;
     border-radius: 100% !important;
     transition: 0.1s;
     z-index: 10000 !important;
-    
 }
 
 .menu-fab-container:hover {
@@ -40,15 +37,15 @@
     border: black;
 }
 
-.nb-theme-corporate nb-sidebar{
-    padding: 3em !important;    
+.nb-theme-corporate nb-sidebar {
+    padding: 3em !important;
 }
 
-:host{
-    ::ng-deep nb-sidebar .scrollable{
+:host {
+    ::ng-deep nb-sidebar .scrollable {
         padding: 0.2rem 1.25rem !important;
     }
-    ::ng-deep nb-sidebar nb-sidebar-header{
+    ::ng-deep nb-sidebar nb-sidebar-header {
         padding: 0 !important;
     }
 }
@@ -56,7 +53,7 @@
 .menu-toggle-wide-button {
     transition: all 0.5s !important;
     & .icon {
-        &::after{
+        &::after {
             content: "keyboard_backspace";
             transition: all 0.5s !important;
             opacity: 0;
@@ -67,9 +64,16 @@
     }
     &:hover .icon {
         &::after {
-
             transition: all 0.5s !important;
             opacity: 1;
         }
+    }
+}
+
+nb-sidebar {
+    box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
+    &.expanded {
+        //, sidebar-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.8)
+        box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.4);
     }
 }
