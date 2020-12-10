@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, ExtraOptions } from '@angular/router';
 import { AppComponent } from './app.component';
 import { PagesComponent } from './pages/pages.component';
+import { AuthGuardService } from './_services/auth.guard.service';
 
 /* const routes: Routes = [
   {
@@ -23,6 +24,7 @@ import { PagesComponent } from './pages/pages.component';
 const routes: Routes = [
   {
     path: 'pages',
+    canActivate: [AuthGuardService],
     loadChildren: () => import('./pages/pages.module')
     .then(m => m.PagesModule),
   },
@@ -36,6 +38,7 @@ const config: ExtraOptions = {
 
 @NgModule({
   imports: [RouterModule.forRoot(routes,config)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers:[AuthGuardService]
 })
 export class AppRoutingModule { }

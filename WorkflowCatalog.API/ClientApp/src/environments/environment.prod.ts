@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  loginUrl: 'http://catalog.acibadem.com.tr/ProductCatalog/Account/Login',
 };
