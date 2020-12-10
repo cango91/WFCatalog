@@ -14,6 +14,7 @@ import { NgProgressHttpModule } from 'ngx-progressbar/http';
 import { PagesModule } from './pages/pages.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SetupService } from './_providers/setup.service';
+import { API_BASE_URL } from './web-api-client';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { SetupService } from './_providers/setup.service';
     
   ],
   providers: [
+    {provide: API_BASE_URL,useValue:'/workflow-api'},
     {provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true},
     NbSidebarService, NbThemeService, SetupService,
   ],

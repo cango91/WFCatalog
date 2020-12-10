@@ -41,7 +41,7 @@ export class DiagramComponent implements OnInit {
   ngOnInit(): void {
     if(this.workflowId){
       this.editMode = true;
-      console.log(this.workflowId);
+      //console.log(this.workflowId);
       this.paging.subscribe(res => {
         this.refreshItems();
       })
@@ -67,7 +67,7 @@ export class DiagramComponent implements OnInit {
   }
 
   toggleRow(event){
-    console.log(event);
+    //console.log(event);
   }
 
 }

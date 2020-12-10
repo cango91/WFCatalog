@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "echo starting... && ng serve",
-    "build": "ng build --prod --base-href /workflow/",
+    "build": "ng build --prod --base-href \"/workflow/\"",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

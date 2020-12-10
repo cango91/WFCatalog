@@ -6,7 +6,6 @@ import { SideNavComponent } from './side-nav/side-nav.component';
 import { NbButtonModule, NbCardModule, NbDialogModule, NbMenuModule, NbMenuService, NbContextMenuModule, NbIconModule, NbBadgeModule } from '@nebular/theme';
 import { ConfirmationPromptComponent } from './confirmation-prompt/confirmation-prompt.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { SetupService } from '../_providers/setup.service';
 import { OverlayNavComponent } from './overlay-nav/overlay-nav.component';
 
 

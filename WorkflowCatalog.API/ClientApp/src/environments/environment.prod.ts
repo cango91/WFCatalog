@@ -7,4 +7,5 @@ export const environment = {
   cpUrl: 'http://catalog.acibadem.com.tr/ProductCatalog/ProductCatalog/ProductCatalog?productId=2',
   aoUrl: 'http://catalog.acibadem.com.tr/ProductCatalog/ProductCatalog/ProductCatalog?productId=3',
   itUrl: 'http://catalog.acibadem.com.tr/ProductCatalog/ProductCatalog/ProductCatalog?productId=4',
+  userApiUrl: 'http://catalog.acibadem.com.tr/ProductCatalogApi/AccountApi/GetUserDetails'
 };

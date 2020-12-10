@@ -71,8 +71,8 @@ export class UsesCasesFormComponent implements OnInit {
   
 
   ngOnInit(): void {
-    console.log(this.mode);
-    console.log(this.element);
+    //console.log(this.mode);
+    //console.log(this.element);
     this.setupService.currentSetupId.subscribe(x => {
       this._setupId = x;
       this.actorsClient.getActors(`setup.id==${this._setupId}`,null,1,500).pipe(

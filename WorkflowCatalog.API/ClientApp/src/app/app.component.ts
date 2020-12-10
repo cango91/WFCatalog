@@ -5,6 +5,7 @@ import { NbDialogService, NbMenuItem, NbSidebarComponent, NbSidebarService, NbTh
 import { environment } from 'src/environments/environment.prod';
 import { OverlayNavComponent } from './theme/overlay-nav/overlay-nav.component';
 import { SetupsClient } from './web-api-client';
+import { UserService } from './_services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -46,7 +47,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   /**
    *
    */
-  constructor(private http: HttpClient, private setupsClient: SetupsClient,protected dialogService: NbDialogService,protected sidebarService: NbSidebarService, protected themeService: NbThemeService,private cd: ChangeDetectorRef,protected router: Router) {
+  constructor(private http: HttpClient, private setupsClient: SetupsClient,protected dialogService: NbDialogService,protected sidebarService: NbSidebarService, protected themeService: NbThemeService,private cd: ChangeDetectorRef,protected router: Router, protected userService: UserService) {
   }
   ngAfterViewInit(): void {
   
@@ -123,6 +124,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
       }
     })
+
+    this.userService.loadUser();
+
   }
 
   public refresh(){

@@ -1,22 +1,26 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment.prod';
 import { User} from '../_models/user.model';
-import { CoreApi } from '../_providers/core-api.service';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  user: Subject<User> = new Subject<User>();
+  user: BehaviorSubject<User> = new BehaviorSubject<User>(new User());
   
 
-  constructor(private coreApi: CoreApi) { }
+  constructor(private http:HttpClient,protected tokenService:TokenService) { }
 
   loadUser(){
-    this.coreApi.fetchUser().subscribe((res:any) => {
-      this.user.next(res);
+    this.http.post(environment.userApiUrl,{},{headers: new HttpHeaders({
+      Authorization: 'Bearer ' + this.tokenService.token.token}) }).subscribe((res:any) => {
+      this.user.next(res.returnValue);
     }, err => {
-      window.location.href = '/Account/Login';
+      console.log("Could not get user details from external Api, redirecting to login");
+      window.location.href = environment.loginUrl;
     })
   }
 }
