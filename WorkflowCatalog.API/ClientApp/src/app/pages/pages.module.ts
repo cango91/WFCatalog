@@ -4,7 +4,7 @@ import { PagesComponent } from './pages.component';
 import { WorkflowExplorerComponent } from './workflow-explorer/workflow-explorer.component';
 import { FunctionExplorerComponent } from './function-explorer/function-explorer.component';
 import { PagesRoutingModule } from './pages-routing.module';
-import { NbButtonModule, NbCardModule, NbCheckboxModule, NbContextMenuModule, NbDialogModule, NbInputModule, NbLayoutModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbToastrModule, NbToggleModule, NbTooltipModule, NbSpinnerModule } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbCheckboxModule, NbContextMenuModule, NbDialogModule, NbInputModule, NbLayoutModule, NbMenuModule, NbPopoverModule, NbSelectModule, NbSpinnerModule, NbToastrModule, NbToggleModule, NbTooltipModule } from '@nebular/theme';
 import { RouterModule } from '@angular/router';
 import { EditSetupsComponent } from './edit-setups/edit-setups.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -74,7 +74,7 @@ import { DiagramUploadComponent } from './workflow-explorer/workflow-form/diagra
     NbTooltipModule,
     NbSpinnerModule
   ],
-  exports: [PagesComponent],
+  exports: [PagesComponent, NbSpinnerModule],
   providers: [WorkflowService]
 })
 export class PagesModule { }

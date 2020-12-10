@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let file of files">
-                <td>{{file.name}}</td>
+                <td><button nbButton fullWidth ghost status="info" class="btn-file" (click)="downloadFile(file)"><span class="material-icons icon" *ngIf="file.id"></span><span>{{file.name}}</span></button></td>
                 <td>
                     <ng-container *ngIf="file.id">
                         <button nbButton size="tiny" status="warning" class="mr-1" (click)="download(file)">

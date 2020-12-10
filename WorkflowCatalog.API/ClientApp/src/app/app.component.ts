@@ -2,10 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, SimpleChange, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { NbDialogService, NbMenuItem, NbSidebarComponent, NbSidebarService, NbThemeService, NbMediaBreakpoint } from '@nebular/theme';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment.prod';
 import { OverlayNavComponent } from './theme/overlay-nav/overlay-nav.component';
-import { PaginatedListOfSetupsDto, SetupsClient } from './web-api-client';
+import { SetupsClient } from './web-api-client';
 
 @Component({
   selector: 'app-root',

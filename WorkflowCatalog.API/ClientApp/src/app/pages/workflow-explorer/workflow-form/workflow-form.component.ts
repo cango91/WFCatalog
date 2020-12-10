@@ -79,7 +79,7 @@ export class WorkflowFormComponent implements OnInit {
           .subscribe(res => {
 
           }, err => {
-            debugger;
+            //debugger;
             this.workflowService.deleteWorkflow(res, new DeleteWorkflowCommand({ id: res })).subscribe(a => {
               this.toast.danger("Please select a valid PDF file!");
             })
