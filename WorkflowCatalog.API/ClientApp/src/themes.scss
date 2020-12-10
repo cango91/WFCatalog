@@ -1,4 +1,4 @@
 @import '~@nebular/theme/styles/theming';
 @import '~@nebular/theme/styles/themes/corporate';
 
-$nb-themes: nb-register-theme(( layout-padding: 0rem 0.5rem 1rem, layout-background-color:#EFEFEF, header-background-color:#EFEFEF, menu-item-active-background-color: #efefef ), corporate, corporate);
+$nb-themes: nb-register-theme(( layout-padding: 0rem 1rem 1rem 1rem, layout-background-color:#EFEFEF, header-background-color:#EFEFEF, menu-item-active-background-color: #efefef ), corporate, corporate);

@@ -2,7 +2,7 @@ import { LocalDataSource } from "ng2-smart-table"
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { deepExtend } from 'src/app/helpers/objects';
-import { CreateSetupCommand, DeleteSetupCommand, EnumsClient, PaginatedListOfSetupsDto, SetupsClient, SetupsDto, UpdateSetupDetailsCommand } from 'src/app/web-api-client';
+import { CreateSetupCommand, DeleteSetupCommand, EnumsClient, PaginatedListOfSetupsDto, SetupsClient, SetupsDto, SetupStatus, UpdateSetupDetailsCommand } from 'src/app/web-api-client';
 
 export class SetupsDataSource extends LocalDataSource {
 
@@ -29,7 +29,7 @@ export class SetupsDataSource extends LocalDataSource {
                     name: values.name,
                     shortName: values.shortName,
                     description: values.description,
-                    status: values.status
+                    status: parseInt(values.status),
                 }
             )).subscribe(res => {
                 this.find(element).then((found) => {
@@ -55,7 +55,6 @@ export class SetupsDataSource extends LocalDataSource {
     }
 
     prepend(element) {
-        debugger;
         return new Promise((resolve, reject) => {
             this.setupsClient.createSetup(new CreateSetupCommand(element)).subscribe(res => {
                 super.add(element).then(() => resolve()).catch(err => reject(err));

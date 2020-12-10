@@ -58,9 +58,15 @@ tr.ng2-smart-titles th a, .nb-theme-corporate ng2-smart-table table tr th {
   font-weight: bold!important;
 }
 
+.nb-theme-corporate ng2-smart-table .dropdown-btn {
+  color: gray !important;
+  font-weight: normal !important;
+}
+
  .nb-theme-corporate ng2-smart-table table tr td{
   padding: 0.3rem 0.3rem !important;
 }
+
 
 @media (max-width: 991.98px){
   .nb-theme-corporate nb-layout .layout .layout-container .content .columns nb-layout-column {
