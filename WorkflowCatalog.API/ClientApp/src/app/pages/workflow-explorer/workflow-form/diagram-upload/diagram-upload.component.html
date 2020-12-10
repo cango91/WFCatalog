@@ -12,6 +12,10 @@
                 <td>{{file.name}}</td>
                 <td>
                     <ng-container *ngIf="file.id">
+                        <button nbButton size="tiny" status="warning" class="mr-1" (click)="download(file)">
+                            <span class="metarial icons">download</span>
+                        </button>
+
                         <button nbButton (click)="makeDefault(file)" size="tiny" *ngIf="file.id !== defaultDiagram" status="primary">
                             <span class="metarial icons">set as default</span>
                         </button>

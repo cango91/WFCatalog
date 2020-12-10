@@ -25,9 +25,10 @@ export class SideNavComponent implements OnDestroy, OnInit, OnChanges {
   @Input()
   items: NbMenuItem[] = [
     {
-      title: 'Function Catalog',
+      title: 'Functional Catalog',
       expanded: false,
-      children: []
+      children: [
+      ]
     },
     {
       title: 'Workflow Catalog',

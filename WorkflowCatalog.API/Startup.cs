@@ -32,7 +32,7 @@ namespace WorkflowCatalog.API
             services.AddApplication();
             services.AddInfrastructure(Configuration);
             //services.AddControllers();
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
             services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
             services.AddHttpContextAccessor();
@@ -72,6 +72,7 @@ namespace WorkflowCatalog.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UsePathBase(new Microsoft.AspNetCore.Http.PathString("/catalog"));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

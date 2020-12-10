@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, 
 import { DiagramUploadItem } from './diagram-upload-item';
 import { isEmpty } from 'lodash';
 import { Guid } from 'src/app/helpers/guid';
+import { DiagramsClient } from 'src/app/web-api-client';
 
 @Component({
   selector: 'app-diagram-upload',
@@ -24,21 +25,21 @@ export class DiagramUploadComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
-  constructor(protected cdr: ChangeDetectorRef) { }
+  constructor(protected cdr: ChangeDetectorRef, protected diagramService: DiagramsClient) { }
 
   ngOnInit(): void {
   }
 
   delete(item: DiagramUploadItem) {
     if (isEmpty(item.id)) {
-      this.addFiles.splice(this.addFiles.findIndex(a => a.generatedId === item.generatedId),1);
+      this.addFiles.splice(this.addFiles.findIndex(a => a.generatedId === item.generatedId), 1);
       this.addFilesChange.emit(this.addFiles);
     } else {
       this.deleteFiles.push(item);
       this.deleteFilesChange.emit(this.deleteFiles);
     }
 
-    this.files.splice(this.files.findIndex(a => a.generatedId === item.generatedId),1);
+    this.files.splice(this.files.findIndex(a => a.generatedId === item.generatedId), 1);
     this.filesChange.emit(this.files);
 
     this.cdr.detectChanges();
@@ -53,18 +54,18 @@ export class DiagramUploadComponent implements OnInit {
     const tmpFiles = this.files;
     const tmpAddFiles = this.addFiles;
 
-    for(let i = 0; i < files.length;i++){
+    for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
       const item: DiagramUploadItem = {
         generatedId: Guid.newGuid(),
         data: file,
         name: file.name
       };
- 
+
       tmpFiles.push(item);
       tmpAddFiles.push(item);
     }
-    
+
     this.files = tmpFiles;
     this.addFiles = tmpAddFiles;
 
@@ -74,6 +75,18 @@ export class DiagramUploadComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
 
     this.cdr.detectChanges();
+  }
+
+  download(item: DiagramUploadItem) {
+    if (!isEmpty(item.id)) {
+      this.diagramService.getDiagramById(item.id).subscribe((res) => {
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(res.data);
+        a.download = res.fileName;
+        a.click();
+        a.remove();
+      });
+    }
   }
 
 }

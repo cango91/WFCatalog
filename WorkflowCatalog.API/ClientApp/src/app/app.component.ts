@@ -18,21 +18,22 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   items : NbMenuItem[] =[];
 
-  products: NbMenuItem[] = [
-    {
-      title: 'Cerebral Plus',
-      link : '/pages/fc',
-      pathMatch:'full',
-    },
-    {title: 'Team',
-    link : '/pages/fc',
-    pathMatch:'full',
+  products: NbMenuItem[] = [  {
+    title:'Team',
+    url:'/ProductCatalog/ProductCatalog/ProductCatalog?productId=1'
   },
-    {title: 'MyTicket',
-    link : '/pages/fc',
-    pathMatch:'full',
-    }
-    
+  {
+    title:'Cerebral Plus',
+    url:'/ProductCatalog/ProductCatalog/ProductCatalog?productId=2'
+  },
+  {
+    title:'Acıbadem Online',
+    url:'/ProductCatalog/ProductCatalog/ProductCatalog?productId=3'
+  },
+  {
+    title:'In-ticket',
+    url:'/ProductCatalog/ProductCatalog/ProductCatalog?productId=4'
+  }
   ]
 
   overlayMenuOpen: boolean = false;
